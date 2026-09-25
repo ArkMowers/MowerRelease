@@ -1,236 +1,197 @@
 {
   "schema": 1,
-  "version": "v4.1.6-alpha.8",
-  "published_at": "2026-09-24T18:42:41Z",
-  "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.8",
-  "notes": "## 4.1.6-alpha.8 - 2026-09-25\n\n### New\n\n- 重构仓库页面并支持历史库存对比与走势分析 [(#1128)](https://github.com/ArkMowers/arknights-mower/pull/1128) @NiceAfternoon\n- 增加可记忆的关闭与启动偏好 [(#1113)](https://github.com/ArkMowers/arknights-mower/pull/1113) @983122046\n- 测试宿舍逻辑支持自定义心情上下限 [(#1132)](https://github.com/ArkMowers/arknights-mower/pull/1132) @ALEXsun0\n- 增加重启续接进程操作 [(#1104)](https://github.com/ArkMowers/arknights-mower/pull/1104) @983122046 @ALEXsun0\n- 手动编辑锁与副表下拉交互优化 [(#1117)](https://github.com/ArkMowers/arknights-mower/pull/1117) @983122046 @ALEXsun0\n- 日志页支持定时启动 [(#1121)](https://github.com/ArkMowers/arknights-mower/pull/1121) @ALEXsun0\n- 统一心情报表拖拽排序并支持自定义观察表 [(#1119)](https://github.com/ArkMowers/arknights-mower/pull/1119) @983122046\n- 记录肥鸭充能前后心情 [(#1103)](https://github.com/ArkMowers/arknights-mower/pull/1103) @ALEXsun0\n- 肥鸭心情曲线标注被充能干员 [(#1097)](https://github.com/ArkMowers/arknights-mower/pull/1097) @ALEXsun0\n- preserve recovery targets across plan reorder [(#1094)](https://github.com/ArkMowers/arknights-mower/pull/1094) @ALEXsun0\n- rebalance temporary group beds [(#1093)](https://github.com/ArkMowers/arknights-mower/pull/1093) @ALEXsun0\n\n### Bug Fixes\n\n- 保留恢复记录并修复测试逻辑满心情离宿 [(#1135)](https://github.com/ArkMowers/arknights-mower/pull/1135) @ALEXsun0\n- keep title bar active on desktop and support late bridge readiness [(#1133)](https://github.com/ArkMowers/arknights-mower/pull/1133) @NiceAfternoon\n- 使用模板匹配识别九色鹿因果 [(#1134)](https://github.com/ArkMowers/arknights-mower/pull/1134) @ALEXsun0\n- 修复 Windows 窗口尺寸记忆与最大化状态同步 [(#1112)](https://github.com/ArkMowers/arknights-mower/pull/1112) @983122046\n- 增加会客室线索流程在产物收取提示浮动时的等待处理 [(#1129)](https://github.com/ArkMowers/arknights-mower/pull/1129) @NiceAfternoon @ALEXsun0\n- 稳定宿舍逻辑，不养闲人修复及其与宿舍候补干员联动 [(#1131)](https://github.com/ArkMowers/arknights-mower/pull/1131) @Hul11n @ALEXsun0\n- 用游戏字体模板复核训练室技能 [(#1120)](https://github.com/ArkMowers/arknights-mower/pull/1120) @ALEXsun0\n- 修复宿舍排班包含空闲位时换班读取心情异常 [(#1126)](https://github.com/ArkMowers/arknights-mower/pull/1126) @NiceAfternoon\n- 避免切换产物后补队列确认误报超时 [(#1127)](https://github.com/ArkMowers/arknights-mower/pull/1127) @ALEXsun0\n- 将数据标签限定于饼图，避免干扰心情曲线 [(#1125)](https://github.com/ArkMowers/arknights-mower/pull/1125) @983122046\n- 恢复周计划控件并移除日志页重复操作 [(#1124)](https://github.com/ArkMowers/arknights-mower/pull/1124) @ALEXsun0\n- 优先识别已展开的导航栏 [(#1122)](https://github.com/ArkMowers/arknights-mower/pull/1122) @ALEXsun0\n- 校准房间姓名区域并训练模板 [(#1116)](https://github.com/ArkMowers/arknights-mower/pull/1116) @ALEXsun0\n- 明确刷理智周计划三种执行状态 [(#1118)](https://github.com/ArkMowers/arknights-mower/pull/1118) @983122046\n- 优化干员进驻的识别与选人流程 [(#1115)](https://github.com/ArkMowers/arknights-mower/pull/1115) @NiceAfternoon\n- 阻止排班干员进入专精训练 [(#1109)](https://github.com/ArkMowers/arknights-mower/pull/1109) @ALEXsun0\n- 验证排班时拦截未持有干员 [(#1111)](https://github.com/ArkMowers/arknights-mower/pull/1111) @ALEXsun0\n- 扩展九色鹿垫刀素材类型 [(#1114)](https://github.com/ArkMowers/arknights-mower/pull/1114) @ALEXsun0\n- 修正日志页空任务布局 [(#1108)](https://github.com/ArkMowers/arknights-mower/pull/1108) @ALEXsun0\n- 修复葛朗台跑单对已就绪订单误报漏单的问题 @NiceAfternoon\n- 优化运行日志布局与任务刷新 [(#1101)](https://github.com/ArkMowers/arknights-mower/pull/1101) @983122046 @ALEXsun0\n- 在心情提示框显示肥鸭充能对象 [(#1100)](https://github.com/ArkMowers/arknights-mower/pull/1100) @ALEXsun0\n- 合并延期排班并阻止单回宿舍循环 [(#1098)](https://github.com/ArkMowers/arknights-mower/pull/1098) @ALEXsun0\n- 修复窗口刚打开时标题栏不显示资源包版本的问题 [(#1099)](https://github.com/ArkMowers/arknights-mower/pull/1099) @NiceAfternoon\n- 修复重排后停摆与陈旧床位循环 [(#1096)](https://github.com/ArkMowers/arknights-mower/pull/1096) @ALEXsun0\n- inherit unset backup room order [(#1095)](https://github.com/ArkMowers/arknights-mower/pull/1095) @ALEXsun0\n- 使用包内版本信息校验手动安装包 [(#1092)](https://github.com/ArkMowers/arknights-mower/pull/1092) @ALEXsun0\n\n### Improvements\n\n- 重构测试宿舍逻辑的换班与副表调度 [(#1110)](https://github.com/ArkMowers/arknights-mower/pull/1110) @ALEXsun0\n- 移除跑单状态读取的重复进房流程 [(#1107)](https://github.com/ArkMowers/arknights-mower/pull/1107) @ALEXsun0\n\n### Other\n\n- prerelease v4.1.6-alpha.8 [(#1137)](https://github.com/ArkMowers/arknights-mower/pull/1137) @NiceAfternoon\n- 换床后重新采样令夕上限计时 [(#1136)](https://github.com/ArkMowers/arknights-mower/pull/1136) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.7...v4.1.6-alpha.8](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.7...v4.1.6-alpha.8)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
+  "version": "v4.1.6-alpha.9",
+  "published_at": "2026-09-25T18:02:16Z",
+  "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.9",
+  "notes": "## 4.1.6-alpha.9 - 2026-09-26\n\n### New\n\n- 支持专精计划按职业交错排序 [(#1149)](https://github.com/ArkMowers/arknights-mower/pull/1149) @ALEXsun0\n- 新增日志调度页面与时间窗口导出 [(#1148)](https://github.com/ArkMowers/arknights-mower/pull/1148) @ALEXsun0\n- 关联运行日志与截图并归档报错画面 [(#1146)](https://github.com/ArkMowers/arknights-mower/pull/1146) @ALEXsun0\n- 支持不养闲人排除名单并整合初始化 [(#1145)](https://github.com/ArkMowers/arknights-mower/pull/1145) @ALEXsun0\n- 增加宿舍高优替班并恢复候补让床 [(#1144)](https://github.com/ArkMowers/arknights-mower/pull/1144) @ALEXsun0\n- 将高级设置移入排班并支持导入导出 [(#1143)](https://github.com/ArkMowers/arknights-mower/pull/1143) @ALEXsun0\n- 镜像完整包并压缩跨版本 OTA [(#1142)](https://github.com/ArkMowers/arknights-mower/pull/1142) @ALEXsun0\n- 跨版本 OTA 并移除 MowerHotUpdate [(#1140)](https://github.com/ArkMowers/arknights-mower/pull/1140) @ALEXsun0\n\n### Bug Fixes\n\n- 修复满员保留、心情初始化与任务冲突 [(#1151)](https://github.com/ArkMowers/arknights-mower/pull/1151) @ALEXsun0\n- 等待启动时间结束后再重启模拟器 [(#1150)](https://github.com/ArkMowers/arknights-mower/pull/1150) @ALEXsun0\n- 调整常用资源分类和导航定位 [(#1147)](https://github.com/ArkMowers/arknights-mower/pull/1147) @ALEXsun0\n- exclude summons from trainee name lookup [(#1141)](https://github.com/ArkMowers/arknights-mower/pull/1141) @ALEXsun0\n- 修复副表校验、用尽换班、单回分配与满心情清退 [(#1138)](https://github.com/ArkMowers/arknights-mower/pull/1138) @983122046 @ALEXsun0\n- 修复未开训误阻断和未建造训练室反复巡检 [(#1139)](https://github.com/ArkMowers/arknights-mower/pull/1139) @ALEXsun0\n\n### Other\n\n- prerelease v4.1.6-alpha.9 [(#1153)](https://github.com/ArkMowers/arknights-mower/pull/1153) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.8...v4.1.6-alpha.9](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.8...v4.1.6-alpha.9)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
   "full_assets": [
     {
-      "name": "arknights-mower_4.1.6-alpha.8_android_arm64.zip",
-      "size": 189261721,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_android_arm64.zip",
-      "digest": "sha256:422d02ee5a71db087c8ce800bc19999319a947b05deeb7e09b30bcd6083e2be5"
+      "name": "arknights-mower_4.1.6-alpha.9_android_arm64.zip",
+      "size": 189312973,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_android_arm64.zip",
+      "digest": "sha256:0aba2609c4084c096a27b417899a7ba2509ae0cf5cff0183db28da65157ed1c0"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
-      "size": 208389065,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
-      "digest": "sha256:a897968c6122b671877e0138ff1ec080c38c250a31b41157838051147bac7813"
+      "name": "arknights-mower_4.1.6-alpha.9_linux_arm64.tar.gz",
+      "size": 208459315,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_linux_arm64.tar.gz",
+      "digest": "sha256:92db056301590b0bb60df7564c2caa69b264b277bb2962a96061af2bf0ef2a53"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
-      "size": 236861905,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
-      "digest": "sha256:2ce7b8478d0bc76ea7dbbf9f4e649e8d3886a10a0500d185e17f3c67a14030f5"
+      "name": "arknights-mower_4.1.6-alpha.9_linux_x64.tar.gz",
+      "size": 236919281,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_linux_x64.tar.gz",
+      "digest": "sha256:f7b613120050d0e16035be383832670a079968343370fb233970f04332042350"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
-      "size": 218842153,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
-      "digest": "sha256:c830f711b3aa6fd6f4e6a343e4488fa421b3c75f0f24a23239ec293f5120b7e8"
+      "name": "arknights-mower_4.1.6-alpha.9_macos_arm64.dmg",
+      "size": 217896992,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_macos_arm64.dmg",
+      "digest": "sha256:eed7ae9311cfd553e390fc9e101cd09dc7abeaf40211fbce00e487edf5aae18a"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
-      "size": 236549048,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
-      "digest": "sha256:49efe3f561b10cf8fa5923cc7665e363e02bac0a937c2f0b75fd408b46fe4843"
+      "name": "arknights-mower_4.1.6-alpha.9_macos_x64.dmg",
+      "size": 243093229,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_macos_x64.dmg",
+      "digest": "sha256:0343650b6e6f2aae08aaf600efcf9246a9da185e57e51d03354f2e740b84fa78"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.8_windows_x64.zip",
-      "size": 136728316,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:96ecd39ac74ed60b739a0f8ef6ce28359f8e3cc03860e7d4ea2495a48cb2aa22"
+      "name": "arknights-mower_4.1.6-alpha.9_windows_x64.zip",
+      "size": 136800347,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_windows_x64.zip",
+      "digest": "sha256:ca292369fa3e7b22bbf29d52461f288cef5c24a33eda70180f53446556b1691a"
     }
   ],
   "ota_assets": [
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_arm64.zip",
-      "size": 57790510,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_arm64.zip",
-      "digest": "sha256:6dd7cafcbefd4325ed3f68bc68593fb04a6aed6713f6ea78e6df26b0aed370be"
+      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "size": 25957913,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "digest": "sha256:8315b7a761daf8a752f182bf72d81a8fadd7baf02314f78e53250e4fccb516ba"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "size": 27110365,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "digest": "sha256:0a794550bd47f26fa377d41ccbf25ae00d533e29f89f27645fac66aa1324b590"
+      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "size": 26617073,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "digest": "sha256:593b900635a167a84a0242633c5fc52b4f6d41f914c5dbc4215fc88e6a9523ab"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_x64.zip",
-      "size": 59223190,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_x64.zip",
-      "digest": "sha256:6e60653f21a412893094096789cc803579ad4f34e1f4a78c1ae051ccbabd6969"
+      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "size": 10875578,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "digest": "sha256:47bf40172139d90150ed13645da1329ab59aabf95d924ade1323e654f9e5099b"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "size": 28535784,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "digest": "sha256:a1ba8a807a1d8ec1fa389ea31353a771ac97faa622ce89bd609937b267f5cde2"
+      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "size": 22200416,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "digest": "sha256:2c84249387a0284d1b64a9b8f54844efb73d13cc5b619bd509f1bd9ec85503a7"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_windows_x64.zip",
-      "size": 38627815,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:b53635c6b25752583efa2406b618444f8c27828dad543e016a30ad1701f04e40"
+      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "size": 23417259,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "digest": "sha256:ed83c144f99e24144ec62b69b8cf7be381be339c33600af88466fc8b63d94630"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "size": 8915077,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.3_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "digest": "sha256:9132ba6f92cc905d9eb1f5b0dce233fa90a6bcb5c8deb38943a5065b359c4e89"
+      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "size": 7675428,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "digest": "sha256:63122119023bd7fe65d487ba3054b0a784bad437de710e63b502d5fbf6a18268"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_arm64.zip",
-      "size": 56804213,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_arm64.zip",
-      "digest": "sha256:9af3230c067b36103b2d0fe5060a123a08ec708664375afc66bb9e31fef05766"
+      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "size": 9909186,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "digest": "sha256:fba49c85a0e41973fc608d652393b202f3bbc35b046885de7f6b34141bd2aec9"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "size": 25793384,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "digest": "sha256:814fc6f6e3e2fcb8de922ec38797edf36508e0ace8edd241fd8f7c9de8019aa2"
+      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "size": 9912470,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "digest": "sha256:f5048b1ed42ef073193ab759c93f06492a85bf5fb8df28431df63f2a673e0b26"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_x64.zip",
-      "size": 57470127,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_x64.zip",
-      "digest": "sha256:49138186cb2a09c908f5a1721ed1e8e6055784e0aa70d0d7c7b658db4b58de8e"
+      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "size": 7375158,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "digest": "sha256:1b8300c5754814dce22abdbedb8aaeb1b4f5d860b9e24aefe3b10f8a371eb118"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "size": 26452225,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "digest": "sha256:8988b56c88634a7a2a788df4428265ba310088ef8acc1e8923e0b88077313ac4"
+      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_android_arm64.zip",
+      "size": 160620345,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_android_arm64.zip",
+      "digest": "sha256:041b81a49207d989a8517735c5eaeff1161b75d4544b9677a74a8e3fe30f90df"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_windows_x64.zip",
-      "size": 40646589,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:718e2291fb7a30f4baab731dc525780f0f2372f537b7956bc7d437f55134eb17"
+      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "size": 12479933,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "digest": "sha256:20fb2b7e13d05b1c2d9df6861c1abcab8e379d0967c34c67adba7438b4ef0723"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "size": 10711895,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.4_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "digest": "sha256:46916b4afcac5f691f19834010e6fc806fd291d5af032d3f6d5425bfb3377bc0"
+      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "size": 12483232,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "digest": "sha256:416da8f8ddea753f15dc5145f82a49eab66b5f7c0ba49c518f3f681c84117b7e"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_arm64.zip",
-      "size": 53117101,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_arm64.zip",
-      "digest": "sha256:db27ff8c40554b88be285ea863b26e68649990022ccd1215e577d539eb24f6d4"
+      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "size": 10027450,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "digest": "sha256:0db20e96cb5500eb984fac37b9189a625515101f57c4d7c2264a45a779a888d3"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "size": 22035759,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "digest": "sha256:18bc8f659af60dffcb6bab2fd78268f2e4106c8e31b8c422f73f1aa490ff1175"
+      "name": "arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_android_arm64.zip",
+      "size": 154120474,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_android_arm64.zip",
+      "digest": "sha256:6057f1abac4729f2cffe544933145cb8ab8fdb97e4ccf4bb567497b679a8bb1c"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_x64.zip",
-      "size": 54341322,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_x64.zip",
-      "digest": "sha256:5b56d9d6f69e9d8c42cb50b5a03f35ebd7de78e627dedcd4b7e51f0869f58152"
+      "name": "arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "size": 3487159,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_linux_arm64_v2.zip",
+      "digest": "sha256:274d7de780ef8974264fa22473c40210500a6c5f51645d2ccf59a6e2802e3b35"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "size": 23252592,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "digest": "sha256:1613000a710f1fc6956db7acc743fc7674b1b698521f52e95d09bf11765b8abc"
+      "name": "arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "size": 3486838,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_linux_x64_v2.zip",
+      "digest": "sha256:0c29c78f092d538f444f22a075af7c99730401df064a8ca91bcbbec46764075e"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_windows_x64.zip",
-      "size": 37517574,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:862e2b4d45f67f642ab1f260411f96db8ee8e13e0628055457842dc9f47c90b8"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "size": 7512390,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.5_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "digest": "sha256:31d3b48ef0c9fb36122bc8b8e3d86087b86a38377cec9f0ef46c0a9113423723"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_arm64.zip",
-      "size": 41254116,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_arm64.zip",
-      "digest": "sha256:bfc559668ea517b05d3f10a1788c6a66c4a2a6a01408e2843d39e4d42626e242"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "size": 9413883,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "digest": "sha256:f33a69633f9d5aae167431983e634038b65e275884738ea4806849e2957c7f21"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_x64.zip",
-      "size": 41264376,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_x64.zip",
-      "digest": "sha256:c5761899010c7b0caa23de8a6042aaffc732a5c170e5583aa8619798b1313d44"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "size": 9416854,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "digest": "sha256:ea4435fc6444cff9ff4a5b5fdcbee1723676834a2af550ba6d35b3ed42d4ab17"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_windows_x64.zip",
-      "size": 37070575,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:0162137f51130cf268f15572ab177a9ab07c40bf6f8cbb1f01f24209875afa18"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "size": 6880288,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.6_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "digest": "sha256:64eba2f1a72e899ece643afe436f59427bfefb5da3fe119cb77821001ff1920c"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_android_arm64.zip",
-      "size": 160259533,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_android_arm64.zip",
-      "digest": "sha256:5f677fa70769b886731d4ba3d37674abd5e0eb819caf5d69bdd7df6260098f7b"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_arm64.zip",
-      "size": 44002598,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_arm64.zip",
-      "digest": "sha256:1772a7f661db692a5745018aa9a16b24ac58d1d4880d0737b00d1e95b3e474e9"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "size": 11881757,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_arm64_v2.zip",
-      "digest": "sha256:e34cd488a77eab5af8fa49b013bccbe4c7e26fef25bbc5db964a354707abb3e4"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_x64.zip",
-      "size": 44012877,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_x64.zip",
-      "digest": "sha256:74b9627c1b90a7fe8155d6e34b19abfb4ce6b3355524a86eeea86a15457485c4"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "size": 11885139,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_linux_x64_v2.zip",
-      "digest": "sha256:2a739fc3fa5c904c9be638b47e5f94d1dd2ed33bd08840a1c066b7b047a1a914"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_windows_x64.zip",
-      "size": 39817776,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_windows_x64.zip",
-      "digest": "sha256:570ce69e7901c74426926a8cefb381470766d19216186d7a53ac928ba607b997"
-    },
-    {
-      "name": "arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "size": 9428296,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower-ota_4.1.6-alpha.7_to_4.1.6-alpha.8_windows_x64_v2.zip",
-      "digest": "sha256:4b615ed01d27c61377c5f83868a910556e69b4869990ebb397bfd382d5d235e6"
+      "name": "arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "size": 3305750,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower-ota_4.1.6-alpha.8_to_4.1.6-alpha.9_windows_x64_v2.zip",
+      "digest": "sha256:b7a7887a621f744b41b07a30705752874502a852ed71bccc5aa05071eeddb356"
     }
   ],
   "history": [
+    {
+      "schema": 1,
+      "version": "v4.1.6-alpha.8",
+      "published_at": "2026-09-24T18:42:41Z",
+      "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.8",
+      "notes": "## 4.1.6-alpha.8 - 2026-09-25\n\n### New\n\n- 重构仓库页面并支持历史库存对比与走势分析 [(#1128)](https://github.com/ArkMowers/arknights-mower/pull/1128) @NiceAfternoon\n- 增加可记忆的关闭与启动偏好 [(#1113)](https://github.com/ArkMowers/arknights-mower/pull/1113) @983122046\n- 测试宿舍逻辑支持自定义心情上下限 [(#1132)](https://github.com/ArkMowers/arknights-mower/pull/1132) @ALEXsun0\n- 增加重启续接进程操作 [(#1104)](https://github.com/ArkMowers/arknights-mower/pull/1104) @983122046 @ALEXsun0\n- 手动编辑锁与副表下拉交互优化 [(#1117)](https://github.com/ArkMowers/arknights-mower/pull/1117) @983122046 @ALEXsun0\n- 日志页支持定时启动 [(#1121)](https://github.com/ArkMowers/arknights-mower/pull/1121) @ALEXsun0\n- 统一心情报表拖拽排序并支持自定义观察表 [(#1119)](https://github.com/ArkMowers/arknights-mower/pull/1119) @983122046\n- 记录肥鸭充能前后心情 [(#1103)](https://github.com/ArkMowers/arknights-mower/pull/1103) @ALEXsun0\n- 肥鸭心情曲线标注被充能干员 [(#1097)](https://github.com/ArkMowers/arknights-mower/pull/1097) @ALEXsun0\n- preserve recovery targets across plan reorder [(#1094)](https://github.com/ArkMowers/arknights-mower/pull/1094) @ALEXsun0\n- rebalance temporary group beds [(#1093)](https://github.com/ArkMowers/arknights-mower/pull/1093) @ALEXsun0\n\n### Bug Fixes\n\n- 保留恢复记录并修复测试逻辑满心情离宿 [(#1135)](https://github.com/ArkMowers/arknights-mower/pull/1135) @ALEXsun0\n- keep title bar active on desktop and support late bridge readiness [(#1133)](https://github.com/ArkMowers/arknights-mower/pull/1133) @NiceAfternoon\n- 使用模板匹配识别九色鹿因果 [(#1134)](https://github.com/ArkMowers/arknights-mower/pull/1134) @ALEXsun0\n- 修复 Windows 窗口尺寸记忆与最大化状态同步 [(#1112)](https://github.com/ArkMowers/arknights-mower/pull/1112) @983122046\n- 增加会客室线索流程在产物收取提示浮动时的等待处理 [(#1129)](https://github.com/ArkMowers/arknights-mower/pull/1129) @NiceAfternoon @ALEXsun0\n- 稳定宿舍逻辑，不养闲人修复及其与宿舍候补干员联动 [(#1131)](https://github.com/ArkMowers/arknights-mower/pull/1131) @Hul11n @ALEXsun0\n- 用游戏字体模板复核训练室技能 [(#1120)](https://github.com/ArkMowers/arknights-mower/pull/1120) @ALEXsun0\n- 修复宿舍排班包含空闲位时换班读取心情异常 [(#1126)](https://github.com/ArkMowers/arknights-mower/pull/1126) @NiceAfternoon\n- 避免切换产物后补队列确认误报超时 [(#1127)](https://github.com/ArkMowers/arknights-mower/pull/1127) @ALEXsun0\n- 将数据标签限定于饼图，避免干扰心情曲线 [(#1125)](https://github.com/ArkMowers/arknights-mower/pull/1125) @983122046\n- 恢复周计划控件并移除日志页重复操作 [(#1124)](https://github.com/ArkMowers/arknights-mower/pull/1124) @ALEXsun0\n- 优先识别已展开的导航栏 [(#1122)](https://github.com/ArkMowers/arknights-mower/pull/1122) @ALEXsun0\n- 校准房间姓名区域并训练模板 [(#1116)](https://github.com/ArkMowers/arknights-mower/pull/1116) @ALEXsun0\n- 明确刷理智周计划三种执行状态 [(#1118)](https://github.com/ArkMowers/arknights-mower/pull/1118) @983122046\n- 优化干员进驻的识别与选人流程 [(#1115)](https://github.com/ArkMowers/arknights-mower/pull/1115) @NiceAfternoon\n- 阻止排班干员进入专精训练 [(#1109)](https://github.com/ArkMowers/arknights-mower/pull/1109) @ALEXsun0\n- 验证排班时拦截未持有干员 [(#1111)](https://github.com/ArkMowers/arknights-mower/pull/1111) @ALEXsun0\n- 扩展九色鹿垫刀素材类型 [(#1114)](https://github.com/ArkMowers/arknights-mower/pull/1114) @ALEXsun0\n- 修正日志页空任务布局 [(#1108)](https://github.com/ArkMowers/arknights-mower/pull/1108) @ALEXsun0\n- 修复葛朗台跑单对已就绪订单误报漏单的问题 @NiceAfternoon\n- 优化运行日志布局与任务刷新 [(#1101)](https://github.com/ArkMowers/arknights-mower/pull/1101) @983122046 @ALEXsun0\n- 在心情提示框显示肥鸭充能对象 [(#1100)](https://github.com/ArkMowers/arknights-mower/pull/1100) @ALEXsun0\n- 合并延期排班并阻止单回宿舍循环 [(#1098)](https://github.com/ArkMowers/arknights-mower/pull/1098) @ALEXsun0\n- 修复窗口刚打开时标题栏不显示资源包版本的问题 [(#1099)](https://github.com/ArkMowers/arknights-mower/pull/1099) @NiceAfternoon\n- 修复重排后停摆与陈旧床位循环 [(#1096)](https://github.com/ArkMowers/arknights-mower/pull/1096) @ALEXsun0\n- inherit unset backup room order [(#1095)](https://github.com/ArkMowers/arknights-mower/pull/1095) @ALEXsun0\n- 使用包内版本信息校验手动安装包 [(#1092)](https://github.com/ArkMowers/arknights-mower/pull/1092) @ALEXsun0\n\n### Improvements\n\n- 重构测试宿舍逻辑的换班与副表调度 [(#1110)](https://github.com/ArkMowers/arknights-mower/pull/1110) @ALEXsun0\n- 移除跑单状态读取的重复进房流程 [(#1107)](https://github.com/ArkMowers/arknights-mower/pull/1107) @ALEXsun0\n\n### Other\n\n- prerelease v4.1.6-alpha.8 [(#1137)](https://github.com/ArkMowers/arknights-mower/pull/1137) @NiceAfternoon\n- 换床后重新采样令夕上限计时 [(#1136)](https://github.com/ArkMowers/arknights-mower/pull/1136) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.7...v4.1.6-alpha.8](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.7...v4.1.6-alpha.8)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
+      "full_assets": [
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_android_arm64.zip",
+          "size": 189261721,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_android_arm64.zip",
+          "digest": "sha256:422d02ee5a71db087c8ce800bc19999319a947b05deeb7e09b30bcd6083e2be5"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
+          "size": 208389065,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
+          "digest": "sha256:a897968c6122b671877e0138ff1ec080c38c250a31b41157838051147bac7813"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
+          "size": 236861905,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
+          "digest": "sha256:2ce7b8478d0bc76ea7dbbf9f4e649e8d3886a10a0500d185e17f3c67a14030f5"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
+          "size": 218842153,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
+          "digest": "sha256:c830f711b3aa6fd6f4e6a343e4488fa421b3c75f0f24a23239ec293f5120b7e8"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
+          "size": 236549048,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
+          "digest": "sha256:49efe3f561b10cf8fa5923cc7665e363e02bac0a937c2f0b75fd408b46fe4843"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.8_windows_x64.zip",
+          "size": 136728316,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_windows_x64.zip",
+          "digest": "sha256:96ecd39ac74ed60b739a0f8ef6ce28359f8e3cc03860e7d4ea2495a48cb2aa22"
+        }
+      ]
+    },
     {
       "schema": 1,
       "version": "v4.1.6-alpha.7",
@@ -435,33 +396,6 @@
           "size": 133597169,
           "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.3/arknights-mower_4.1.6-alpha.3_windows_x64.zip",
           "digest": "sha256:1dfbdfc5b3ab4ba9c1be4b5c18f8e418456cfd149fee659d0de811ec1b36e6e8"
-        }
-      ]
-    },
-    {
-      "schema": 1,
-      "version": "v4.1.6-alpha.2",
-      "published_at": "2026-09-03T05:26:43Z",
-      "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.2",
-      "notes": "## 4.1.6-alpha.2 - 2026-09-03\n\n### New\n\n- 新增资源更新与热更通道 [(#923)](https://github.com/ArkMowers/arknights-mower/pull/923) @NiceAfternoon\n- 配置文件改走原子写并挪到 config/ 目录 [(#920)](https://github.com/ArkMowers/arknights-mower/pull/920) @NiceAfternoon\n\n### Bug Fixes\n\n- 修复排班图片导入在导出图被改过后失败 [(#922)](https://github.com/ArkMowers/arknights-mower/pull/922) @NiceAfternoon\n- 修复一键替换干员漏换主副表全部字段的问题 [(#921)](https://github.com/ArkMowers/arknights-mower/pull/921) @NiceAfternoon\n- 修复窗口尺寸配置不生效 [(#919)](https://github.com/ArkMowers/arknights-mower/pull/919) @NiceAfternoon\n- 修复连接错误被误判导致运行中的游戏退出与资源残留 [(#918)](https://github.com/ArkMowers/arknights-mower/pull/918) @NiceAfternoon\n- 修复 Linux 独立包缺少 pywebview 的 GTK 后端导致窗口无法启动 [(#917)](https://github.com/ArkMowers/arknights-mower/pull/917) @NiceAfternoon\n\n### Improvements\n\n- 精简识别热路径 DEBUG 日志 [(#925)](https://github.com/ArkMowers/arknights-mower/pull/925) @NiceAfternoon\n- 图像识别改用纯 numpy 实现缩减打包体积 [(#916)](https://github.com/ArkMowers/arknights-mower/pull/916) @NiceAfternoon\n\n### Dependencies\n\n- changelog 按版本类型选取基准并新增依赖升级分组 [(#913)](https://github.com/ArkMowers/arknights-mower/pull/913) @NiceAfternoon\n- 升级 echarts、vite、vitest 等前端依赖 [(#912)](https://github.com/ArkMowers/arknights-mower/pull/912) @NiceAfternoon\n\n**Full Changelog**: [v4.1.6-alpha.1...v4.1.6-alpha.2](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.1...v4.1.6-alpha.2)\n\n> 产物均为未签名构建，并附带统一 SHA-256 清单（SHA256SUMS）。Windows\n> 首次运行可能出现 SmartScreen 提示；macOS 为 unsigned experimental\n> build，若被系统拦截需在「隐私与安全性」中手动允许。建议先核对\n> SHA256SUMS 再使用。\n",
-      "full_assets": [
-        {
-          "name": "arknights-mower_4.1.6-alpha.2_linux_arm64.tar.gz",
-          "size": 202115826,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.2/arknights-mower_4.1.6-alpha.2_linux_arm64.tar.gz",
-          "digest": "sha256:79d0d23be9cd9452057aae44ff9bdcd5ea082bde6bec91de057fe959e3c68716"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.2_linux_x64.tar.gz",
-          "size": 230500585,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.2/arknights-mower_4.1.6-alpha.2_linux_x64.tar.gz",
-          "digest": "sha256:8539690b35003322c4651402b4861b1a00e003064391f525b6658118095f4a0e"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.2_windows_x64.zip",
-          "size": 133597429,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.2/arknights-mower_4.1.6-alpha.2_windows_x64.zip",
-          "digest": "sha256:171b0e1d65ce4d28ba61342fca9d1bcc855803b621d5e08b3c129a8db046da69"
         }
       ]
     }
