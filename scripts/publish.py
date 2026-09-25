@@ -127,16 +127,21 @@ def publish_target(target, releases, source_limit):
                     continue
                 old_path = download(before["tag_name"], previous, root / "previous")
                 output = root / "products" / name
-                result = build(
-                    old_path,
-                    latest_path,
-                    output,
-                    from_version=before["tag_name"],
-                    to_version=tag,
-                    platform=platform,
-                    arch=arch,
-                )
-                old_path.unlink()
+                try:
+                    result = build(
+                        old_path,
+                        latest_path,
+                        output,
+                        from_version=before["tag_name"],
+                        to_version=tag,
+                        platform=platform,
+                        arch=arch,
+                    )
+                except ValueError as error:
+                    print(f"Skip incompatible OTA {name}: {error}")
+                    continue
+                finally:
+                    old_path.unlink()
                 if output.stat().st_size >= latest["size"] * 0.85:
                     print(f"Skip oversized OTA {name}: {result['bytes']} bytes")
                     output.unlink()
