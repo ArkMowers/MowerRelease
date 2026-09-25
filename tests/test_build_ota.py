@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import sys
 import tarfile
 import tempfile
@@ -9,9 +10,66 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from build_ota import build
+import bsdiff4
 
 
 class BuildOtaTests(unittest.TestCase):
+    def test_changed_large_library_also_uses_binary_patch(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old, new, delta = (
+                root / name for name in ("old.zip", "new.zip", "delta.zip")
+            )
+            before = os.urandom(512 * 1024)
+            after = before[:123456] + b"replacement" + before[123467:]
+            name = "mower/_internal/base_library.zip"
+            for path, contents in ((old, before), (new, after)):
+                with zipfile.ZipFile(path, "w") as archive:
+                    archive.writestr(name, contents)
+            build(
+                old,
+                new,
+                delta,
+                from_version="v4.1.6-alpha.7",
+                to_version="v4.1.6-alpha.8",
+                platform="windows",
+                arch="x64",
+            )
+            with zipfile.ZipFile(delta) as archive:
+                manifest = json.loads(archive.read("ota.json"))
+                self.assertEqual(manifest["format"], 2)
+                self.assertEqual(
+                    bsdiff4.patch(before, archive.read("patch/" + name)), after
+                )
+
+    def test_changed_windows_executable_uses_small_verified_binary_patch(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old, new, delta = (
+                root / name for name in ("old.zip", "new.zip", "delta.zip")
+            )
+            before = os.urandom(1024 * 1024)
+            after = before[:500000] + b"new build" + before[500009:]
+            for path, contents in ((old, before), (new, after)):
+                with zipfile.ZipFile(path, "w") as archive:
+                    archive.writestr("mower/mower.exe", contents)
+            build(
+                old,
+                new,
+                delta,
+                from_version="v4.1.6-alpha.7",
+                to_version="v4.1.6-alpha.8",
+                platform="windows",
+                arch="x64",
+            )
+            with zipfile.ZipFile(delta) as archive:
+                manifest = json.loads(archive.read("ota.json"))
+                self.assertEqual(manifest["format"], 2)
+                self.assertNotIn("payload/mower/mower.exe", archive.namelist())
+                patch = archive.read("patch/mower/mower.exe")
+                self.assertEqual(bsdiff4.patch(before, patch), after)
+                self.assertLess(delta.stat().st_size, 10000)
+
     def test_windows_delta_has_changed_files_and_complete_target_manifest(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -1,4 +1,4 @@
-"""Publish direct portable OTA assets and a small channel index."""
+"""Mirror full Mower packages, publish OTA assets, and update channel indexes."""
 
 import argparse
 import hashlib
@@ -13,12 +13,16 @@ from build_ota import build
 
 SOURCE_REPO = "ArkMowers/arknights-mower"
 RELEASE_REPO = "ArkMowers/MowerRelease"
-VERSION = re.compile(r"v\d+\.\d+\.\d+(?:-alpha\.\d+)?\Z")
-TARGETS = (
+VERSION = re.compile(r"v\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
+OTA_TARGETS = (
     ("windows", "x64", "zip"),
     ("linux", "x64", "tar.gz"),
     ("linux", "arm64", "tar.gz"),
     ("android", "arm64", "zip"),
+)
+FULL_TARGETS = OTA_TARGETS + (
+    ("macos", "x64", "dmg"),
+    ("macos", "arm64", "dmg"),
 )
 
 
@@ -41,9 +45,21 @@ def asset_name(tag, platform, arch, extension):
     return f"arknights-mower_{tag.removeprefix('v')}_{platform}_{arch}.{extension}"
 
 
+def ota_name(before, target, platform, arch):
+    suffix = "_v2" if platform in ("windows", "linux") else ""
+    return (
+        f"arknights-mower-ota_{before.removeprefix('v')}_to_"
+        f"{target.removeprefix('v')}_{platform}_{arch}{suffix}.zip"
+    )
+
+
 def asset(release, platform, arch, extension):
     name = asset_name(release["tag_name"], platform, arch, extension)
     return next((a for a in release.get("assets", []) if a["name"] == name), None)
+
+
+def has_full_assets(release):
+    return any(asset(release, *target) for target in FULL_TARGETS)
 
 
 def download(tag, artifact, directory):
@@ -88,16 +104,101 @@ def release_by_tag(releases, tag):
     return next((r for r in releases if r["tag_name"] == tag), None)
 
 
-def publish_target(target, releases, source_limit):
-    tag = target["tag_name"]
-    current = None
+def release_body(target):
+    return (
+        f"Mower {target['tag_name']} 的完整安装包与跨版本 OTA 差异包。原始发布记录："
+        f"{target['html_url']} 。\n\n"
+        "完整包与差异包均来自官方 Mower Release；安装器会校验 SHA-256。"
+    )
+
+
+def current_release(tag):
     try:
         current = api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
-        if current.get("draft"):
-            raise ValueError(f"draft release {tag} needs manual review")
     except subprocess.CalledProcessError:
-        pass
-    published_names = {a["name"] for a in current["assets"]} if current else set()
+        return None
+    if current.get("draft"):
+        raise ValueError(f"draft release {tag} needs manual review")
+    return current
+
+
+def mirror_full_release(target):
+    """Copy every supported full package with its source digest unchanged."""
+    tag = target["tag_name"]
+    current = current_release(tag)
+    published = {a["name"]: a for a in current["assets"]} if current else {}
+    source_assets = [
+        item
+        for platform, arch, extension in FULL_TARGETS
+        if (item := asset(target, platform, arch, extension)) is not None
+    ]
+    if not source_assets:
+        raise ValueError(f"no supported full packages for {tag}")
+    with tempfile.TemporaryDirectory(prefix="mower-full-") as temp:
+        products = []
+        for item in source_assets:
+            existing = published.get(item["name"])
+            if existing:
+                if existing.get("size") != item["size"] or existing.get(
+                    "digest"
+                ) != item.get("digest"):
+                    raise ValueError(f"mirrored package differs: {item['name']}")
+                continue
+            products.append(download(tag, item, Path(temp)))
+        if current is None:
+            command = [
+                "gh",
+                "release",
+                "create",
+                tag,
+                "--repo",
+                RELEASE_REPO,
+                "--title",
+                tag,
+                "--notes",
+                release_body(target),
+                "--draft",
+            ]
+            if target["prerelease"]:
+                command.append("--prerelease")
+            subprocess.run(command, check=True)
+        if products:
+            subprocess.run(
+                [
+                    "gh",
+                    "release",
+                    "upload",
+                    tag,
+                    "--repo",
+                    RELEASE_REPO,
+                    *map(str, products),
+                ],
+                check=True,
+            )
+        mirrored = api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
+        mirrored_assets = {a["name"]: a for a in mirrored["assets"]}
+        for item in source_assets:
+            copy = mirrored_assets.get(item["name"])
+            if (
+                not copy
+                or copy.get("size") != item["size"]
+                or copy.get("digest") != item.get("digest")
+            ):
+                raise ValueError(
+                    f"full package mirror verification failed: {item['name']}"
+                )
+        if current is None:
+            subprocess.run(
+                ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
+                check=True,
+            )
+    return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
+
+
+def publish_target(target, releases, source_limit):
+    tag = target["tag_name"]
+    current = mirror_full_release(target)
+    published_names = {a["name"] for a in current["assets"]}
 
     candidates = [
         r
@@ -105,26 +206,28 @@ def publish_target(target, releases, source_limit):
         if released_at(r) < released_at(target) and r["tag_name"] != tag
     ][:source_limit]
     if not candidates:
-        print(f"No older versions for {tag}")
+        print(f"No older versions for {tag}; full packages are available")
         return current
     with tempfile.TemporaryDirectory(prefix="mower-ota-") as temp:
         root = Path(temp)
         products = []
-        for platform, arch, extension in TARGETS:
+        for platform, arch, extension in OTA_TARGETS:
             latest = asset(target, platform, arch, extension)
             if not latest:
                 continue
+            pending = [
+                before
+                for before in candidates
+                if asset(before, platform, arch, extension)
+                and ota_name(before["tag_name"], tag, platform, arch)
+                not in published_names
+            ]
+            if not pending:
+                continue
             latest_path = download(tag, latest, root / "target")
-            for before in candidates:
+            for before in pending:
                 previous = asset(before, platform, arch, extension)
-                if not previous:
-                    continue
-                name = (
-                    f"arknights-mower-ota_{before['tag_name'][1:]}_to_{tag[1:]}_"
-                    f"{platform}_{arch}.zip"
-                )
-                if name in published_names:
-                    continue
+                name = ota_name(before["tag_name"], tag, platform, arch)
                 old_path = download(before["tag_name"], previous, root / "previous")
                 output = root / "products" / name
                 try:
@@ -152,28 +255,6 @@ def publish_target(target, releases, source_limit):
             print(f"No useful OTA packages for {tag}")
             return current
 
-        body = (
-            f"Mower {tag} 的跨版本 OTA 差异包。完整安装包与更新说明见 "
-            f"https://github.com/{SOURCE_REPO}/releases/tag/{tag} 。\n\n"
-            "客户端会校验起点文件与完整目标目录；无法应用时改用主仓库完整包。"
-        )
-        if current is None:
-            command = [
-                "gh",
-                "release",
-                "create",
-                tag,
-                "--repo",
-                RELEASE_REPO,
-                "--title",
-                tag,
-                "--notes",
-                body,
-                "--draft",
-            ]
-            if target["prerelease"]:
-                command.append("--prerelease")
-            subprocess.run(command, check=True)
         subprocess.run(
             [
                 "gh",
@@ -186,30 +267,36 @@ def publish_target(target, releases, source_limit):
             ],
             check=True,
         )
-        if current is None:
-            subprocess.run(
-                ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
-                check=True,
-            )
     return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
 
 
-def index_record(target, ota_release):
+def full_asset_records(mirrored):
+    return [
+        {
+            "name": item["name"],
+            "size": item["size"],
+            "url": item["browser_download_url"],
+            "digest": item.get("digest"),
+        }
+        for item in mirrored["assets"]
+        if item["name"].startswith("arknights-mower_")
+    ]
+
+
+def source_record(target, mirrored):
     return {
         "schema": 1,
         "version": target["tag_name"],
         "published_at": target["published_at"],
         "source_release": target["html_url"],
-        "full_assets": [
-            {
-                "name": a["name"],
-                "size": a["size"],
-                "url": a["browser_download_url"],
-                "digest": a.get("digest"),
-            }
-            for a in target["assets"]
-            if a["name"].startswith("arknights-mower_")
-        ],
+        "notes": target.get("body") or "暂无更新说明",
+        "full_assets": full_asset_records(mirrored),
+    }
+
+
+def index_record(target, ota_release, history=()):
+    return {
+        **source_record(target, ota_release),
         "ota_assets": [
             {
                 "name": a["name"],
@@ -220,6 +307,7 @@ def index_record(target, ota_release):
             for a in ota_release["assets"]
             if a["name"].startswith("arknights-mower-ota_")
         ],
+        "history": [source_record(old, mirrored) for old, mirrored in history],
     }
 
 
@@ -247,6 +335,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tag", help="Only publish one specific main repository tag")
     parser.add_argument("--source-limit", type=int, default=5)
+    parser.add_argument(
+        "--mirror-only",
+        action="store_true",
+        help="Mirror one tag without updating the channel index",
+    )
     args = parser.parse_args()
     if not 1 <= args.source_limit <= 20:
         raise ValueError("source limit must be between 1 and 20")
@@ -256,18 +349,33 @@ def main():
         if targets[0] is None:
             raise ValueError("tag is not a published Mower Release")
     else:
+        stable = api(f"repos/{SOURCE_REPO}/releases/latest")
         targets = [
-            next((r for r in releases if r["prerelease"] == pre), None)
-            for pre in (False, True)
+            release_by_tag(releases, stable["tag_name"]),
+            next((r for r in releases if r["prerelease"]), None),
         ]
     for target in targets:
         if target is None:
             continue
+        if not has_full_assets(target):
+            print(f"Skip {target['tag_name']}: no supported full packages")
+            continue
+        if args.mirror_only:
+            mirror_full_release(target)
+            continue
+        history = [
+            old
+            for old in releases
+            if old["prerelease"] == target["prerelease"]
+            and released_at(old) < released_at(target)
+            and has_full_assets(old)
+        ][:6]
+        mirrored_history = [(old, mirror_full_release(old)) for old in history]
         ota_release = publish_target(target, releases, args.source_limit)
         if ota_release:
             save_index(
                 "beta" if target["prerelease"] else "stable",
-                index_record(target, ota_release),
+                index_record(target, ota_release, mirrored_history),
             )
 
 

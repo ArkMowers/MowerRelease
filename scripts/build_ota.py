@@ -8,11 +8,16 @@ import re
 import stat
 import tarfile
 import zipfile
+import zlib
 from pathlib import Path, PurePosixPath
+
+import bsdiff4
 
 MAX_FILES = 50000
 MAX_UNPACKED = 8 * 1024**3
-VERSION = re.compile(r"v?\d+\.\d+\.\d+(?:-alpha\.\d+)?\Z")
+VERSION = re.compile(r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
+MAX_PATCH_FILE = 64 * 1024**2
+MIN_PATCH_FILE = 256 * 1024
 
 
 def safe_name(name):
@@ -132,9 +137,41 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
         changed = sorted(
             name for name, info in new_files.items() if info != old_files.get(name)
         )
+        patches = {}
+        patch_data = {}
+        if platform in ("windows", "linux"):
+            for name in changed:
+                if (
+                    old_files.get(name, {}).get("type") != "file"
+                    or new_files[name]["type"] != "file"
+                ):
+                    continue
+                member = after.members[name]
+                target_size = member.file_size if after.is_zip else member.size
+                if not MIN_PATCH_FILE <= target_size <= MAX_PATCH_FILE:
+                    continue
+                with before.open(name) as source_file, after.open(name) as target_file:
+                    old_data, new_data = source_file.read(), target_file.read()
+                if (
+                    not 0 < len(old_data) <= MAX_PATCH_FILE
+                    or not 0 < len(new_data) <= MAX_PATCH_FILE
+                ):
+                    continue
+                delta = bsdiff4.diff(old_data, new_data)
+                if len(delta) >= len(zlib.compress(new_data, level=6)) * 0.8:
+                    continue
+                if bsdiff4.patch(old_data, delta) != new_data:
+                    raise ValueError(f"binary patch verification failed: {name}")
+                patches[name] = {
+                    "type": "bsdiff",
+                    "base_sha256": old_files[name]["sha256"],
+                    "sha256": hashlib.sha256(delta).hexdigest(),
+                    "size": len(new_data),
+                }
+                patch_data[name] = delta
         manifest = {
             "kind": "mower-ota",
-            "format": 1,
+            "format": 2 if patches else 1,
             "from": from_version.lstrip("v"),
             "to": to_version.lstrip("v"),
             "platform": platform,
@@ -142,6 +179,8 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
             "files": new_files,
             "changed": changed,
         }
+        if patches:
+            manifest["patches"] = patches
         temporary = output.with_suffix(output.suffix + ".tmp")
         output.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -159,6 +198,9 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
                 )
                 for name in changed:
                     if new_files[name]["type"] != "file":
+                        continue
+                    if name in patches:
+                        patch.writestr("patch/" + name, patch_data[name])
                         continue
                     with (
                         after.open(name) as src,

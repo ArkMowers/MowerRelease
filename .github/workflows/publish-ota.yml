@@ -12,6 +12,11 @@ on:
         type: number
         default: 5
         required: true
+      mirror_only:
+        description: Mirror full packages for the selected tag without changing channel indexes
+        type: boolean
+        default: false
+        required: false
   schedule:
     - cron: '23,53 * * * *'
 
@@ -31,6 +36,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install OTA builder dependency
+        run: python -m pip install bsdiff4==1.2.6
       - name: Test OTA package format
         run: python -m unittest discover -s tests -p 'test_*.py' -q
       - name: Generate and publish OTA packages
@@ -38,9 +45,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag }}
           SOURCE_LIMIT: ${{ inputs.source_limit || 5 }}
+          MIRROR_ONLY: ${{ inputs.mirror_only || false }}
         run: |
           args=(--source-limit "$SOURCE_LIMIT")
           if [[ -n "$TAG" ]]; then args+=(--tag "$TAG"); fi
+          if [[ "$MIRROR_ONLY" == "true" ]]; then args+=(--mirror-only); fi
           python scripts/publish.py "${args[@]}"
       - name: Commit channel index
         run: |
