@@ -16,8 +16,17 @@ import bsdiff4
 MAX_FILES = 50000
 MAX_UNPACKED = 8 * 1024**3
 VERSION = re.compile(r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
-MAX_PATCH_FILE = 64 * 1024**2
+MAX_PATCH_FILE = 32 * 1024**2
 MIN_PATCH_FILE = 256 * 1024
+PATCH_CANDIDATES = {
+    "mower/mower.exe",
+    "mower/多开管理器.exe",
+    "mower/mower",
+    "mower/多开管理器",
+    "mower/_internal/base_library.zip",
+    "mower/_internal/arknights_mower/data/skill_data.json",
+    "mower/_internal/arknights_mower/solvers/base_schedule.py",
+}
 
 
 def safe_name(name):
@@ -142,7 +151,8 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
         if platform in ("windows", "linux"):
             for name in changed:
                 if (
-                    old_files.get(name, {}).get("type") != "file"
+                    name not in PATCH_CANDIDATES
+                    or old_files.get(name, {}).get("type") != "file"
                     or new_files[name]["type"] != "file"
                 ):
                     continue
