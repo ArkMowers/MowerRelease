@@ -1,6 +1,8 @@
 name: Publish Mower OTA
 
 on:
+  repository_dispatch:
+    types: [mower_release_published]
   workflow_dispatch:
     inputs:
       tag:
@@ -18,7 +20,7 @@ on:
         default: false
         required: false
   schedule:
-    - cron: '23,53 * * * *'
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
@@ -43,7 +45,7 @@ jobs:
       - name: Generate and publish OTA packages
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ inputs.tag }}
+          TAG: ${{ inputs.tag || github.event.client_payload.tag }}
           SOURCE_LIMIT: ${{ inputs.source_limit || 5 }}
           MIRROR_ONLY: ${{ inputs.mirror_only || false }}
         run: |

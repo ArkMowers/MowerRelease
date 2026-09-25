@@ -10,4 +10,4 @@ OTA 清单 `ota.json` 包含起点、目标、平台、目标文件摘要及差�
 
 Windows 和 Linux 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同名附件继续保留，旧客户端仍可使用；新版客户端优先下载 `_v2.zip`。
 
-手动补发：在 [Publish Mower OTA](https://github.com/ArkMowers/MowerRelease/actions/workflows/publish-ota.yml) 工作流输入主仓库已发布的 tag。定时流程每半小时检查最新正式版和公测版。发布账号使用本仓库 `GITHUB_TOKEN`；无需主仓库跨仓库写入密钥。
+主仓库 Release 构建完成并上传全部安装包后，会发送 `mower_release_published` 事件，立即触发本仓库打包。主仓库需要配置 `MOWER_RELEASE_TOKEN` Actions secret：使用仅授权本仓库、具有 Contents 写权限的细粒度令牌。若未配置，主仓库发布任务跳过即时触发，本仓库每五分钟检查最新可用 Release 并自动补发。手动补发可在 [Publish Mower OTA](https://github.com/ArkMowers/MowerRelease/actions/workflows/publish-ota.yml) 输入已发布的 tag。本仓库构建和上传使用自身的 `GITHUB_TOKEN`。
