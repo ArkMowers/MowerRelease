@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import posixpath
 import re
 import stat
 import tarfile
@@ -22,7 +23,10 @@ def safe_name(name):
         or ".." in path.parts
         or "\\" in name
         or ":" in name
-        or not name.startswith("mower/")
+        or not (
+            name.startswith("mower/")
+            or name in ("mower-android.json", "python-runtime.zip.xz")
+        )
         or path.as_posix() != name
     ):
         raise ValueError(f"unsafe package path: {name}")
@@ -84,7 +88,9 @@ class Archive:
                 if (
                     not target
                     or PurePosixPath(target).is_absolute()
-                    or ".." in PurePosixPath(target).parts
+                    or not posixpath.normpath(
+                        posixpath.join(posixpath.dirname(name), target)
+                    ).startswith("mower/")
                 ):
                     raise ValueError(f"unsafe symlink: {name}")
                 result[name] = {"type": "symlink", "target": target}
@@ -109,12 +115,20 @@ class Archive:
 def build(source, target, output, *, from_version, to_version, platform, arch):
     if not VERSION.fullmatch(from_version) or not VERSION.fullmatch(to_version):
         raise ValueError("invalid release version")
-    if platform not in ("windows", "linux") or arch not in ("x64", "arm64"):
+    if platform not in ("windows", "linux", "android") or arch not in ("x64", "arm64"):
         raise ValueError("unsupported OTA platform")
     output = Path(output)
     with Archive(source) as before, Archive(target) as after:
         old_files = before.files()
         new_files = after.files()
+        android_roots = {"mower-android.json", "python-runtime.zip.xz"}
+        if platform == "android":
+            if not android_roots.issubset(old_files) or not android_roots.issubset(
+                new_files
+            ):
+                raise ValueError("Android packages need manifest and Python runtime")
+        elif any(name in old_files or name in new_files for name in android_roots):
+            raise ValueError("Android files in desktop package")
         changed = sorted(
             name for name, info in new_files.items() if info != old_files.get(name)
         )

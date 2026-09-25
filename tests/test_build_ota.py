@@ -82,6 +82,36 @@ class BuildOtaTests(unittest.TestCase):
                 )
                 self.assertEqual(data["changed"], ["mower/lib.so.1"])
 
+    def test_android_reuses_unchanged_runtime_archive(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old, new, patch = (root / n for n in ("old.zip", "new.zip", "patch.zip"))
+            for path, version in ((old, "old"), (new, "new")):
+                with zipfile.ZipFile(path, "w") as archive:
+                    archive.writestr(
+                        "mower-android.json", '{"version":"' + version + '"}'
+                    )
+                    archive.writestr(
+                        "python-runtime.zip.xz", b"same compressed runtime"
+                    )
+                    archive.writestr("mower/server.py", version)
+            build(
+                old,
+                new,
+                patch,
+                from_version="v4.1.6-alpha.7",
+                to_version="v4.1.6-alpha.8",
+                platform="android",
+                arch="arm64",
+            )
+            with zipfile.ZipFile(patch) as archive:
+                data = json.loads(archive.read("ota.json"))
+                self.assertIn("python-runtime.zip.xz", data["files"])
+                self.assertNotIn("python-runtime.zip.xz", data["changed"])
+                self.assertEqual(
+                    set(data["changed"]), {"mower-android.json", "mower/server.py"}
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

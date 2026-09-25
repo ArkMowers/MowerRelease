@@ -18,6 +18,7 @@ TARGETS = (
     ("windows", "x64", "zip"),
     ("linux", "x64", "tar.gz"),
     ("linux", "arm64", "tar.gz"),
+    ("android", "arm64", "zip"),
 )
 
 
@@ -89,14 +90,14 @@ def release_by_tag(releases, tag):
 
 def publish_target(target, releases, source_limit):
     tag = target["tag_name"]
+    current = None
     try:
         current = api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
         if current.get("draft"):
             raise ValueError(f"draft release {tag} needs manual review")
-        print(f"Already published: {tag}")
-        return current
     except subprocess.CalledProcessError:
         pass
+    published_names = {a["name"] for a in current["assets"]} if current else set()
 
     candidates = [
         r
@@ -105,7 +106,7 @@ def publish_target(target, releases, source_limit):
     ][:source_limit]
     if not candidates:
         print(f"No older versions for {tag}")
-        return None
+        return current
     with tempfile.TemporaryDirectory(prefix="mower-ota-") as temp:
         root = Path(temp)
         products = []
@@ -118,11 +119,13 @@ def publish_target(target, releases, source_limit):
                 previous = asset(before, platform, arch, extension)
                 if not previous:
                     continue
-                old_path = download(before["tag_name"], previous, root / "previous")
                 name = (
                     f"arknights-mower-ota_{before['tag_name'][1:]}_to_{tag[1:]}_"
                     f"{platform}_{arch}.zip"
                 )
+                if name in published_names:
+                    continue
+                old_path = download(before["tag_name"], previous, root / "previous")
                 output = root / "products" / name
                 result = build(
                     old_path,
@@ -142,29 +145,30 @@ def publish_target(target, releases, source_limit):
                     products.append(output)
         if not products:
             print(f"No useful OTA packages for {tag}")
-            return None
+            return current
 
         body = (
             f"Mower {tag} 的跨版本 OTA 差异包。完整安装包与更新说明见 "
             f"https://github.com/{SOURCE_REPO}/releases/tag/{tag} 。\n\n"
             "客户端会校验起点文件与完整目标目录；无法应用时改用主仓库完整包。"
         )
-        command = [
-            "gh",
-            "release",
-            "create",
-            tag,
-            "--repo",
-            RELEASE_REPO,
-            "--title",
-            tag,
-            "--notes",
-            body,
-            "--draft",
-        ]
-        if target["prerelease"]:
-            command.append("--prerelease")
-        subprocess.run(command, check=True)
+        if current is None:
+            command = [
+                "gh",
+                "release",
+                "create",
+                tag,
+                "--repo",
+                RELEASE_REPO,
+                "--title",
+                tag,
+                "--notes",
+                body,
+                "--draft",
+            ]
+            if target["prerelease"]:
+                command.append("--prerelease")
+            subprocess.run(command, check=True)
         subprocess.run(
             [
                 "gh",
@@ -177,10 +181,11 @@ def publish_target(target, releases, source_limit):
             ],
             check=True,
         )
-        subprocess.run(
-            ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
-            check=True,
-        )
+        if current is None:
+            subprocess.run(
+                ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
+                check=True,
+            )
     return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
 
 
