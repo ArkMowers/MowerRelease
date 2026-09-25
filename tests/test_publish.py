@@ -1,4 +1,5 @@
 import sys
+import subprocess
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -36,6 +37,15 @@ def mirrored(target):
 
 
 class PublishTests(unittest.TestCase):
+    def test_draft_created_by_previous_run_is_found_by_release_list(self):
+        draft = {"tag_name": "v4.1.6-alpha.7", "draft": True, "id": 42}
+        with patch.object(
+            publish,
+            "api",
+            side_effect=[subprocess.CalledProcessError(1, "gh"), [draft]],
+        ):
+            self.assertIs(publish.current_release(draft["tag_name"]), draft)
+
     def test_channel_index_uses_mirrored_full_asset_and_source_notes(self):
         current = source("v4.1.6-alpha.8")
         previous = source("v4.1.6-alpha.7")

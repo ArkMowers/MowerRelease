@@ -114,18 +114,26 @@ def release_body(target):
 
 def current_release(tag):
     try:
-        current = api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
+        return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
     except subprocess.CalledProcessError:
-        return None
-    if current.get("draft"):
-        raise ValueError(f"draft release {tag} needs manual review")
-    return current
+        # GitHub's lookup by tag excludes drafts, including drafts created by
+        # this workflow. The release list includes them so a failed run resumes.
+        return next(
+            (
+                item
+                for item in api(f"repos/{RELEASE_REPO}/releases?per_page=100")
+                if item["tag_name"] == tag
+            ),
+            None,
+        )
 
 
 def mirror_full_release(target):
     """Copy every supported full package with its source digest unchanged."""
     tag = target["tag_name"]
     current = current_release(tag)
+    if current and current.get("draft") and current.get("body") != release_body(target):
+        raise ValueError(f"draft release {tag} was not created by this workflow")
     published = {a["name"]: a for a in current["assets"]} if current else {}
     source_assets = [
         item
@@ -175,7 +183,11 @@ def mirror_full_release(target):
                 ],
                 check=True,
             )
-        mirrored = api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
+        mirrored = (
+            api(f"repos/{RELEASE_REPO}/releases/{current['id']}")
+            if current
+            else current_release(tag)
+        )
         mirrored_assets = {a["name"]: a for a in mirrored["assets"]}
         for item in source_assets:
             copy = mirrored_assets.get(item["name"])
@@ -187,7 +199,7 @@ def mirror_full_release(target):
                 raise ValueError(
                     f"full package mirror verification failed: {item['name']}"
                 )
-        if current is None:
+        if mirrored["draft"]:
             subprocess.run(
                 ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
                 check=True,
