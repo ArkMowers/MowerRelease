@@ -10,7 +10,7 @@ on:
         type: string
         required: false
       source_limit:
-        description: Number of older releases per channel (nightly also includes up to two beta sources)
+        description: Older releases per channel; beta and nightly also reserve stable sources
         type: number
         default: 5
         required: true

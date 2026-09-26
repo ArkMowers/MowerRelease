@@ -126,7 +126,7 @@ def channel_of(release):
     return "beta" if release["prerelease"] else "stable"
 
 
-def ota_sources(target, releases, limit):
+def ota_sources(target, releases, limit, *, asset_target=None):
     channel = channel_of(target)
     older = [
         item
@@ -134,13 +134,19 @@ def ota_sources(target, releases, limit):
         if released_at(item) < released_at(target)
         and item["tag_name"] != target["tag_name"]
         and (channel == "dev" or channel_of(item) != "dev")
+        and (asset_target is None or asset(item, *asset_target))
     ]
     if channel == "dev":
-        # Keep the normal nightly history while reserving recent beta builds
-        # as direct OTA starting points for users switching to development.
+        # Keep nightly history and reserve beta/stable starting points for
+        # users switching channels.
         nightlies = [item for item in older if channel_of(item) == "dev"]
         betas = [item for item in older if channel_of(item) == "beta"]
-        return nightlies[:limit] + betas[: min(2, limit)]
+        stables = [item for item in older if channel_of(item) == "stable"]
+        return nightlies[:limit] + betas[: min(2, limit)] + stables[: min(2, limit)]
+    if channel == "beta":
+        betas = [item for item in older if channel_of(item) == "beta"]
+        stables = [item for item in older if channel_of(item) == "stable"]
+        return betas[:limit] + stables[: min(2, limit)]
     return older[:limit]
 
 
@@ -257,10 +263,6 @@ def publish_target(target, releases, source_limit):
     current = mirror_full_release(target)
     published_names = {a["name"] for a in current["assets"]}
 
-    candidates = ota_sources(target, releases, source_limit)
-    if not candidates:
-        print(f"No older versions for {tag}; full packages are available")
-        return current
     with tempfile.TemporaryDirectory(prefix="mower-ota-") as temp:
         root = Path(temp)
         products = []
@@ -268,6 +270,12 @@ def publish_target(target, releases, source_limit):
             latest = asset(target, platform, arch, extension)
             if not latest:
                 continue
+            candidates = ota_sources(
+                target,
+                releases,
+                source_limit,
+                asset_target=(platform, arch, extension),
+            )
             pending = [
                 before
                 for before in candidates
@@ -401,7 +409,7 @@ def main():
         "--source-limit",
         type=int,
         default=5,
-        help="Older releases per channel; nightly also includes up to two beta sources",
+        help="Older releases per channel; beta and nightly also reserve stable sources",
     )
     parser.add_argument(
         "--mirror-only",

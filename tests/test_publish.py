@@ -72,21 +72,47 @@ class PublishTests(unittest.TestCase):
         releases = [latest, older, alpha, stable]
         self.assertEqual(publish.channel_of(latest), "dev")
         self.assertEqual(publish.channel_of(alpha), "beta")
-        self.assertEqual(publish.ota_sources(latest, releases, 5), [older, alpha])
+        self.assertEqual(
+            publish.ota_sources(latest, releases, 5), [older, alpha, stable]
+        )
         self.assertEqual(publish.ota_sources(alpha, releases, 5), [stable])
 
-    def test_nightly_keeps_five_development_and_two_beta_ota_sources(self):
+    def test_nightly_keeps_five_development_two_beta_and_two_stable_sources(self):
         latest = source("v4.1.6-alpha.9.g12345678")
         latest["published_at"] = "2026-09-26T18:00:00Z"
         nightlies = [source(f"v4.1.6-alpha.9.g{day:08x}") for day in range(25, 18, -1)]
         betas = [source(f"v4.1.6-alpha.{day}") for day in range(18, 15, -1)]
+        stables = [source(f"v4.1.{day}", False) for day in range(15, 12, -1)]
         for day, item in zip(range(25, 18, -1), nightlies):
             item["published_at"] = f"2026-09-{day}T18:00:00Z"
         for day, item in zip(range(18, 15, -1), betas):
             item["published_at"] = f"2026-09-{day}T18:00:00Z"
+        for day, item in zip(range(15, 12, -1), stables):
+            item["published_at"] = f"2026-09-{day}T18:00:00Z"
         self.assertEqual(
-            publish.ota_sources(latest, [latest, *nightlies, *betas], 5),
-            [*nightlies[:5], *betas[:2]],
+            publish.ota_sources(latest, [latest, *nightlies, *betas, *stables], 5),
+            [*nightlies[:5], *betas[:2], *stables[:2]],
+        )
+
+    def test_beta_reserves_stable_ota_source_and_filters_missing_platform(self):
+        latest = source("v4.1.6-alpha.9")
+        beta = source("v4.1.6-alpha.8")
+        stable = source("v4.1.5", False)
+        latest["published_at"] = "2026-09-26T18:00:00Z"
+        beta["published_at"] = "2026-09-25T18:00:00Z"
+        stable["published_at"] = "2026-09-24T18:00:00Z"
+        self.assertEqual(
+            publish.ota_sources(latest, [latest, beta, stable], 5),
+            [beta, stable],
+        )
+        self.assertEqual(
+            publish.ota_sources(
+                latest,
+                [latest, beta, stable],
+                5,
+                asset_target=("linux", "x64", "tar.gz"),
+            ),
+            [],
         )
 
     def test_draft_created_by_previous_run_is_found_by_release_list(self):
