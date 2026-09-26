@@ -15,7 +15,9 @@ import bsdiff4
 
 MAX_FILES = 50000
 MAX_UNPACKED = 8 * 1024**3
-VERSION = re.compile(r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
+VERSION = re.compile(
+    r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+(?:\.g[0-9a-f]{8})?)?\Z"
+)
 MAX_PATCH_FILE = 32 * 1024**2
 MIN_PATCH_FILE = 256 * 1024
 PATCH_CANDIDATES = {

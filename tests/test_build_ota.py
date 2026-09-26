@@ -30,8 +30,8 @@ class BuildOtaTests(unittest.TestCase):
                 old,
                 new,
                 delta,
-                from_version="v4.1.6-alpha.7",
-                to_version="v4.1.6-alpha.8",
+                from_version="v4.1.6-alpha.9.g12345678",
+                to_version="v4.1.6-alpha.9.g87654321",
                 platform="windows",
                 arch="x64",
             )

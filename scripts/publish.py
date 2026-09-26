@@ -13,7 +13,7 @@ from build_ota import build
 
 SOURCE_REPO = "ArkMowers/arknights-mower"
 RELEASE_REPO = "ArkMowers/MowerRelease"
-VERSION = re.compile(r"v\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
+VERSION = re.compile(r"v\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+(?:\.g[0-9a-f]{8})?)?\Z")
 OTA_TARGETS = (
     ("windows", "x64", "zip"),
     ("linux", "x64", "tar.gz"),
@@ -92,7 +92,14 @@ def download(tag, artifact, directory):
 
 
 def all_releases():
-    releases = api(f"repos/{SOURCE_REPO}/releases?per_page=100")
+    releases = []
+    page = 1
+    while True:
+        batch = api(f"repos/{SOURCE_REPO}/releases?per_page=100&page={page}")
+        releases.extend(batch)
+        if len(batch) < 100:
+            break
+        page += 1
     return sorted(
         (r for r in releases if not r["draft"] and VERSION.fullmatch(r["tag_name"])),
         key=released_at,
@@ -102,6 +109,25 @@ def all_releases():
 
 def release_by_tag(releases, tag):
     return next((r for r in releases if r["tag_name"] == tag), None)
+
+
+def channel_of(release):
+    tag = release["tag_name"]
+    if re.search(r"-alpha\.\d+\.g[0-9a-f]{8}$", tag):
+        return "dev"
+    return "beta" if release["prerelease"] else "stable"
+
+
+def ota_sources(target, releases, limit):
+    channel = channel_of(target)
+    return [
+        item
+        for item in releases
+        if released_at(item) < released_at(target)
+        and item["tag_name"] != target["tag_name"]
+        and (channel != "dev" or channel_of(item) == "dev")
+        and (channel == "dev" or channel_of(item) != "dev")
+    ][:limit]
 
 
 def release_body(target):
@@ -212,11 +238,7 @@ def publish_target(target, releases, source_limit):
     current = mirror_full_release(target)
     published_names = {a["name"] for a in current["assets"]}
 
-    candidates = [
-        r
-        for r in releases
-        if released_at(r) < released_at(target) and r["tag_name"] != tag
-    ][:source_limit]
+    candidates = ota_sources(target, releases, source_limit)
     if not candidates:
         print(f"No older versions for {tag}; full packages are available")
         return current
@@ -330,7 +352,7 @@ def save_index(channel, record):
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     summary = {}
-    for name in ("stable", "beta"):
+    for name in ("stable", "beta", "dev"):
         path = directory / f"{name}.json"
         if path.is_file():
             data = json.loads(path.read_text(encoding="utf-8"))
@@ -364,7 +386,8 @@ def main():
         stable = api(f"repos/{SOURCE_REPO}/releases/latest")
         targets = [
             release_by_tag(releases, stable["tag_name"]),
-            next((r for r in releases if r["prerelease"]), None),
+            next((r for r in releases if channel_of(r) == "beta"), None),
+            next((r for r in releases if channel_of(r) == "dev"), None),
         ]
     for target in targets:
         if target is None:
@@ -378,7 +401,7 @@ def main():
         history = [
             old
             for old in releases
-            if old["prerelease"] == target["prerelease"]
+            if channel_of(old) == channel_of(target)
             and released_at(old) < released_at(target)
             and has_full_assets(old)
         ][:6]
@@ -386,7 +409,7 @@ def main():
         ota_release = publish_target(target, releases, args.source_limit)
         if ota_release:
             save_index(
-                "beta" if target["prerelease"] else "stable",
+                channel_of(target),
                 index_record(target, ota_release, mirrored_history),
             )
 

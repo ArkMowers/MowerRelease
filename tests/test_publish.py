@@ -37,6 +37,19 @@ def mirrored(target):
 
 
 class PublishTests(unittest.TestCase):
+    def test_nightly_is_separate_from_beta_and_only_uses_nightly_ota_bases(self):
+        latest = source("v4.1.6-alpha.9.g12345678")
+        older = source("v4.1.6-alpha.9.g87654321")
+        alpha = source("v4.1.6-alpha.9")
+        stable = source("v4.1.5", False)
+        for item, day in ((latest, 26), (older, 25), (alpha, 24), (stable, 23)):
+            item["published_at"] = f"2026-09-{day}T18:00:00Z"
+        releases = [latest, older, alpha, stable]
+        self.assertEqual(publish.channel_of(latest), "dev")
+        self.assertEqual(publish.channel_of(alpha), "beta")
+        self.assertEqual(publish.ota_sources(latest, releases, 5), [older])
+        self.assertEqual(publish.ota_sources(alpha, releases, 5), [stable])
+
     def test_draft_created_by_previous_run_is_found_by_release_list(self):
         draft = {"tag_name": "v4.1.6-alpha.7", "draft": True, "id": 42}
         with patch.object(
