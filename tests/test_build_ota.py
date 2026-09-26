@@ -87,13 +87,14 @@ class BuildOtaTests(unittest.TestCase):
                 new,
                 patch,
                 from_version="v4.1.6-alpha.7",
-                to_version="v4.1.6-alpha.8",
+                to_version="v4.1.6-alpha.9.g12345678",
                 platform="windows",
                 arch="x64",
             )
             with zipfile.ZipFile(patch) as archive:
                 data = json.loads(archive.read("ota.json"))
                 self.assertEqual(data["from"], "4.1.6-alpha.7")
+                self.assertEqual(data["to"], "4.1.6-alpha.9.g12345678")
                 self.assertEqual(
                     data["changed"], ["mower/added.txt", "mower/changed.txt"]
                 )

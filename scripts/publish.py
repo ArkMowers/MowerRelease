@@ -128,14 +128,20 @@ def channel_of(release):
 
 def ota_sources(target, releases, limit):
     channel = channel_of(target)
-    return [
+    older = [
         item
         for item in releases
         if released_at(item) < released_at(target)
         and item["tag_name"] != target["tag_name"]
-        and (channel != "dev" or channel_of(item) == "dev")
         and (channel == "dev" or channel_of(item) != "dev")
-    ][:limit]
+    ]
+    if channel == "dev":
+        # Keep the normal nightly history while reserving recent beta builds
+        # as direct OTA starting points for users switching to development.
+        nightlies = [item for item in older if channel_of(item) == "dev"]
+        betas = [item for item in older if channel_of(item) == "beta"]
+        return nightlies[:limit] + betas[: min(2, limit)]
+    return older[:limit]
 
 
 def release_body(target):
