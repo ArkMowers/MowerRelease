@@ -1,4 +1,4 @@
-name: Windows Nightly
+name: Windows and Android Nightly
 
 on:
   schedule:
@@ -44,8 +44,8 @@ jobs:
             exit 1
           fi
           tag_name="v${version}.g${source_sha:0:8}"
-          if gh release view "$tag_name" --repo ArkMowers/MowerRelease --json assets --jq '.assets[].name' |
-             grep -q '_windows_x64.zip$'; then
+          assets="$(gh release view "$tag_name" --repo ArkMowers/MowerRelease --json assets --jq '.assets[].name' 2>/dev/null || true)"
+          if grep -q '_windows_x64.zip$' <<< "$assets" && grep -q '_android_arm64.zip$' <<< "$assets"; then
             echo 'alpha has not changed since the last published nightly.'
             echo 'changed=false' >> "$GITHUB_OUTPUT"
             exit 0
@@ -123,8 +123,56 @@ jobs:
           path: mower/dist/arknights-mower_*_windows_x64.zip
           if-no-files-found: error
 
+  build-android:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.changed == 'true' }}
+    runs-on: ubuntu-24.04-arm
+    defaults:
+      run:
+        working-directory: mower
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ needs.prepare.outputs.source_sha }}
+          path: mower
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: mower/ui/package-lock.json
+      - name: Inject nightly version
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python scripts/inject_version.py "${NIGHTLY_TAG#v}"
+      - name: Build shared WebUI
+        working-directory: mower/ui
+        run: npm ci && npm run build
+      - name: Build and smoke test ARM64 Python environment
+        run: python scripts/build_android_runtime.py
+      - name: Package Android Mower and Python runtime
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python scripts/package_android.py "${NIGHTLY_TAG#v}"
+      - name: Validate Android package
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}
+        run: python scripts/check_android_package.py "dist/arknights-mower_${NIGHTLY_TAG#v}_android_arm64.zip" --version "${NIGHTLY_TAG#v}" --revision "$SOURCE_SHA"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-android
+          path: mower/dist/arknights-mower_*_android_arm64.zip
+          if-no-files-found: error
+
   publish:
-    needs: [prepare, build-windows]
+    needs: [prepare, build-windows, build-android]
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     permissions:
@@ -138,6 +186,10 @@ jobs:
         with:
           name: nightly-windows
           path: release-assets
+      - uses: actions/download-artifact@v4
+        with:
+          name: nightly-android
+          path: release-assets
       - name: Test OTA package format
         run: |
           python -m pip install bsdiff4==1.2.6
@@ -150,16 +202,17 @@ jobs:
         run: |
           set -euo pipefail
           package="release-assets/arknights-mower_${TAG#v}_windows_x64.zip"
-          (cd release-assets && sha256sum "$(basename "$package")" > SHA256SUMS)
+          android_package="release-assets/arknights-mower_${TAG#v}_android_arm64.zip"
+          (cd release-assets && sha256sum "$(basename "$package")" "$(basename "$android_package")" > SHA256SUMS)
           cat release-assets/SHA256SUMS
           if gh release view "$TAG" --repo ArkMowers/MowerRelease >/dev/null 2>&1; then
-            gh release upload "$TAG" "$package" release-assets/SHA256SUMS \
+            gh release upload "$TAG" "$package" "$android_package" release-assets/SHA256SUMS \
               --repo ArkMowers/MowerRelease --clobber
           else
-            gh release create "$TAG" "$package" release-assets/SHA256SUMS \
+            gh release create "$TAG" "$package" "$android_package" release-assets/SHA256SUMS \
               --repo ArkMowers/MowerRelease --target main --prerelease \
               --title "$TAG" \
-              --notes "Windows x64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/${SOURCE_SHA})。完整包和 OTA 均在此发布。"
+              --notes "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/${SOURCE_SHA})。完整包和 OTA 均在此发布。"
           fi
           python scripts/publish.py --tag "$TAG"
       - name: Commit development index
