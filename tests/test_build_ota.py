@@ -1,5 +1,7 @@
 import hashlib
+import io
 import json
+import lzma
 import os
 import sys
 import tarfile
@@ -9,11 +11,21 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from build_ota import build
 import bsdiff4
+from build_ota import build
 
 
 class BuildOtaTests(unittest.TestCase):
+    @staticmethod
+    def runtime_blob(changed=b"same"):
+        output = io.BytesIO()
+        with zipfile.ZipFile(output, "w") as archive:
+            archive.writestr("usr/", b"")
+            archive.writestr("usr/local/bin/python3.12", b"python")
+            archive.writestr("usr/lib/changed.so", changed)
+            archive.writestr(".symlinks.json", b"{}")
+        return lzma.compress(output.getvalue(), preset=6)
+
     def test_changed_large_library_also_uses_binary_patch(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -30,8 +42,8 @@ class BuildOtaTests(unittest.TestCase):
                 old,
                 new,
                 delta,
-                from_version="v4.1.6-alpha.7",
-                to_version="v4.1.6-alpha.8",
+                from_version="v4.1.6-alpha.9.g12345678",
+                to_version="v4.1.6-alpha.9.g87654321",
                 platform="windows",
                 arch="x64",
             )
@@ -87,13 +99,14 @@ class BuildOtaTests(unittest.TestCase):
                 new,
                 patch,
                 from_version="v4.1.6-alpha.7",
-                to_version="v4.1.6-alpha.8",
+                to_version="v4.1.6-alpha.9.g12345678",
                 platform="windows",
                 arch="x64",
             )
             with zipfile.ZipFile(patch) as archive:
                 data = json.loads(archive.read("ota.json"))
                 self.assertEqual(data["from"], "4.1.6-alpha.7")
+                self.assertEqual(data["to"], "4.1.6-alpha.9.g12345678")
                 self.assertEqual(
                     data["changed"], ["mower/added.txt", "mower/changed.txt"]
                 )
@@ -149,9 +162,7 @@ class BuildOtaTests(unittest.TestCase):
                     archive.writestr(
                         "mower-android.json", '{"version":"' + version + '"}'
                     )
-                    archive.writestr(
-                        "python-runtime.zip.xz", b"same compressed runtime"
-                    )
+                    archive.writestr("python-runtime.zip.xz", self.runtime_blob())
                     archive.writestr("mower/server.py", version)
             build(
                 old,
@@ -166,9 +177,43 @@ class BuildOtaTests(unittest.TestCase):
                 data = json.loads(archive.read("ota.json"))
                 self.assertIn("python-runtime.zip.xz", data["files"])
                 self.assertNotIn("python-runtime.zip.xz", data["changed"])
+                self.assertEqual(data["format"], 2)
+                self.assertEqual(data["runtime"]["changed"], [])
                 self.assertEqual(
                     set(data["changed"]), {"mower-android.json", "mower/server.py"}
                 )
+
+    def test_android_runtime_changes_only_upload_inner_files(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old, new, patch = (root / n for n in ("old.zip", "new.zip", "patch.zip"))
+            for path, version, runtime in (
+                (old, "old", self.runtime_blob(b"old library")),
+                (new, "new", self.runtime_blob(b"new library")),
+            ):
+                with zipfile.ZipFile(path, "w") as archive:
+                    archive.writestr(
+                        "mower-android.json", '{"version":"' + version + '"}'
+                    )
+                    archive.writestr("python-runtime.zip.xz", runtime)
+                    archive.writestr("mower/server.py", version)
+            build(
+                old,
+                new,
+                patch,
+                from_version="v4.1.6-alpha.7",
+                to_version="v4.1.6-alpha.8",
+                platform="android",
+                arch="arm64",
+            )
+            with zipfile.ZipFile(patch) as archive:
+                manifest = json.loads(archive.read("ota.json"))
+                self.assertEqual(manifest["format"], 2)
+                self.assertEqual(manifest["runtime"]["changed"], ["usr/lib/changed.so"])
+                self.assertEqual(
+                    archive.read("runtime/usr/lib/changed.so"), b"new library"
+                )
+                self.assertNotIn("payload/python-runtime.zip.xz", archive.namelist())
 
 
 if __name__ == "__main__":

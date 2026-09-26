@@ -3,21 +3,30 @@
 import argparse
 import hashlib
 import json
+import lzma
 import posixpath
 import re
+import shutil
 import stat
 import tarfile
+import tempfile
 import zipfile
 import zlib
+from contextlib import ExitStack
 from pathlib import Path, PurePosixPath
 
 import bsdiff4
 
 MAX_FILES = 50000
 MAX_UNPACKED = 8 * 1024**3
-VERSION = re.compile(r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?\Z")
+VERSION = re.compile(
+    r"v?\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+(?:\.g[0-9a-f]{8})?)?\Z"
+)
 MAX_PATCH_FILE = 32 * 1024**2
 MIN_PATCH_FILE = 256 * 1024
+MAX_RUNTIME_FILES = 100000
+MAX_RUNTIME_BYTES = 2 * 1024**3
+MAX_RUNTIME_ARCHIVE = 3 * 1024**3
 PATCH_CANDIDATES = {
     "mower/mower.exe",
     "mower/多开管理器.exe",
@@ -52,6 +61,59 @@ def digest(stream):
     while chunk := stream.read(1024 * 1024):
         result.update(chunk)
     return result.hexdigest()
+
+
+def expand_runtime(package, destination):
+    with (
+        package.open("python-runtime.zip.xz") as compressed,
+        lzma.LZMAFile(compressed) as source,
+        destination.open("wb") as target,
+    ):
+        expanded = 0
+        while chunk := source.read(1024 * 1024):
+            expanded += len(chunk)
+            if expanded > MAX_RUNTIME_ARCHIVE:
+                raise ValueError("Android runtime ZIP exceeds 3 GiB")
+            target.write(chunk)
+    return zipfile.ZipFile(destination)
+
+
+def runtime_files(archive):
+    entries = archive.infolist()
+    if len(entries) > MAX_RUNTIME_FILES:
+        raise ValueError("too many Android runtime files")
+    files = {}
+    total = 0
+    for entry in entries:
+        name = entry.filename
+        path = PurePosixPath(name)
+        if (
+            not name
+            or path.is_absolute()
+            or path.as_posix() != name.rstrip("/")
+            or ".." in path.parts
+            or "\\" in name
+            or ":" in name
+            or name in files
+            or (name.startswith(("mower/", "mower-data/")) and not entry.is_dir())
+            or stat.S_ISLNK(entry.external_attr >> 16)
+        ):
+            raise ValueError("unsafe Android runtime entry")
+        mode = (entry.external_attr >> 16) & 0o777 or 0o644
+        if entry.is_dir():
+            files[name] = {"type": "dir", "mode": mode}
+        else:
+            total += entry.file_size
+            if total > MAX_RUNTIME_BYTES:
+                raise ValueError("Android runtime expands beyond 2 GiB")
+            with archive.open(entry) as source:
+                files[name] = {
+                    "type": "file",
+                    "mode": mode,
+                    "size": entry.file_size,
+                    "sha256": digest(source),
+                }
+    return files
 
 
 class Archive:
@@ -132,7 +194,9 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
     if platform not in ("windows", "linux", "android") or arch not in ("x64", "arm64"):
         raise ValueError("unsupported OTA platform")
     output = Path(output)
-    with Archive(source) as before, Archive(target) as after:
+    with ExitStack() as stack:
+        before = stack.enter_context(Archive(source))
+        after = stack.enter_context(Archive(target))
         old_files = before.files()
         new_files = after.files()
         android_roots = {"mower-android.json", "python-runtime.zip.xz"}
@@ -146,6 +210,27 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
         changed = sorted(
             name for name, info in new_files.items() if info != old_files.get(name)
         )
+        runtime = None
+        runtime_after = None
+        if platform == "android":
+            temporary_runtime = Path(stack.enter_context(tempfile.TemporaryDirectory()))
+            runtime_before = stack.enter_context(
+                expand_runtime(before, temporary_runtime / "before.zip")
+            )
+            runtime_after = stack.enter_context(
+                expand_runtime(after, temporary_runtime / "after.zip")
+            )
+            old_runtime_files = runtime_files(runtime_before)
+            new_runtime_files = runtime_files(runtime_after)
+            runtime = {
+                "files": new_runtime_files,
+                "changed": sorted(
+                    name
+                    for name, item in new_runtime_files.items()
+                    if item["type"] == "file" and item != old_runtime_files.get(name)
+                ),
+            }
+            changed = [name for name in changed if name != "python-runtime.zip.xz"]
         patches = {}
         patch_data = {}
         if platform in ("windows", "linux"):
@@ -181,7 +266,7 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
                 patch_data[name] = delta
         manifest = {
             "kind": "mower-ota",
-            "format": 2 if patches else 1,
+            "format": 2 if patches or runtime is not None else 1,
             "from": from_version.lstrip("v"),
             "to": to_version.lstrip("v"),
             "platform": platform,
@@ -191,6 +276,8 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
         }
         if patches:
             manifest["patches"] = patches
+        if runtime is not None:
+            manifest["runtime"] = runtime
         temporary = output.with_suffix(output.suffix + ".tmp")
         output.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -218,6 +305,13 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
                     ):
                         while chunk := src.read(1024 * 1024):
                             dst.write(chunk)
+                if runtime is not None:
+                    for name in runtime["changed"]:
+                        with (
+                            runtime_after.open(name) as src,
+                            patch.open("runtime/" + name, "w", force_zip64=True) as dst,
+                        ):
+                            shutil.copyfileobj(src, dst, 1024 * 1024)
             temporary.replace(output)
         finally:
             temporary.unlink(missing_ok=True)

@@ -1,0 +1,227 @@
+name: Windows and Android Nightly
+
+on:
+  schedule:
+    # 06:00 Asia/Shanghai; scheduled workflows run from this repo's default branch.
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-mower-ota
+  cancel-in-progress: false
+
+env:
+  PYINSTALLER_VERSION: '6.22.2'
+  UPX_VERSION: '5.2.0'
+  UPX_WINDOWS_SHA256: 'b471ebf1b7f20f4a89150264ed9a008a2a5bfd247f3c6d1184a75bb59ca08f5d'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.version.outputs.changed }}
+      tag_name: ${{ steps.version.outputs.tag_name }}
+      source_sha: ${{ steps.version.outputs.source_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: alpha
+          path: mower
+      - name: Select alpha revision
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          source_sha="$(git -C mower rev-parse HEAD)"
+          version="$(sed -nE 's/^__version__ = "([0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+)"$/\1/p' mower/arknights_mower/__init__.py)"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+$ ]]; then
+            echo '::error::alpha has no supported alpha version' >&2
+            exit 1
+          fi
+          tag_name="v${version}.g${source_sha:0:8}"
+          assets="$(gh release view "$tag_name" --repo ArkMowers/MowerRelease --json assets --jq '.assets[].name' 2>/dev/null || true)"
+          if grep -q '_windows_x64.zip$' <<< "$assets" && grep -q '_android_arm64.zip$' <<< "$assets"; then
+            echo 'alpha has not changed since the last published nightly.'
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          {
+            echo 'changed=true'
+            echo "tag_name=$tag_name"
+            echo "source_sha=$source_sha"
+          } >> "$GITHUB_OUTPUT"
+
+  build-windows:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.changed == 'true' }}
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: mower
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ needs.prepare.outputs.source_sha }}
+          path: mower
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inject nightly version
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python scripts/inject_version.py "${NIGHTLY_TAG#v}" --system windows --arch x64
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install "pyinstaller==${PYINSTALLER_VERSION}"
+      - name: Prune unused OpenCV assets
+        shell: bash
+        run: python scripts/prune_opencv.py
+      - name: Install UPX
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "upx-$($env:UPX_VERSION)-win64.zip"
+          $destination = Join-Path $env:RUNNER_TEMP "upx-$($env:UPX_VERSION)"
+          $url = "https://github.com/upx/upx/releases/download/v$($env:UPX_VERSION)/upx-$($env:UPX_VERSION)-win64.zip"
+          Invoke-WebRequest -Uri $url -OutFile $archive
+          $actualHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualHash -ne $env:UPX_WINDOWS_SHA256) {
+            throw "UPX SHA-256 mismatch: expected $($env:UPX_WINDOWS_SHA256), got $actualHash"
+          }
+          Expand-Archive -LiteralPath $archive -DestinationPath $destination
+          $upx = Get-ChildItem -LiteralPath $destination -Filter upx.exe -Recurse | Select-Object -First 1
+          if ($null -eq $upx) { throw 'upx.exe was not found in the downloaded archive' }
+          $upx.Directory.FullName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Install frontend dependencies
+        working-directory: mower/ui
+        run: npm ci
+      - name: Build with PyInstaller
+        shell: bash
+        run: python -m PyInstaller webui_zip.spec
+      - name: Verify PE architecture
+        shell: bash
+        env:
+          PYTHONUTF8: '1'
+        run: python scripts/check_pe_arch.py dist/mower --arch x64
+      - name: Package into zip
+        shell: pwsh
+        run: |
+          $version = "${{ needs.prepare.outputs.tag_name }}".TrimStart('v')
+          Compress-Archive -Path dist/mower -DestinationPath "dist/arknights-mower_${version}_windows_x64.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-windows
+          path: mower/dist/arknights-mower_*_windows_x64.zip
+          if-no-files-found: error
+
+  build-android:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.changed == 'true' }}
+    runs-on: ubuntu-24.04-arm
+    defaults:
+      run:
+        working-directory: mower
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ needs.prepare.outputs.source_sha }}
+          path: mower
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: mower/ui/package-lock.json
+      - name: Inject nightly version
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python scripts/inject_version.py "${NIGHTLY_TAG#v}"
+      - name: Build shared WebUI
+        working-directory: mower/ui
+        run: npm ci && npm run build
+      - name: Build and smoke test ARM64 Python environment
+        run: python scripts/build_android_runtime.py
+      - name: Package Android Mower and Python runtime
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python scripts/package_android.py "${NIGHTLY_TAG#v}"
+      - name: Validate Android package
+        shell: bash
+        env:
+          NIGHTLY_TAG: ${{ needs.prepare.outputs.tag_name }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}
+        run: python scripts/check_android_package.py "dist/arknights-mower_${NIGHTLY_TAG#v}_android_arm64.zip" --version "${NIGHTLY_TAG#v}" --revision "$SOURCE_SHA"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-android
+          path: mower/dist/arknights-mower_*_android_arm64.zip
+          if-no-files-found: error
+
+  publish:
+    needs: [prepare, build-windows, build-android]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: nightly-windows
+          path: release-assets
+      - uses: actions/download-artifact@v4
+        with:
+          name: nightly-android
+          path: release-assets
+      - name: Test OTA package format
+        run: |
+          python -m pip install bsdiff4==1.2.6
+          python -m unittest discover -s tests -p 'test_*.py' -q
+      - name: Publish full package and OTA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prepare.outputs.tag_name }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          package="release-assets/arknights-mower_${TAG#v}_windows_x64.zip"
+          android_package="release-assets/arknights-mower_${TAG#v}_android_arm64.zip"
+          (cd release-assets && sha256sum "$(basename "$package")" "$(basename "$android_package")" > SHA256SUMS)
+          cat release-assets/SHA256SUMS
+          if gh release view "$TAG" --repo ArkMowers/MowerRelease >/dev/null 2>&1; then
+            gh release upload "$TAG" "$package" "$android_package" release-assets/SHA256SUMS \
+              --repo ArkMowers/MowerRelease --clobber
+          else
+            gh release create "$TAG" "$package" "$android_package" release-assets/SHA256SUMS \
+              --repo ArkMowers/MowerRelease --target main --prerelease \
+              --title "$TAG" \
+              --notes "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/${SOURCE_SHA})。完整包和 OTA 均在此发布。"
+          fi
+          python scripts/publish.py --tag "$TAG"
+      - name: Commit development index
+        run: |
+          if [[ -n "$(git status --porcelain -- version)" ]]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add version
+            git commit -m 'chore: update nightly OTA index'
+            git pull --rebase origin main
+            git push
+          fi
