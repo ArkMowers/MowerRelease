@@ -397,7 +397,12 @@ def save_index(channel, record):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tag", help="Only publish one specific main repository tag")
-    parser.add_argument("--source-limit", type=int, default=5)
+    parser.add_argument(
+        "--source-limit",
+        type=int,
+        default=5,
+        help="Older releases per channel; nightly also includes up to two beta sources",
+    )
     parser.add_argument(
         "--mirror-only",
         action="store_true",
