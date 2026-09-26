@@ -62,7 +62,7 @@ def has_full_assets(release):
     return any(asset(release, *target) for target in FULL_TARGETS)
 
 
-def download(tag, artifact, directory):
+def download(tag, artifact, directory, *, repo=SOURCE_REPO):
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / artifact["name"]
     if not path.exists():
@@ -73,7 +73,7 @@ def download(tag, artifact, directory):
                 "download",
                 tag,
                 "--repo",
-                SOURCE_REPO,
+                repo,
                 "--pattern",
                 artifact["name"],
                 "--dir",
@@ -91,15 +91,23 @@ def download(tag, artifact, directory):
     return path
 
 
-def all_releases():
+def list_releases(repo):
     releases = []
     page = 1
     while True:
-        batch = api(f"repos/{SOURCE_REPO}/releases?per_page=100&page={page}")
+        batch = api(f"repos/{repo}/releases?per_page=100&page={page}")
         releases.extend(batch)
         if len(batch) < 100:
             break
         page += 1
+    return releases
+
+
+def all_releases():
+    releases = list_releases(SOURCE_REPO)
+    releases.extend(
+        item for item in list_releases(RELEASE_REPO) if channel_of(item) == "dev"
+    )
     return sorted(
         (r for r in releases if not r["draft"] and VERSION.fullmatch(r["tag_name"])),
         key=released_at,
@@ -157,6 +165,11 @@ def current_release(tag):
 def mirror_full_release(target):
     """Copy every supported full package with its source digest unchanged."""
     tag = target["tag_name"]
+    if channel_of(target) == "dev":
+        current = current_release(tag)
+        if not current or current["draft"] or not has_full_assets(current):
+            raise ValueError(f"nightly full package is unavailable: {tag}")
+        return current
     current = current_release(tag)
     if current and current.get("draft") and current.get("body") != release_body(target):
         raise ValueError(f"draft release {tag} was not created by this workflow")
@@ -258,11 +271,21 @@ def publish_target(target, releases, source_limit):
             ]
             if not pending:
                 continue
-            latest_path = download(tag, latest, root / "target")
+            latest_path = download(
+                tag,
+                latest,
+                root / "target",
+                repo=RELEASE_REPO if channel_of(target) == "dev" else SOURCE_REPO,
+            )
             for before in pending:
                 previous = asset(before, platform, arch, extension)
                 name = ota_name(before["tag_name"], tag, platform, arch)
-                old_path = download(before["tag_name"], previous, root / "previous")
+                old_path = download(
+                    before["tag_name"],
+                    previous,
+                    root / "previous",
+                    repo=RELEASE_REPO if channel_of(before) == "dev" else SOURCE_REPO,
+                )
                 output = root / "products" / name
                 try:
                     result = build(

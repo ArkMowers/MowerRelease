@@ -37,6 +37,24 @@ def mirrored(target):
 
 
 class PublishTests(unittest.TestCase):
+    def test_release_listing_keeps_nightly_from_this_repository_separate(self):
+        alpha = source("v4.1.6-alpha.9")
+        nightly = source("v4.1.6-alpha.9.g12345678")
+        nightly["html_url"] = f"https://github.com/{publish.RELEASE_REPO}/releases/tag/{nightly['tag_name']}"
+        for item in (alpha, nightly):
+            item["draft"] = False
+        with patch.object(publish, "list_releases", side_effect=[[alpha], [nightly]]) as listing:
+            releases = publish.all_releases()
+        self.assertEqual({item["tag_name"] for item in releases}, {alpha["tag_name"], nightly["tag_name"]})
+        self.assertEqual(listing.call_count, 2)
+
+    def test_nightly_full_package_is_used_from_mowerrelease(self):
+        nightly = source("v4.1.6-alpha.9.g12345678")
+        copy = mirrored(nightly)
+        copy["tag_name"] = nightly["tag_name"]
+        with patch.object(publish, "current_release", return_value=copy):
+            self.assertIs(publish.mirror_full_release(nightly), copy)
+
     def test_nightly_is_separate_from_beta_and_only_uses_nightly_ota_bases(self):
         latest = source("v4.1.6-alpha.9.g12345678")
         older = source("v4.1.6-alpha.9.g87654321")
