@@ -145,21 +145,18 @@ def ota_sources(target, releases, limit, *, asset_target=None):
         for item in releases
         if released_at(item) < released_at(target)
         and item["tag_name"] != target["tag_name"]
-        and (channel == "dev" or channel_of(item) != "dev")
         and (asset_target is None or asset(item, *asset_target))
     ]
+    nightlies = [item for item in older if channel_of(item) == "dev"]
+    betas = [item for item in older if channel_of(item) == "beta"]
+    stables = [item for item in older if channel_of(item) == "stable"]
     if channel == "dev":
         # Keep nightly history and reserve beta/stable starting points for
         # users switching channels.
-        nightlies = [item for item in older if channel_of(item) == "dev"]
-        betas = [item for item in older if channel_of(item) == "beta"]
-        stables = [item for item in older if channel_of(item) == "stable"]
         return nightlies[:limit] + betas[: min(2, limit)] + stables[: min(2, limit)]
     if channel == "beta":
-        betas = [item for item in older if channel_of(item) == "beta"]
-        stables = [item for item in older if channel_of(item) == "stable"]
-        return betas[:limit] + stables[: min(2, limit)]
-    return older[:limit]
+        return betas[:limit] + nightlies[:limit] + stables[: min(2, limit)]
+    return stables[:limit] + betas[:limit] + nightlies[:limit]
 
 
 def release_body(target):

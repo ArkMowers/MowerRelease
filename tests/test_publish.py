@@ -37,6 +37,103 @@ def mirrored(target):
 
 
 class PublishTests(unittest.TestCase):
+    def test_public_targets_build_and_upload_nightly_ota_from_release_repository(self):
+        for tag, prerelease in (("v4.1.6-alpha.11", True), ("v4.1.6", False)):
+            with self.subTest(tag=tag):
+                latest = source(tag, prerelease)
+                nightly = source("v4.1.6-alpha.10.g85e916f7")
+                latest["published_at"] = "2026-10-09T06:00:00Z"
+                for item in (latest, nightly):
+                    item["assets"] = [
+                        {
+                            "name": publish.asset_name(item["tag_name"], *target),
+                            "size": 1000,
+                        }
+                        for target in publish.OTA_TARGETS
+                    ]
+                downloads, products = [], []
+
+                def download(tag, artifact, directory, *, repo, events=downloads):
+                    events.append((tag, repo))
+                    directory.mkdir(parents=True, exist_ok=True)
+                    path = directory / artifact["name"]
+                    path.write_bytes(b"full package")
+                    return path
+
+                def build(old, new, output, *, events=products, **kwargs):
+                    events.append(kwargs)
+                    output.parent.mkdir(parents=True, exist_ok=True)
+                    output.write_bytes(b"delta")
+                    return {"bytes": 5}
+
+                with (
+                    patch.object(
+                        publish, "mirror_full_release", return_value=mirrored(latest)
+                    ),
+                    patch.object(publish, "download", side_effect=download),
+                    patch.object(publish, "build", side_effect=build),
+                    patch.object(publish.subprocess, "run") as upload,
+                    patch.object(publish, "api", return_value=mirrored(latest)),
+                ):
+                    publish.publish_target(latest, [latest, nightly], 5)
+                self.assertEqual(
+                    [p["platform"] for p in products], ["windows", "android"]
+                )
+                self.assertTrue(
+                    all(
+                        p["from_version"] == nightly["tag_name"]
+                        and p["to_version"] == tag
+                        for p in products
+                    )
+                )
+                self.assertEqual(
+                    downloads,
+                    [
+                        (tag, publish.SOURCE_REPO),
+                        (nightly["tag_name"], publish.RELEASE_REPO),
+                        (tag, publish.SOURCE_REPO),
+                        (nightly["tag_name"], publish.RELEASE_REPO),
+                    ],
+                )
+                self.assertEqual(upload.call_count, 2)
+
+    def test_beta_and_stable_reserve_nightly_sources_for_cross_channel_ota(self):
+        nightly = source("v4.1.6-alpha.10.g85e916f7")
+        beta = source("v4.1.6-alpha.11")
+        stable = source("v4.1.6", False)
+        older_stable = source("v4.1.5", False)
+        for item, day in ((stable, 29), (beta, 28), (nightly, 27), (older_stable, 26)):
+            item["published_at"] = f"2026-09-{day}T18:00:00Z"
+        self.assertEqual(
+            publish.ota_sources(beta, [beta, nightly, older_stable], 5),
+            [nightly, older_stable],
+        )
+        self.assertEqual(
+            publish.ota_sources(stable, [stable, beta, nightly, older_stable], 5),
+            [older_stable, beta, nightly],
+        )
+
+    def test_cross_channel_sources_keep_per_channel_quota_and_platform_filter(self):
+        target = source("v4.1.6", False)
+        target["published_at"] = "2026-09-30T18:00:00Z"
+        betas = [source(f"v4.1.6-alpha.{n}") for n in range(8, 3, -1)]
+        nightlies = [source(f"v4.1.6-alpha.3.g{n:08x}") for n in range(9, 3, -1)]
+        stable = source("v4.1.5", False)
+        for day, item in enumerate([*betas, *nightlies, stable], 10):
+            item["published_at"] = f"2026-09-{day}T18:00:00Z"
+        # Callers provide releases in descending publication order.
+        releases = sorted(
+            [target, *betas, *nightlies, stable], key=publish.released_at, reverse=True
+        )
+        selected = publish.ota_sources(target, releases, 2)
+        self.assertEqual(selected, [stable, *betas[-2:][::-1], *nightlies[-2:][::-1]])
+        self.assertEqual(
+            publish.ota_sources(
+                target, releases, 2, asset_target=("android", "arm64", "zip")
+            ),
+            [],
+        )
+
     def test_ota_only_builds_windows_x64_and_android_arm64_and_uploads_incrementally(
         self,
     ):
