@@ -6,28 +6,33 @@ import json
 import re
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from build_ota import build
+from build_ota import IncompatibleSourceError, build
 
 SOURCE_REPO = "ArkMowers/arknights-mower"
 RELEASE_REPO = "ArkMowers/MowerRelease"
 VERSION = re.compile(r"v\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+(?:\.g[0-9a-f]{8})?)?\Z")
 OTA_TARGETS = (
     ("windows", "x64", "zip"),
-    ("linux", "x64", "tar.gz"),
-    ("linux", "arm64", "tar.gz"),
     ("android", "arm64", "zip"),
 )
 FULL_TARGETS = OTA_TARGETS + (
-    ("macos", "x64", "dmg"),
+    ("linux", "x64", "tar.gz"),
+    ("linux", "arm64", "tar.gz"),
     ("macos", "arm64", "dmg"),
 )
 
+COMMAND_TIMEOUT = 120
+TRANSFER_TIMEOUT = 600
+
 
 def gh(*args):
-    return subprocess.check_output(["gh", *args], text=True).strip()
+    return subprocess.check_output(
+        ["gh", *args], text=True, timeout=COMMAND_TIMEOUT
+    ).strip()
 
 
 def api(path):
@@ -66,6 +71,8 @@ def download(tag, artifact, directory, *, repo=SOURCE_REPO):
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / artifact["name"]
     if not path.exists():
+        started = time.monotonic()
+        print(f"Download {repo}/{tag}/{artifact['name']}", flush=True)
         subprocess.run(
             [
                 "gh",
@@ -80,6 +87,11 @@ def download(tag, artifact, directory, *, repo=SOURCE_REPO):
                 str(directory),
             ],
             check=True,
+            timeout=TRANSFER_TIMEOUT,
+        )
+        print(
+            f"Downloaded {artifact['name']} in {time.monotonic() - started:.1f}s",
+            flush=True,
         )
     expected = artifact.get("digest") or ""
     if not re.fullmatch(r"sha256:[a-f0-9]{64}", expected):
@@ -177,6 +189,7 @@ def current_release(tag):
 def mirror_full_release(target):
     """Copy every supported full package with its source digest unchanged."""
     tag = target["tag_name"]
+    print(f"Mirror full packages: {tag}", flush=True)
     if channel_of(target) == "dev":
         current = current_release(tag)
         if not current or current["draft"] or not has_full_assets(current):
@@ -220,7 +233,7 @@ def mirror_full_release(target):
             ]
             if target["prerelease"]:
                 command.append("--prerelease")
-            subprocess.run(command, check=True)
+            subprocess.run(command, check=True, timeout=COMMAND_TIMEOUT)
         if products:
             subprocess.run(
                 [
@@ -233,6 +246,7 @@ def mirror_full_release(target):
                     *map(str, products),
                 ],
                 check=True,
+                timeout=TRANSFER_TIMEOUT,
             )
         mirrored = (
             api(f"repos/{RELEASE_REPO}/releases/{current['id']}")
@@ -254,6 +268,7 @@ def mirror_full_release(target):
             subprocess.run(
                 ["gh", "release", "edit", tag, "--repo", RELEASE_REPO, "--draft=false"],
                 check=True,
+                timeout=COMMAND_TIMEOUT,
             )
     return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
 
@@ -265,7 +280,7 @@ def publish_target(target, releases, source_limit):
 
     with tempfile.TemporaryDirectory(prefix="mower-ota-") as temp:
         root = Path(temp)
-        products = []
+        uploaded = False
         for platform, arch, extension in OTA_TARGETS:
             latest = asset(target, platform, arch, extension)
             if not latest:
@@ -301,6 +316,8 @@ def publish_target(target, releases, source_limit):
                     repo=RELEASE_REPO if channel_of(before) == "dev" else SOURCE_REPO,
                 )
                 output = root / "products" / name
+                started = time.monotonic()
+                print(f"Build OTA: {name}", flush=True)
                 try:
                     result = build(
                         old_path,
@@ -311,8 +328,8 @@ def publish_target(target, releases, source_limit):
                         platform=platform,
                         arch=arch,
                     )
-                except ValueError as error:
-                    print(f"Skip incompatible OTA {name}: {error}")
+                except IncompatibleSourceError as error:
+                    print(f"Skip incompatible OTA {name}: {error}", flush=True)
                     continue
                 finally:
                     old_path.unlink()
@@ -320,24 +337,30 @@ def publish_target(target, releases, source_limit):
                     print(f"Skip oversized OTA {name}: {result['bytes']} bytes")
                     output.unlink()
                 else:
-                    print(f"Built {name}: {result}")
-                    products.append(output)
-        if not products:
-            print(f"No useful OTA packages for {tag}")
+                    print(
+                        f"Built {name} in {time.monotonic() - started:.1f}s: {result}",
+                        flush=True,
+                    )
+                    subprocess.run(
+                        [
+                            "gh",
+                            "release",
+                            "upload",
+                            tag,
+                            "--repo",
+                            RELEASE_REPO,
+                            str(output),
+                        ],
+                        check=True,
+                        timeout=TRANSFER_TIMEOUT,
+                    )
+                    print(f"Published OTA: {name}", flush=True)
+                    uploaded = True
+                    output.unlink()
+        if not uploaded:
+            print(f"No new useful OTA packages for {tag}", flush=True)
             return current
 
-        subprocess.run(
-            [
-                "gh",
-                "release",
-                "upload",
-                tag,
-                "--repo",
-                RELEASE_REPO,
-                *map(str, products),
-            ],
-            check=True,
-        )
     return api(f"repos/{RELEASE_REPO}/releases/tags/{tag}")
 
 
@@ -450,6 +473,10 @@ def main():
         mirrored_history = [(old, mirror_full_release(old)) for old in history]
         ota_release = publish_target(target, releases, args.source_limit)
         if ota_release:
+            print(
+                f"Update {channel_of(target)} channel index: {target['tag_name']}",
+                flush=True,
+            )
             save_index(
                 channel_of(target),
                 index_record(target, ota_release, mirrored_history),

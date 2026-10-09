@@ -38,6 +38,10 @@ PATCH_CANDIDATES = {
 }
 
 
+class IncompatibleSourceError(ValueError):
+    """An older Android release has no independently installable runtime."""
+
+
 def safe_name(name):
     path = PurePosixPath(name)
     if (
@@ -93,12 +97,14 @@ def runtime_files(archive):
             or path.as_posix() != name.rstrip("/")
             or ".." in path.parts
             or "\\" in name
-            or ":" in name
+            or "\0" in name
+            or re.match(r"^[A-Za-z]:", name)
             or name in files
             or (name.startswith(("mower/", "mower-data/")) and not entry.is_dir())
+            or (name in ("mower", "mower-data") and not entry.is_dir())
             or stat.S_ISLNK(entry.external_attr >> 16)
         ):
-            raise ValueError("unsafe Android runtime entry")
+            raise ValueError(f"unsafe Android runtime entry: {name!r}")
         mode = (entry.external_attr >> 16) & 0o777 or 0o644
         if entry.is_dir():
             files[name] = {"type": "dir", "mode": mode}
@@ -197,14 +203,20 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
     with ExitStack() as stack:
         before = stack.enter_context(Archive(source))
         after = stack.enter_context(Archive(target))
+        print(f"Scan source archive: {source}", flush=True)
         old_files = before.files()
+        print(f"Scan target archive: {target}", flush=True)
         new_files = after.files()
         android_roots = {"mower-android.json", "python-runtime.zip.xz"}
         if platform == "android":
-            if not android_roots.issubset(old_files) or not android_roots.issubset(
-                new_files
-            ):
-                raise ValueError("Android packages need manifest and Python runtime")
+            if not android_roots.issubset(new_files):
+                raise ValueError(
+                    "Target Android package needs manifest and Python runtime"
+                )
+            if not android_roots.issubset(old_files):
+                raise IncompatibleSourceError(
+                    "Source Android package needs manifest and Python runtime"
+                )
         elif any(name in old_files or name in new_files for name in android_roots):
             raise ValueError("Android files in desktop package")
         changed = sorted(
@@ -214,12 +226,15 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
         runtime_after = None
         if platform == "android":
             temporary_runtime = Path(stack.enter_context(tempfile.TemporaryDirectory()))
+            print("Expand source Python runtime", flush=True)
             runtime_before = stack.enter_context(
                 expand_runtime(before, temporary_runtime / "before.zip")
             )
+            print("Expand target Python runtime", flush=True)
             runtime_after = stack.enter_context(
                 expand_runtime(after, temporary_runtime / "after.zip")
             )
+            print("Hash Python runtime files", flush=True)
             old_runtime_files = runtime_files(runtime_before)
             new_runtime_files = runtime_files(runtime_after)
             runtime = {
@@ -252,6 +267,7 @@ def build(source, target, output, *, from_version, to_version, platform, arch):
                     or not 0 < len(new_data) <= MAX_PATCH_FILE
                 ):
                     continue
+                print(f"Build binary patch: {name}", flush=True)
                 delta = bsdiff4.diff(old_data, new_data)
                 if len(delta) >= len(zlib.compress(new_data, level=6)) * 0.8:
                     continue

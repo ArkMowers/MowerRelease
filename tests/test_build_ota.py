@@ -3,6 +3,7 @@ import io
 import json
 import lzma
 import os
+import stat
 import sys
 import tarfile
 import tempfile
@@ -12,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import bsdiff4
-from build_ota import build
+from build_ota import IncompatibleSourceError, build, runtime_files
 
 
 class BuildOtaTests(unittest.TestCase):
@@ -22,9 +23,67 @@ class BuildOtaTests(unittest.TestCase):
         with zipfile.ZipFile(output, "w") as archive:
             archive.writestr("usr/", b"")
             archive.writestr("usr/local/bin/python3.12", b"python")
-            archive.writestr("usr/lib/changed.so", changed)
+            archive.writestr("var/lib/dpkg/info/libc6:arm64.list", changed)
+            archive.writestr("mower/", b"")
+            archive.writestr("mower-data/", b"")
             archive.writestr(".symlinks.json", b"{}")
         return lzma.compress(output.getvalue(), preset=6)
+
+    def test_runtime_rejects_unsafe_paths_and_host_files(self):
+        for name in (
+            "../escape",
+            "/absolute",
+            "usr/../escape",
+            "C:escape",
+            "usr//lib",
+            "usr/./lib",
+            "usr\\escape",
+            "mower",
+            "mower-data",
+            "mower/server.py",
+            "mower-data/conf.yml",
+        ):
+            with self.subTest(name=name), io.BytesIO() as stream:
+                with zipfile.ZipFile(stream, "w") as archive:
+                    archive.writestr(name, b"payload")
+                with (
+                    zipfile.ZipFile(stream) as archive,
+                    self.assertRaisesRegex(ValueError, "unsafe Android runtime entry"),
+                ):
+                    runtime_files(archive)
+
+    def test_runtime_rejects_symbolic_link_entries(self):
+        stream = io.BytesIO()
+        with zipfile.ZipFile(stream, "w") as archive:
+            entry = zipfile.ZipInfo("usr/link")
+            entry.external_attr = (stat.S_IFLNK | 0o777) << 16
+            archive.writestr(entry, "outside")
+        with (
+            zipfile.ZipFile(stream) as archive,
+            self.assertRaisesRegex(ValueError, "unsafe Android runtime entry"),
+        ):
+            runtime_files(archive)
+
+    def test_only_a_legacy_source_can_be_skipped(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            legacy, complete = root / "legacy.zip", root / "complete.zip"
+            with zipfile.ZipFile(legacy, "w") as archive:
+                archive.writestr("mower/server.py", b"old code")
+            with zipfile.ZipFile(complete, "w") as archive:
+                archive.writestr("mower-android.json", b"{}")
+                archive.writestr("python-runtime.zip.xz", self.runtime_blob())
+            args = {
+                "from_version": "v4.1.6-alpha.7",
+                "to_version": "v4.1.6-alpha.8",
+                "platform": "android",
+                "arch": "arm64",
+            }
+            with self.assertRaises(IncompatibleSourceError):
+                build(legacy, complete, root / "ota.zip", **args)
+            with self.assertRaises(ValueError) as raised:
+                build(complete, legacy, root / "ota.zip", **args)
+            self.assertNotIsInstance(raised.exception, IncompatibleSourceError)
 
     def test_changed_large_library_also_uses_binary_patch(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -209,9 +268,13 @@ class BuildOtaTests(unittest.TestCase):
             with zipfile.ZipFile(patch) as archive:
                 manifest = json.loads(archive.read("ota.json"))
                 self.assertEqual(manifest["format"], 2)
-                self.assertEqual(manifest["runtime"]["changed"], ["usr/lib/changed.so"])
                 self.assertEqual(
-                    archive.read("runtime/usr/lib/changed.so"), b"new library"
+                    manifest["runtime"]["changed"],
+                    ["var/lib/dpkg/info/libc6:arm64.list"],
+                )
+                self.assertEqual(
+                    archive.read("runtime/var/lib/dpkg/info/libc6:arm64.list"),
+                    b"new library",
                 )
                 self.assertNotIn("payload/python-runtime.zip.xz", archive.namelist())
 
