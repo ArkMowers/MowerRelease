@@ -44,17 +44,17 @@ jobs:
             exit 1
           fi
           tag_name="v${version}.g${source_sha:0:8}"
+          {
+            echo "tag_name=$tag_name"
+            echo "source_sha=$source_sha"
+          } >> "$GITHUB_OUTPUT"
           assets="$(gh release view "$tag_name" --repo ArkMowers/MowerRelease --json assets --jq '.assets[].name' 2>/dev/null || true)"
-          if grep -q '_windows_x64.zip$' <<< "$assets" && grep -q '_android_arm64.zip$' <<< "$assets"; then
+          if grep -Fxq "arknights-mower_${tag_name#v}_windows_x64.zip" <<< "$assets" && grep -Fxq "arknights-mower_${tag_name#v}_android_arm64.zip" <<< "$assets"; then
             echo 'alpha has not changed since the last published nightly.'
             echo 'changed=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          {
-            echo 'changed=true'
-            echo "tag_name=$tag_name"
-            echo "source_sha=$source_sha"
-          } >> "$GITHUB_OUTPUT"
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
 
   build-windows:
     needs: prepare
@@ -173,6 +173,10 @@ jobs:
 
   publish:
     needs: [prepare, build-windows, build-android]
+    if: >-
+      ${{ !cancelled() && needs.prepare.result == 'success' &&
+          (needs.prepare.outputs.changed == 'false' ||
+           (needs.build-windows.result == 'success' && needs.build-android.result == 'success')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     permissions:
@@ -183,18 +187,21 @@ jobs:
         with:
           python-version: '3.12'
       - uses: actions/download-artifact@v4
+        if: ${{ needs.prepare.outputs.changed == 'true' }}
         with:
           name: nightly-windows
           path: release-assets
       - uses: actions/download-artifact@v4
+        if: ${{ needs.prepare.outputs.changed == 'true' }}
         with:
           name: nightly-android
           path: release-assets
       - name: Test OTA package format
         run: |
-          python -m pip install bsdiff4==1.2.6
+          python -m pip install bsdiff4==1.2.6 PyYAML==6.0.3
           python -m unittest discover -s tests -p 'test_*.py' -q
-      - name: Publish full package and OTA
+      - name: Publish full packages
+        if: ${{ needs.prepare.outputs.changed == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.prepare.outputs.tag_name }}
@@ -214,7 +221,11 @@ jobs:
               --title "$TAG" \
               --notes "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/${SOURCE_SHA})。完整包和 OTA 均在此发布。"
           fi
-          python scripts/publish.py --tag "$TAG"
+      - name: Generate and publish OTA packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prepare.outputs.tag_name }}
+        run: python -u scripts/publish.py --tag "$TAG"
       - name: Commit development index
         run: |
           if [[ -n "$(git status --porcelain -- version)" ]]; then
