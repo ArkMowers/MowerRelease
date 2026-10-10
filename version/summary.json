@@ -1,6 +1,6 @@
 {
   "beta": {
-    "version": "v4.1.6-alpha.11",
+    "version": "v4.1.6-alpha.12",
     "index": "https://raw.githubusercontent.com/ArkMowers/MowerRelease/main/version/beta.json"
   },
   "dev": {
