@@ -1,110 +1,131 @@
 {
   "schema": 1,
-  "version": "v4.1.6-alpha.12.g7c86e427",
-  "published_at": "2026-10-12T01:13:38Z",
-  "source_release": "https://github.com/ArkMowers/MowerRelease/releases/tag/v4.1.6-alpha.12.g7c86e427",
-  "notes": "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/7c86e427f9136c9bb6a3b1bb61c230ac8a889412)。完整包和 OTA 均在此发布。",
+  "version": "v4.1.6-alpha.12.g0c2a30cd",
+  "published_at": "2026-10-12T01:57:32Z",
+  "source_release": "https://github.com/ArkMowers/MowerRelease/releases/tag/v4.1.6-alpha.12.g0c2a30cd",
+  "notes": "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/0c2a30cdce00cc031fe2e79dacde07232c555c38)。完整包和 OTA 均在此发布。",
   "full_assets": [
     {
-      "name": "arknights-mower_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 189570341,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:2a88ed294243c6686a9797ab5f0242ab85522d227a1ae9a4f02fde5e84141101"
+      "name": "arknights-mower_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 189572270,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:fd79a61138f9555584aa042caa3f199b689d1b45d101d5699e2e6410de1e27a2"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.12.g7c86e427_windows_x64.zip",
-      "size": 138468973,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower_4.1.6-alpha.12.g7c86e427_windows_x64.zip",
-      "digest": "sha256:90b16ab5ef8e1d47b0c3c20c63d4e7399f50c7c02926e8d7755e319f17659ebd"
+      "name": "arknights-mower_4.1.6-alpha.12.g0c2a30cd_windows_x64.zip",
+      "size": 138474212,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower_4.1.6-alpha.12.g0c2a30cd_windows_x64.zip",
+      "digest": "sha256:a4e445ac32a7915570a07559cde3634285c0731d2b982d5487c1185e6bf3e1b3"
     }
   ],
   "ota_assets": [
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3364637,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:5c90c675f65e32722d059057a093699bfe43f6d5068e15a42994b4020d3ec085"
+      "name": "arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 3366170,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:06599add8034e36857669d548dfa53f5682355218d27a885899d25087a45663d"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 4001098,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:383c48287509da87dfbf7cfb4c0c64a38812abc1e325e07e0266e9307e53046b"
+      "name": "arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 4027451,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11.g2c1f68a7_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:ae4f890870f4c563b9a895f0d09db9c14dbf83f01e777d51f949df55b639a96b"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.g58122131_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3483935,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.g58122131_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:8a6ca8bbf131bcd76be0dd64cae00e323154b2c9c6d17ffbf6e81ecb50f0b72a"
+      "name": "arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 3477883,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:77f70f93a292490f7b066b3e0325f77a2ffc7ef2f7815a162f06e05a8117bcd5"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.g58122131_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 4211980,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.g58122131_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:e686b3e57c0d66e38d7046b9720c6cc865df0f4cf3e4ce48fda16ad3a28550e6"
+      "name": "arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 4213279,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:01fde0959ded23a0dfa978376a65b47375642817968e834284455e38722a5ac3"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3476348,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:f26231802433c73d1076ad4c5d19717acc7686e696d0f1061f8b13971cd4b905"
+      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 4090276,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:b23e5bbdb2dec975fe261757dc4e3be68a7c08f3996bc788e487e40340422f7c"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 4186865,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11.ged674a9f_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:391557c9ee12fb99c80393ffbca279e229346beb8030516789cd98f59f498616"
+      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 4929632,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:ccca32bdca453c7e7d9b562815086c0d0a05f65eb138e5bb6bd49748fffcf194"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 4088745,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:070d41dc1674d17d778555410aa6fefd73639fb6cf901fcc305e308c8f5ba6a1"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 3232204,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:39df7892dff6bb4b9f1d4184b15437dc762018e3da2261525c28e43e25313457"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 4903265,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:71af4d95019a211f9fae3cf772820a1d0f0696460505e912846abd1c8bc0331c"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 3859660,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:a9c286b71de3bc01d528dd49c94a4dcca90470128d3b9d8d21bf7d080905cfa6"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3218554,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:4b6f1785d14205ed2084060027ccbc53fd1a3577c044c54d7e5dc5f8a24dfa52"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 3135487,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:9776d0e1c22bb7d90aef097060f2fa6c1f06c277c2e82735f71dcb0ac39db741"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 3817570,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12.g5b179393_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:0592690ef2ffde14e4a7e1b7f40135bc8a66bc1342a7afd64f61d6f3dbc12d00"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 3583999,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:4314606796a6393b945799b3f73e2a492caf962ac3e2a9570ae5a927e0d7fa5c"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3121833,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:a71edfd955653e3e8b74639392b05b1d1f9fc121c45cb4543ade0d827648c704"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g7c86e427_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 890300,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g7c86e427_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:2856bf86904ad013fb8bc1951b633d9ffc0c96979a28b804c5076cadfb0fb89e"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 3541352,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12.g71327df8_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:f97b61eb673172550193f6ca9b3ce72ed5930a7c559fcf3760d0d98f1a6dfa24"
+      "name": "arknights-mower-ota_4.1.6-alpha.12.g7c86e427_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 688631,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12.g7c86e427_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:a64a1502293cae46a031544415bb0988177d8f30a3e4c38cbbf2455f211b8013"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "size": 3348396,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
-      "digest": "sha256:dc403080b0fde90459d742aab43021b9d2b0444a76fbe9448f7594be99e76a67"
+      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "size": 3355047,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g0c2a30cd_android_arm64.zip",
+      "digest": "sha256:925409e924dbfa2baade319c55046d489dbb26fa5cc90b4951442761c65dfccd"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "size": 3951576,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g7c86e427_windows_x64_v2.zip",
-      "digest": "sha256:f8fbc753fc529a2a2b17b10b2070757ca2bdd7959b3041d634781a509df4a4ed"
+      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "size": 3994113,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g0c2a30cd/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.12.g0c2a30cd_windows_x64_v2.zip",
+      "digest": "sha256:f098789ac93edade0ba495a6e45a281f02da049152d6a5e14453550f0e0997a6"
     }
   ],
   "history": [
+    {
+      "schema": 1,
+      "version": "v4.1.6-alpha.12.g7c86e427",
+      "published_at": "2026-10-12T01:13:38Z",
+      "source_release": "https://github.com/ArkMowers/MowerRelease/releases/tag/v4.1.6-alpha.12.g7c86e427",
+      "notes": "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/7c86e427f9136c9bb6a3b1bb61c230ac8a889412)。完整包和 OTA 均在此发布。",
+      "full_assets": [
+        {
+          "name": "arknights-mower_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
+          "size": 189570341,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower_4.1.6-alpha.12.g7c86e427_android_arm64.zip",
+          "digest": "sha256:2a88ed294243c6686a9797ab5f0242ab85522d227a1ae9a4f02fde5e84141101"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.12.g7c86e427_windows_x64.zip",
+          "size": 138468973,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.12.g7c86e427/arknights-mower_4.1.6-alpha.12.g7c86e427_windows_x64.zip",
+          "digest": "sha256:90b16ab5ef8e1d47b0c3c20c63d4e7399f50c7c02926e8d7755e319f17659ebd"
+        }
+      ]
+    },
     {
       "schema": 1,
       "version": "v4.1.6-alpha.12.g71327df8",
@@ -207,27 +228,6 @@
           "size": 138226645,
           "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.11.g58122131/arknights-mower_4.1.6-alpha.11.g58122131_windows_x64.zip",
           "digest": "sha256:cc2239db79ac44d1154f9b4fc140f88efe954da379c179bb5dd3f8db057e5e7f"
-        }
-      ]
-    },
-    {
-      "schema": 1,
-      "version": "v4.1.6-alpha.10.g85e916f7",
-      "published_at": "2026-10-09T02:00:37Z",
-      "source_release": "https://github.com/ArkMowers/MowerRelease/releases/tag/v4.1.6-alpha.10.g85e916f7",
-      "notes": "Windows x64 和 Android ARM64 Nightly，来自 [Mower alpha 提交](https://github.com/ArkMowers/arknights-mower/commit/85e916f7d27c23785f085caa229b4e7b2bbd75d6)。完整包和 OTA 均在此发布。",
-      "full_assets": [
-        {
-          "name": "arknights-mower_4.1.6-alpha.10.g85e916f7_android_arm64.zip",
-          "size": 189120894,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.10.g85e916f7/arknights-mower_4.1.6-alpha.10.g85e916f7_android_arm64.zip",
-          "digest": "sha256:071ed914e0f859c1550aec3c72d43a42fc6211e1107aa2d68e4f6f2f3414c09e"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.10.g85e916f7_windows_x64.zip",
-          "size": 138086193,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.10.g85e916f7/arknights-mower_4.1.6-alpha.10.g85e916f7_windows_x64.zip",
-          "digest": "sha256:95bb6ded0f7ac0c23b54d0a046b95769d550db78d608d10df7fbbf0b6434e153"
         }
       ]
     }
