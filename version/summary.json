@@ -4,7 +4,7 @@
     "index": "https://raw.githubusercontent.com/ArkMowers/MowerRelease/main/version/beta.json"
   },
   "dev": {
-    "version": "v4.1.6-alpha.14.gf32a1906",
+    "version": "v4.1.6-alpha.14.g3414b427",
     "index": "https://raw.githubusercontent.com/ArkMowers/MowerRelease/main/version/dev.json"
   }
 }
