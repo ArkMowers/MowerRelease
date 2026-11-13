@@ -1,164 +1,203 @@
 {
   "schema": 1,
-  "version": "v4.1.6-alpha.14",
-  "published_at": "2026-11-01T13:25:01Z",
-  "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.14",
-  "notes": "## 4.1.6-alpha.14 - 2026-11-01\n\n### New\n\n- 完善养成规划干员卡的练度展示 [(#1751)](https://github.com/ArkMowers/arknights-mower/pull/1751) @NiceAfternoon\n- 提前停机维护的登录尝试时刻，从公告结束前半小时改为前一小时。 [(#1749)](https://github.com/ArkMowers/arknights-mower/pull/1749) @ALEXsun0\n- 适配行铃等六名干员与「时间啊，向前！」活动 [(#1747)](https://github.com/ArkMowers/arknights-mower/pull/1747) @ALEXsun0\n- 支持副表按既有绑组请求整组上下班，并修复换班中的恢复床位与替班协调判断。 [(#1745)](https://github.com/ArkMowers/arknights-mower/pull/1745) @ALEXsun0\n- 增加不含截图的日志导出入口并附带当前排班表 [(#1731)](https://github.com/ArkMowers/arknights-mower/pull/1731) @ALEXsun0\n- 添加万圣节装饰的显示选项 [(#1730)](https://github.com/ArkMowers/arknights-mower/pull/1730) @NiceAfternoon\n- 添加按日期启用的万圣节界面装饰 [(#1722)](https://github.com/ArkMowers/arknights-mower/pull/1722) @NiceAfternoon\n- 增加跑单与等待场景的网络自适应 [(#1711)](https://github.com/ArkMowers/arknights-mower/pull/1711) @NiceAfternoon\n- 展示仓库页四档折合寻访抽数和全部经验的历史走势。 [(#1710)](https://github.com/ArkMowers/arknights-mower/pull/1710) @NiceAfternoon\n- 支持自动保存专精收取截图 [(#1704)](https://github.com/ArkMowers/arknights-mower/pull/1704) @ALEXsun0\n- 支持以标准或股票模式查看基建收益与订单历史 [(#1699)](https://github.com/ArkMowers/arknights-mower/pull/1699) @NiceAfternoon\n- 支持大型任务延后普通宿舍清退并按周计划兑换活动商品 [(#1695)](https://github.com/ArkMowers/arknights-mower/pull/1695) @ALEXsun0\n- 支持悖论模拟队列和活动商店兑换 [(#1690)](https://github.com/ArkMowers/arknights-mower/pull/1690) @ALEXsun0\n- 支持通过 PRTS Plus 新作业代码和单份作业链接导入作业，并将作业集按成员顺序追加到已有队列。 [(#1689)](https://github.com/ArkMowers/arknights-mower/pull/1689) @ALEXsun0\n- 支持按队列执行普通自动战斗和保全作业 [(#1684)](https://github.com/ArkMowers/arknights-mower/pull/1684) @ALEXsun0\n- 为 GitHub 文件下载增加 GH-Proxy 默认站点，未指定站点时仍优先直连和 ghfast.top。 [(#1677)](https://github.com/ArkMowers/arknights-mower/pull/1677) @ALEXsun0\n- 保留报错归档中的原始画面像素 [(#1670)](https://github.com/ArkMowers/arknights-mower/pull/1670) @ALEXsun0\n- 支持按绑组设置心情阈值，并将日常心情阈值的最低设置降至 35%。 [(#1668)](https://github.com/ArkMowers/arknights-mower/pull/1668) @ALEXsun0\n- 支持从侧栏预览并安装软件与资源更新 [(#1666)](https://github.com/ArkMowers/arknights-mower/pull/1666) @ALEXsun0\n\n### Bug Fixes\n\n- 修复轮休受阻后的人员误调与零心情驻岗 [(#1759)](https://github.com/ArkMowers/arknights-mower/pull/1759) @ALEXsun0\n- 修复手动收取专三后养成规划仍显示训练中的问题 [(#1760)](https://github.com/ArkMowers/arknights-mower/pull/1760) @ALEXsun0\n- 修复 MAA 调用失败后任务结束设置不生效的问题 [(#1758)](https://github.com/ArkMowers/arknights-mower/pull/1758) @ALEXsun0\n- 修复干员搜索以 v 表示 ü 或查询英文 v 时遗漏结果的问题。 [(#1757)](https://github.com/ArkMowers/arknights-mower/pull/1757) @NiceAfternoon\n- 修复受监督桌面实例在工作线程异常后无法自动恢复的问题 [(#1756)](https://github.com/ArkMowers/arknights-mower/pull/1756) @NiceAfternoon\n- 修复活动签到第十天卡片的数字漏识别问题 [(#1754)](https://github.com/ArkMowers/arknights-mower/pull/1754) @NiceAfternoon\n- 修复森空岛同步后已完成的手动养成目标仍残留在训练队列的问题。 [(#1755)](https://github.com/ArkMowers/arknights-mower/pull/1755) @ALEXsun0\n- 修复最新活动推荐选入无常规材料掉落的末关而漏选材料关的问题。 [(#1753)](https://github.com/ArkMowers/arknights-mower/pull/1753) @ALEXsun0\n- 补齐公开招募池中的罗比菈塔、桑葚和琴柳 [(#1752)](https://github.com/ArkMowers/arknights-mower/pull/1752) @ALEXsun0\n- 修复旧客户端因资源包包含未登记文件而无法完成资源更新的问题。 [(#1750)](https://github.com/ArkMowers/arknights-mower/pull/1750) @ALEXsun0\n- 修复切换分组或副表后条件沿用旧值并误存的问题 [(#1748)](https://github.com/ArkMowers/arknights-mower/pull/1748) @ALEXsun0\n- 修复长时间收益演算仍受固定计算额度限制的问题，并让未完成提示突出已算时长和停止原因。 [(#1746)](https://github.com/ArkMowers/arknights-mower/pull/1746) @ALEXsun0\n- 修复副表任务整份替换后编辑器仍显示旧内容、后续编辑可能覆盖新任务的问题。 [(#1744)](https://github.com/ArkMowers/arknights-mower/pull/1744) @ALEXsun0\n- 修复共享干员继续承担现有工作替班时，兼容绑组仍无法同休的问题。 [(#1743)](https://github.com/ArkMowers/arknights-mower/pull/1743) @ALEXsun0\n- 修复跑单换人结果迟到时过早判失败并误判原班恢复完成的问题 [(#1742)](https://github.com/ArkMowers/arknights-mower/pull/1742) @NiceAfternoon\n- 修复名称 OCR 多框或误读导致的回收站材料识别错误 [(#1741)](https://github.com/ArkMowers/arknights-mower/pull/1741) @NiceAfternoon\n- 修复仓库扫描将龙门币图标误读为前导 1 的问题 [(#1740)](https://github.com/ArkMowers/arknights-mower/pull/1740) @NiceAfternoon\n- 修复信用商店领取过渡时崩溃并中断购物的问题 [(#1739)](https://github.com/ArkMowers/arknights-mower/pull/1739) @NiceAfternoon\n- 修复活动签到一次失败就跳过当天后续检查的问题 [(#1733)](https://github.com/ArkMowers/arknights-mower/pull/1733) @NiceAfternoon\n- 修复个人上限离宿阻挡已获准整组回班的问题 [(#1738)](https://github.com/ArkMowers/arknights-mower/pull/1738) @ALEXsun0\n- 修复绑组主班按个人上限离宿后，即使本组满足正常回班条件仍空闲等待的问题。 [(#1737)](https://github.com/ArkMowers/arknights-mower/pull/1737) @ALEXsun0\n- 修复普通基建位置预演使用旧心情造成的分床顺序错误，并恢复两电90分钟、其余60分钟的默认组内恢复时间差阈值。 [(#1734)](https://github.com/ArkMowers/arknights-mower/pull/1734) @ALEXsun0\n- 修复自动切换信赖因漏识别选中框而中断的问题 [(#1736)](https://github.com/ArkMowers/arknights-mower/pull/1736) @ALEXsun0\n- 显示副表暂缓切换的具体原因 [(#1735)](https://github.com/ArkMowers/arknights-mower/pull/1735) @ALEXsun0\n- 修复训练室进房失败后停止巡检并阻塞替班交接的问题 [(#1732)](https://github.com/ArkMowers/arknights-mower/pull/1732) @ALEXsun0\n- 修复 MAA 画面探测误报警和保全导航误改战术装备的问题 [(#1729)](https://github.com/ArkMowers/arknights-mower/pull/1729) @ALEXsun0\n- 修复自动救急换人或离宿失败后丢失剩余安排并阻塞独立任务的问题 [(#1726)](https://github.com/ArkMowers/arknights-mower/pull/1726) @NiceAfternoon\n- 修复设备启动和恢复未持有当前连接的准备锁的问题 [(#1725)](https://github.com/ArkMowers/arknights-mower/pull/1725) @NiceAfternoon\n- 修复活动签到无法识别已解锁未领取奖励的问题 [(#1727)](https://github.com/ArkMowers/arknights-mower/pull/1727) @NiceAfternoon\n- 修复跑单恢复原班后因短暂的房间返回失败而无法完成任务的问题。 [(#1724)](https://github.com/ArkMowers/arknights-mower/pull/1724) @NiceAfternoon\n- 修复清空缓存和进程恢复时一次房间识别失败就中断观察的问题。 [(#1723)](https://github.com/ArkMowers/arknights-mower/pull/1723) @NiceAfternoon\n- 修复跑单原班恢复时干员确认失败后进入长时间休眠、共享干员的后续跑单被阻塞的问题。 [(#1721)](https://github.com/ArkMowers/arknights-mower/pull/1721) @NiceAfternoon\n- 修复活动签到因卡片裁剪偏差而提前结束检查的问题 [(#1717)](https://github.com/ArkMowers/arknights-mower/pull/1717) @NiceAfternoon\n- 修复等待场景设置中的名称与日志不一致的问题。 [(#1718)](https://github.com/ArkMowers/arknights-mower/pull/1718) @NiceAfternoon\n- 修复保全导航误判按钮后点击进入战斗的问题 [(#1719)](https://github.com/ArkMowers/arknights-mower/pull/1719) @ALEXsun0\n- 修复换人返回后将退场残影当作已进房、导致订单操作失败的问题。 [(#1716)](https://github.com/ArkMowers/arknights-mower/pull/1716) @NiceAfternoon\n- 修复访问记录弹窗导致会客室线索流程停滞的问题 [(#1715)](https://github.com/ArkMowers/arknights-mower/pull/1715) @NiceAfternoon\n- 修复生产房快速选人名单不符时提前报错的问题 [(#1714)](https://github.com/ArkMowers/arknights-mower/pull/1714) @NiceAfternoon\n- 修复训练室协助位完整重选时误点不存在的清空按钮，导致无法取消原暂选的问题。 [(#1713)](https://github.com/ArkMowers/arknights-mower/pull/1713) @NiceAfternoon\n- 调整养成规划页面的局部呈现与交互 [(#1712)](https://github.com/ArkMowers/arknights-mower/pull/1712) @NiceAfternoon\n- 修复加工站和办公室误点清空按钮导致取消暂选失败的问题 [(#1709)](https://github.com/ArkMowers/arknights-mower/pull/1709) @NiceAfternoon\n- 修复 macOS 应用从全部设置返回后侧边栏顶部多出空白的问题。 [(#1708)](https://github.com/ArkMowers/arknights-mower/pull/1708) @ALEXsun0\n- 修复独立管理器检测 BlueStacks Air 后选项空白、无法选择和保存 ADB 连接地址的问题。 [(#1707)](https://github.com/ArkMowers/arknights-mower/pull/1707) @ALEXsun0\n- 修复宿舍不养闲人时把保留住客误当空位，导致满心情干员反复入住和补位的问题。 [(#1706)](https://github.com/ArkMowers/arknights-mower/pull/1706) @ALEXsun0\n- 修复用尽下班后心情曲线缺少入宿零点的问题 [(#1705)](https://github.com/ArkMowers/arknights-mower/pull/1705) @ALEXsun0\n- 修复 Windows 窗口从最小化恢复时页面短暂缩在左上角的问题。 [(#1697)](https://github.com/ArkMowers/arknights-mower/pull/1697) @NiceAfternoon\n- 修复普通宿舍补位遗漏首屏低心情干员的问题 [(#1701)](https://github.com/ArkMowers/arknights-mower/pull/1701) @ALEXsun0\n- 修复保存各组心情阈值时覆盖其他组设置及调整普通心情阈值时提前唤醒调度的问题。 [(#1700)](https://github.com/ArkMowers/arknights-mower/pull/1700) @ALEXsun0\n- 补足切产物与依赖换班的整批时间预算 [(#1698)](https://github.com/ArkMowers/arknights-mower/pull/1698) @ALEXsun0\n- 回收站材料收取改为读全即记录并恢复报错归档为 JPEG 编码 [(#1686)](https://github.com/ArkMowers/arknights-mower/pull/1686) @NiceAfternoon\n- 修复副表启用零心情工作后绑组成员独立回班的问题 [(#1694)](https://github.com/ArkMowers/arknights-mower/pull/1694) @ALEXsun0\n- 修复切产物等待后合并换班安排丢失导致回班挂起的问题 [(#1693)](https://github.com/ArkMowers/arknights-mower/pull/1693) @ALEXsun0\n- 修复副表条件连续读取心情时因取值时刻不同而误判，导致副表在实时判断与完整换班预演之间反复切换的问题。 [(#1692)](https://github.com/ArkMowers/arknights-mower/pull/1692) @ALEXsun0\n- 修复部分组员已有恢复床位时整组下班安排被拒绝、其余成员无法休息的问题。 [(#1691)](https://github.com/ArkMowers/arknights-mower/pull/1691) @ALEXsun0\n- 修复进入基建房间时，收取产物后仍在地图却因场景识别不匹配而提前返回首页的问题。 [(#1688)](https://github.com/ArkMowers/arknights-mower/pull/1688) @ALEXsun0\n- 修正养成推荐与卡片底部比例取全部技能最高值的问题 [(#1685)](https://github.com/ArkMowers/arknights-mower/pull/1685) @NiceAfternoon\n- 修复分片回归测试中本地作战与 MAA 用例残留库存事件、导致同一 pytest 进程中后续加工站用例失败的问题。 [(#1687)](https://github.com/ArkMowers/arknights-mower/pull/1687) @NiceAfternoon\n- 修复后台实例再次启动时无法打开内置窗口的问题 [(#1682)](https://github.com/ArkMowers/arknights-mower/pull/1682) @ALEXsun0\n- 修复活动签到奖励已领取后重新检查无法完成的问题 [(#1676)](https://github.com/ArkMowers/arknights-mower/pull/1676) @NiceAfternoon\n- 修复弹窗内容较多时出现的重复纵向滚动 [(#1679)](https://github.com/ArkMowers/arknights-mower/pull/1679) @NiceAfternoon\n- 修复心情曲线遗漏换岗和耗尽零值及满心情参与速率计算的问题 [(#1683)](https://github.com/ArkMowers/arknights-mower/pull/1683) @ALEXsun0\n- 修复实时心情模式下用尽下班未提前换班的问题 [(#1681)](https://github.com/ArkMowers/arknights-mower/pull/1681) @ALEXsun0\n- 修复制造站批量切产物反复等待的问题 [(#1680)](https://github.com/ArkMowers/arknights-mower/pull/1680) @ALEXsun0\n- 修复侧栏拖动时分组标题贴边、行距异常及原位置文字重复显示的问题。 [(#1673)](https://github.com/ArkMowers/arknights-mower/pull/1673) @NiceAfternoon\n- 修复 Windows 高 DPI 下首次读取工作区前已启用 DPI 感知时重开窗口过大的问题。 [(#1674)](https://github.com/ArkMowers/arknights-mower/pull/1674) @NiceAfternoon\n- 修复普通基建换班确认失败并耗尽原地恢复后，重登仍可能因缺少新房间观测而无法继续剩余安排的问题。 [(#1672)](https://github.com/ArkMowers/arknights-mower/pull/1672) @NiceAfternoon\n- 修复 Windows 自动换行检出后，前端构建使内容未变的心情计算产物显示假修改的问题。 [(#1669)](https://github.com/ArkMowers/arknights-mower/pull/1669) @NiceAfternoon\n- 修复 MAA 自动日常中断后未提前完成登录的问题 [(#1667)](https://github.com/ArkMowers/arknights-mower/pull/1667) @Hul11n @ALEXsun0\n- 修复基建任务等待资源或前置操作时阻塞调度的问题 [(#1661)](https://github.com/ArkMowers/arknights-mower/pull/1661) @ALEXsun0\n- 修复基建房间标题偏移导致的编号误识别 [(#1665)](https://github.com/ArkMowers/arknights-mower/pull/1665) @NiceAfternoon\n- 修复停留在贸易站订单页时进入其他房间反复等待，以及进入同一房间被提前判定成功的问题。 [(#1664)](https://github.com/ArkMowers/arknights-mower/pull/1664) @NiceAfternoon\n- 消除 vue-axios 引起的前端构建兼容性警告 [(#1663)](https://github.com/ArkMowers/arknights-mower/pull/1663) @NiceAfternoon\n\n### Improvements\n\n- 统一内置干员基础资料与基建技能的数据来源 [(#1728)](https://github.com/ArkMowers/arknights-mower/pull/1728) @NiceAfternoon\n- 减少实时心情查询的重复计算准备 [(#1720)](https://github.com/ArkMowers/arknights-mower/pull/1720) @ALEXsun0\n- 替换手动切换显示主题时的逐元素颜色过渡，改用原生界面快照完成切换。 [(#1671)](https://github.com/ArkMowers/arknights-mower/pull/1671) @NiceAfternoon\n- 减少完整换班和副表收敛中的重复心情演算 [(#1675)](https://github.com/ArkMowers/arknights-mower/pull/1675) @ALEXsun0\n\n### Dependencies\n\n- 修复前端开发依赖 zod 校验大集合时可能耗尽内存的问题。 [(#1662)](https://github.com/ArkMowers/arknights-mower/pull/1662) @NiceAfternoon\n\n### Maintenance\n\n- 发布 4.1.6-alpha.14 [(#1761)](https://github.com/ArkMowers/arknights-mower/pull/1761) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.13...v4.1.6-alpha.14](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.13...v4.1.6-alpha.14)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
+  "version": "v4.1.6-alpha.15",
+  "published_at": "2026-11-13T16:23:27Z",
+  "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.15",
+  "notes": "## 4.1.6-alpha.15 - 2026-11-13\n\n### New\n\n- 支持自定义运行日志布局 [(#1928)](https://github.com/ArkMowers/arknights-mower/pull/1928) @NiceAfternoon\n- 支持 Mower AI 跨刷新保留会话并继续处理未完成任务 [(#1907)](https://github.com/ArkMowers/arknights-mower/pull/1907) @ALEXsun0\n- 调整黑流树海刷等级为明确推进一结局，并在第五层 BOSS 前暂停后保存完成状态，防止后续调度重复刷取。 [(#1910)](https://github.com/ArkMowers/arknights-mower/pull/1910) @ALEXsun0\n- 支持 Mower AI 自定义模型选择 OpenAI API 协议 [(#1901)](https://github.com/ArkMowers/arknights-mower/pull/1901) @wzy6055 @ALEXsun0\n- 支持含裁缝排班的理论期望收益演算 [(#1905)](https://github.com/ArkMowers/arknights-mower/pull/1905) @ALEXsun0\n- 默认按满练度估算基建组合中的未拥有干员 [(#1892)](https://github.com/ArkMowers/arknights-mower/pull/1892) @ALEXsun0\n- 为 MowerHUD 提供本机实例的状态和任务摘要 [(#1888)](https://github.com/ArkMowers/arknights-mower/pull/1888) @Fui-Reconk\n- 改进运行日志浏览并支持从警告和错误查看截图 [(#1886)](https://github.com/ArkMowers/arknights-mower/pull/1886) @NiceAfternoon\n- 调整运行日志页截图预览和任务列表的动画以适配系统动态效果偏好 [(#1883)](https://github.com/ArkMowers/arknights-mower/pull/1883) @NiceAfternoon\n- 支持在运行日志页分别显示或隐藏任务列表和今日任务 [(#1871)](https://github.com/ArkMowers/arknights-mower/pull/1871) @NiceAfternoon\n- 支持在运行日志页查看业务进度和任务状态 [(#1861)](https://github.com/ArkMowers/arknights-mower/pull/1861) @NiceAfternoon\n- 统一收益演算与排班表高级设置的无人机加速目标 [(#1862)](https://github.com/ArkMowers/arknights-mower/pull/1862) @ALEXsun0\n- 禁止在北京时间每日 03:45（含）至 04:00（不含）启动 MAA，已运行任务继续按原有规则执行。 [(#1851)](https://github.com/ArkMowers/arknights-mower/pull/1851) @ALEXsun0\n- 支持副表按所选绑组强制保持上班 [(#1847)](https://github.com/ArkMowers/arknights-mower/pull/1847) @ALEXsun0\n- 支持在排班中统一管理无人机加速设置 [(#1843)](https://github.com/ArkMowers/arknights-mower/pull/1843) @ALEXsun0\n- 为排班编辑添加不阻断的持有与练度警告 [(#1844)](https://github.com/ArkMowers/arknights-mower/pull/1844) @ALEXsun0\n- 统一通知邮件样式并支持附带参考截图 [(#1834)](https://github.com/ArkMowers/arknights-mower/pull/1834) @Fui-Reconk\n- 支持 Mower AI 在反馈中引用原始记录和相关代码 [(#1833)](https://github.com/ArkMowers/arknights-mower/pull/1833) @ALEXsun0\n- 支持按连续工作量演算排班理论期望收益 [(#1827)](https://github.com/ArkMowers/arknights-mower/pull/1827) @ALEXsun0\n- 支持在副表设施状态中按自动养成当前可合成内容判断加工站条件。 [(#1830)](https://github.com/ArkMowers/arknights-mower/pull/1830) @ALEXsun0\n- 支持副表分组并行生效并指定互斥对象 [(#1826)](https://github.com/ArkMowers/arknights-mower/pull/1826) @ALEXsun0\n- 支持使用 GitHub Token 检查和下载更新 [(#1821)](https://github.com/ArkMowers/arknights-mower/pull/1821) @ALEXsun0\n- 补充驻员相符房间返回前的页面复核 [(#1816)](https://github.com/ArkMowers/arknights-mower/pull/1816) @ALEXsun0\n- 保留收益演算参数并支持恢复默认 [(#1817)](https://github.com/ArkMowers/arknights-mower/pull/1817) @ALEXsun0\n- 支持自动招募未满潜支援机械 [(#1807)](https://github.com/ArkMowers/arknights-mower/pull/1807) @ALEXsun0\n- 错开共用协助干员的专精计划并检查完整技能的开训心情 [(#1802)](https://github.com/ArkMowers/arknights-mower/pull/1802) @ALEXsun0\n- 支持按训练室当前岗位保护状态触发副表。 [(#1800)](https://github.com/ArkMowers/arknights-mower/pull/1800) @ALEXsun0\n- 支持在收益计算的干员时间总览中按名称、拼音或首字母检索干员。 [(#1799)](https://github.com/ArkMowers/arknights-mower/pull/1799) @ALEXsun0\n- 扩展数据库管理以处理备份大小超限 [(#1796)](https://github.com/ArkMowers/arknights-mower/pull/1796) @ALEXsun0\n- 补齐 MAA 大型任务的启动导航与完成状态显示 [(#1794)](https://github.com/ArkMowers/arknights-mower/pull/1794) @ALEXsun0\n- 仓库页新增预计可培养数量，按折算经验与龙门币估算六/五/四星还能养几个，并支持拉满练度与卫戍练度切换。 [(#1783)](https://github.com/ArkMowers/arknights-mower/pull/1783) @Fui-Reconk\n- 支持九色鹿按手动干员顺序参与养成加工 [(#1789)](https://github.com/ArkMowers/arknights-mower/pull/1789) @ALEXsun0\n- 将 Android 的 MAA Python 兼容接口检查改为仅在 MAA 核心检查成功且发现更新后执行。 [(#1776)](https://github.com/ArkMowers/arknights-mower/pull/1776) @ALEXsun0\n- 在浏览器和桌面标题栏显示管理器注册的实例名称 [(#1771)](https://github.com/ArkMowers/arknights-mower/pull/1771) @ALEXsun0\n- 支持精零孑进驻贸易站的定时收单 [(#1769)](https://github.com/ArkMowers/arknights-mower/pull/1769) @ALEXsun0\n- 优先恢复当前配方加成较高的已配置加工干员 [(#1768)](https://github.com/ArkMowers/arknights-mower/pull/1768) @ALEXsun0\n\n### Bug Fixes\n\n- 修复运行日志中部分截图预览底部出现白线的问题。 [(#1932)](https://github.com/ArkMowers/arknights-mower/pull/1932) @NiceAfternoon\n- 修复运行日志布局保存和今日任务显示问题 [(#1931)](https://github.com/ArkMowers/arknights-mower/pull/1931) @NiceAfternoon\n- 修复桌面窗口最小化后截图预览仍在轮询的问题 [(#1930)](https://github.com/ArkMowers/arknights-mower/pull/1930) @NiceAfternoon\n- 统一运行日志和 Mower AI 助手的「回到最新」按钮样式 [(#1929)](https://github.com/ArkMowers/arknights-mower/pull/1929) @NiceAfternoon\n- 修复运行日志截图预览破图与缓存死锁 [(#1913)](https://github.com/ArkMowers/arknights-mower/pull/1913) @NiceAfternoon\n- 修复添加专精计划被森空岛同步长时间阻塞并误报「请勿修改设备本地时间」的问题 [(#1912)](https://github.com/ArkMowers/arknights-mower/pull/1912) @Fui-Reconk\n- 补全资源更新页和侧栏的未结束活动提示 [(#1927)](https://github.com/ArkMowers/arknights-mower/pull/1927) @ALEXsun0\n- 修复专精协助干员心情检查造成的不必要等待 [(#1926)](https://github.com/ArkMowers/arknights-mower/pull/1926) @ALEXsun0\n- 简化 Mower AI 回复操作与继续处理交互 [(#1924)](https://github.com/ArkMowers/arknights-mower/pull/1924) @ALEXsun0\n- 启动器不再因不可读的实例登记崩溃 [(#1918)](https://github.com/ArkMowers/arknights-mower/pull/1918) @Fui-Reconk\n- 诊断导出遮蔽设备串号时不再吞掉行尾结论 [(#1917)](https://github.com/ArkMowers/arknights-mower/pull/1917) @Fui-Reconk\n- MuMu 管理器缺失时报告可操作错误而非跳过身份核验 [(#1920)](https://github.com/ArkMowers/arknights-mower/pull/1920) @Fui-Reconk\n- 修复自动救急期间等待中的旧整组换班仍预约干员和床位、阻塞正常排班交接的问题。 [(#1922)](https://github.com/ArkMowers/arknights-mower/pull/1922) @ALEXsun0\n- 修复信用商店性价比购物将两个一份的破损装置判为未知规格而跳过的问题。 [(#1923)](https://github.com/ArkMowers/arknights-mower/pull/1923) @ALEXsun0\n- 修复宿舍无空床时按床序先换出较高恢复层级住客的问题 [(#1915)](https://github.com/ArkMowers/arknights-mower/pull/1915) @ALEXsun0\n- 修复副表换人使未恢复组员回班引发的上下班循环 [(#1916)](https://github.com/ArkMowers/arknights-mower/pull/1916) @ALEXsun0\n- 修复副表任务引用不存在的绑组时，排班验证、导入和图片导出被保存失败阻断的问题。 [(#1919)](https://github.com/ArkMowers/arknights-mower/pull/1919) @ALEXsun0\n- 取消排班干员预检的森空岛自动刷新 [(#1914)](https://github.com/ArkMowers/arknights-mower/pull/1914) @ALEXsun0\n- 修复自定义分组生效时屏蔽默认分组副表的问题 [(#1911)](https://github.com/ArkMowers/arknights-mower/pull/1911) @ALEXsun0\n- 修复理论期望演算中肥鸭充能后新入宿干员被移出宿舍，导致自动化组长时间不下班的问题。 [(#1909)](https://github.com/ArkMowers/arknights-mower/pull/1909) @ALEXsun0\n- 修复专精副表已替换普通排班岗位时，相关干员仍被误排除在协助者名单之外的问题。 [(#1908)](https://github.com/ArkMowers/arknights-mower/pull/1908) @ALEXsun0\n- 修复同站多名裁缝实际影响普通赤金订单时，收益演算仍按最强概率生成近似报告的问题。 [(#1906)](https://github.com/ArkMowers/arknights-mower/pull/1906) @ALEXsun0\n- 修复内置窗口在 XHR 请求期间的 WebView2 私有提交积累 [(#1903)](https://github.com/ArkMowers/arknights-mower/pull/1903) @asdfgdfhf\n- 修复不触发副表中的裁缝阻止演算启用理论期望模式的问题 [(#1902)](https://github.com/ArkMowers/arknights-mower/pull/1902) @ALEXsun0\n- 修复收益演算中肥鸭充能后干员长期空闲的问题 [(#1904)](https://github.com/ArkMowers/arknights-mower/pull/1904) @ALEXsun0\n- 修复贸易站跑单识别因订单标签与龙舌兰标记平级打分而将但书 2500 订单误判为龙舌兰的问题 [(#1897)](https://github.com/ArkMowers/arknights-mower/pull/1897) @NiceAfternoon\n- 修复收益演算换班停滞及统计已满仍无法结算的问题 [(#1899)](https://github.com/ArkMowers/arknights-mower/pull/1899) @ALEXsun0\n- 修复活动商店导航因触控失败进入设备恢复后，超时或停止仍反复重试、无法跳过兑换的问题。 [(#1900)](https://github.com/ArkMowers/arknights-mower/pull/1900) @ALEXsun0\n- 修复理智周计划表格新增关卡行被追加到底部的问题，改为插入当前第二行。 [(#1898)](https://github.com/ArkMowers/arknights-mower/pull/1898) @Well2333\n- 修复 MuMu 12 实例未报告 ADB 端口时无法连接 [(#1868)](https://github.com/ArkMowers/arknights-mower/pull/1868) @Fui-Reconk\n- 修复无运行缓存时载入心情数据的恢复报错 [(#1895)](https://github.com/ArkMowers/arknights-mower/pull/1895) @ALEXsun0\n- 修复宿舍候选均已满心情时反复重试清退的问题 [(#1893)](https://github.com/ArkMowers/arknights-mower/pull/1893) @ALEXsun0\n- 修复阿米娅近卫和医疗形态添加专精计划失败 [(#1891)](https://github.com/ArkMowers/arknights-mower/pull/1891) @ALEXsun0\n- 修复养成规划因将无法精二的干员计入分母而低估精二率的问题。 [(#1890)](https://github.com/ArkMowers/arknights-mower/pull/1890) @ALEXsun0\n- 修复整组回满期间主班失床和补床受阻导致收益演算失败的问题 [(#1887)](https://github.com/ArkMowers/arknights-mower/pull/1887) @ALEXsun0\n- 修复初始化生成或保留普通驻员纠错任务时漏判自动救急的问题。 [(#1885)](https://github.com/ArkMowers/arknights-mower/pull/1885) @ALEXsun0\n- 修复宿舍换班中的固定替班误迁和床位分配错误 [(#1880)](https://github.com/ArkMowers/arknights-mower/pull/1880) @ALEXsun0\n- 修复 SS 章节开放后关卡与商店导航的入口识别 [(#1882)](https://github.com/ArkMowers/arknights-mower/pull/1882) @ALEXsun0\n- 修复活动签到因无法确认翻页重叠而中断检查的问题 [(#1884)](https://github.com/ArkMowers/arknights-mower/pull/1884) @NiceAfternoon\n- 修复软件更新失败后过早尝试重启实例的问题 [(#1879)](https://github.com/ArkMowers/arknights-mower/pull/1879) @NiceAfternoon\n- 过滤实例监督探测产生的预期 HTTP 403 日志 [(#1878)](https://github.com/ArkMowers/arknights-mower/pull/1878) @NiceAfternoon\n- 修复共享替班轮休中可行交接受阻和失效安排仍被提交的问题 [(#1865)](https://github.com/ArkMowers/arknights-mower/pull/1865) @ALEXsun0\n- 修正公告维护前后的基建调度与登录恢复 [(#1866)](https://github.com/ArkMowers/arknights-mower/pull/1866) @ALEXsun0\n- 修复待开始专精先于副表实际换人执行的问题 [(#1869)](https://github.com/ArkMowers/arknights-mower/pull/1869) @ALEXsun0\n- 修复刷理智周计划跨游戏日后返回页面时，“今天”仍高亮旧日期的问题。 [(#1867)](https://github.com/ArkMowers/arknights-mower/pull/1867) @ALEXsun0\n- 修正运行日志页的加工配方与干员显示 [(#1872)](https://github.com/ArkMowers/arknights-mower/pull/1872) @NiceAfternoon\n- 停止记录桌面 HTTP 的成功与重定向响应 [(#1870)](https://github.com/ArkMowers/arknights-mower/pull/1870) @NiceAfternoon\n- 修复副表生效时普通回班误回宿舍，以及回班受阻后反复搬床导致的收益演算失败；本体同步修正回班目标。 [(#1864)](https://github.com/ArkMowers/arknights-mower/pull/1864) @ALEXsun0\n- 修复转发访问网页时携带正确 Token 的请求被来源校验拒绝的问题 [(#1863)](https://github.com/ArkMowers/arknights-mower/pull/1863) @ALEXsun0\n- 修复多绑组工作换位阻塞轮休和混合下班请求提前取消的问题 [(#1860)](https://github.com/ArkMowers/arknights-mower/pull/1860) @ALEXsun0\n- 修复森空岛同步后部分已扫描物品在仓库显示为零 [(#1857)](https://github.com/ArkMowers/arknights-mower/pull/1857) @Fui-Reconk\n- 修复收益演算在恢复等待或普通替班支援后反复派发换班、无法推进统计周期的问题。 [(#1858)](https://github.com/ArkMowers/arknights-mower/pull/1858) @ALEXsun0\n- 修复跑单恢复原班时跳过重选而阻塞后续跑单的问题 [(#1841)](https://github.com/ArkMowers/arknights-mower/pull/1841) @NiceAfternoon\n- 修复活动签到卡在没有「穿戴」按钮的时装展示页的问题 [(#1832)](https://github.com/ArkMowers/arknights-mower/pull/1832) @NiceAfternoon\n- 修复 Windows 上 Mower 进程退出因 OpenCL 驱动清理卡住而导致软件更新超时取消的问题。 [(#1856)](https://github.com/ArkMowers/arknights-mower/pull/1856) @CarrotLouis\n- 修复理论期望模式下无人机加速收益受库存、阈值及检查间隔限制的问题，改按采样期生成能力计算。 [(#1855)](https://github.com/ArkMowers/arknights-mower/pull/1855) @ALEXsun0\n- 修正正常排班与救急恢复的宿舍分床顺序 [(#1854)](https://github.com/ArkMowers/arknights-mower/pull/1854) @ALEXsun0\n- 修复活动签到翻页后因卡片裁剪偏差而中断检查的问题 [(#1853)](https://github.com/ArkMowers/arknights-mower/pull/1853) @ALEXsun0\n- 修复会客室信息板入口唤出后因固定等待而延后点击的问题。 [(#1852)](https://github.com/ArkMowers/arknights-mower/pull/1852) @ALEXsun0\n- 修复副表将离岗主班迁到新岗位时错误安排其上岗、与所在组休息状态不一致的问题。 [(#1849)](https://github.com/ArkMowers/arknights-mower/pull/1849) @ALEXsun0\n- 将排班警告的运行风险提示限定为未持有干员、训练位基础技能不足七级或所有技能均已专三的情况。 [(#1848)](https://github.com/ArkMowers/arknights-mower/pull/1848) @ALEXsun0\n- 修复共享替班争用导致收益演算不收敛的问题 [(#1846)](https://github.com/ArkMowers/arknights-mower/pull/1846) @ALEXsun0\n- 修复排班校验因无关设施技能或会客室干员未精二而误报基建技能未解锁的问题。 [(#1845)](https://github.com/ArkMowers/arknights-mower/pull/1845) @ALEXsun0\n- 修复远期跑单阻止入宿及连续跑单留下空床的问题 [(#1840)](https://github.com/ArkMowers/arknights-mower/pull/1840) @ALEXsun0\n- 修复低恢复优先级主班接受肥鸭充能后，整组回班仍被推迟到其他成员自然恢复期限的问题。 [(#1838)](https://github.com/ArkMowers/arknights-mower/pull/1838) @ALEXsun0\n- 修复未绑组工作主班回满后遗漏回班安排的问题 [(#1836)](https://github.com/ArkMowers/arknights-mower/pull/1836) @ALEXsun0\n- 修正理论收益演算中的无人机分配偏差 [(#1842)](https://github.com/ArkMowers/arknights-mower/pull/1842) @ALEXsun0\n- 修复收益演算中，副表启用整组零心情工作后宿管未随组回班、占用替班的问题。 [(#1839)](https://github.com/ArkMowers/arknights-mower/pull/1839) @YuNHz\n- 修复厂商标识位置偏差导致的登录页识别失败 [(#1837)](https://github.com/ArkMowers/arknights-mower/pull/1837) @ALEXsun0\n- 修复副表条件弹窗在嵌套条件增多时无法自动扩宽的问题。 [(#1835)](https://github.com/ArkMowers/arknights-mower/pull/1835) @ALEXsun0\n- 仓库页的经验详情与龙门币详情右上角改为显示预计消耗，不再显示库存总量，并随拉满练度与卫戍练度切换更新。 [(#1831)](https://github.com/ArkMowers/arknights-mower/pull/1831) @Fui-Reconk\n- 优先补位原工作设施再调走驻员 [(#1829)](https://github.com/ArkMowers/arknights-mower/pull/1829) @ALEXsun0\n- 修复加工站一键设置将副产品概率加成低于 80% 的干员只填入单个分类的问题。 [(#1828)](https://github.com/ArkMowers/arknights-mower/pull/1828) @ALEXsun0\n- 修复普通入宿或迁宿安排阻止干员加工的问题，加工后仍保留原定宿舍目标和任务时间。 [(#1823)](https://github.com/ArkMowers/arknights-mower/pull/1823) @ALEXsun0\n- 修复家具零件为负数时森空岛本地缓存无法补回其他材料库存的问题。 [(#1824)](https://github.com/ArkMowers/arknights-mower/pull/1824) @ALEXsun0\n- 修复家具零件数量为负数时无法同步森空岛数据的问题。 [(#1822)](https://github.com/ArkMowers/arknights-mower/pull/1822) @ALEXsun0\n- 固定收益图的四行资源排布，并修复排班快照尚未初始化时保存参数导致演算无人机误停用的问题。 [(#1820)](https://github.com/ArkMowers/arknights-mower/pull/1820) @ALEXsun0\n- 修复延后宿舍清退时漏读下一单时间的问题 [(#1819)](https://github.com/ArkMowers/arknights-mower/pull/1819) @YuNHz\n- 修复宿舍快速选人跳过同职业干员的问题 [(#1812)](https://github.com/ArkMowers/arknights-mower/pull/1812) @ALEXsun0\n- 修复九色鹿打开配方后误读因果而中断加工 [(#1813)](https://github.com/ArkMowers/arknights-mower/pull/1813) @ALEXsun0\n- 修复日常任务恢复主题时重复启动 MAA [(#1818)](https://github.com/ArkMowers/arknights-mower/pull/1818) @ALEXsun0\n- 修复启动背景被误认为验证码导致的登录异常 [(#1815)](https://github.com/ArkMowers/arknights-mower/pull/1815) @ALEXsun0\n- 修复房间头像被误认为空槽导致的驻员漏读 [(#1814)](https://github.com/ArkMowers/arknights-mower/pull/1814) @ALEXsun0\n- 修复高优替班保床导致主班无法休息的问题 [(#1811)](https://github.com/ArkMowers/arknights-mower/pull/1811) @ALEXsun0\n- 修复收益演算在直观产出模式下切换制造产物后多计或漏计源石碎片的问题。 [(#1810)](https://github.com/ArkMowers/arknights-mower/pull/1810) @ALEXsun0\n- 修复回收站页面展开“计算口径与概率来源”后页面和图表变宽的问题。 [(#1809)](https://github.com/ArkMowers/arknights-mower/pull/1809) @ALEXsun0\n- 修复基建待办事项中订单交付按钮的漏识别 [(#1808)](https://github.com/ArkMowers/arknights-mower/pull/1808) @ALEXsun0\n- 修复多绑组排班的收益演算失败 [(#1803)](https://github.com/ArkMowers/arknights-mower/pull/1803) @ALEXsun0\n- 修正回收站理论日产及制造站效率换算 [(#1806)](https://github.com/ArkMowers/arknights-mower/pull/1806) @ALEXsun0\n- 修复加工干员宿舍恢复忽略手动顺序的问题 [(#1805)](https://github.com/ArkMowers/arknights-mower/pull/1805) @ALEXsun0\n- 修复大型任务启动前的页面准备和结束后的主题切换 [(#1801)](https://github.com/ArkMowers/arknights-mower/pull/1801) @ALEXsun0\n- 修复公招梅尔被识别为梅的问题 [(#1804)](https://github.com/ArkMowers/arknights-mower/pull/1804) @NiceAfternoon\n- 修复仓库页切换练度时鼠标悬停导致按钮文字看不清的问题。 [(#1797)](https://github.com/ArkMowers/arknights-mower/pull/1797) @Fui-Reconk\n- 修复训练室保护导致的替班误判和换班确认异常 [(#1795)](https://github.com/ArkMowers/arknights-mower/pull/1795) @ALEXsun0\n- 修复森空岛同步失败后未从缓存补回缺失库存的问题 [(#1791)](https://github.com/ArkMowers/arknights-mower/pull/1791) @ALEXsun0\n- 修复精零孑驻卖金贸易站时误用仅收单的问题，恢复普通跑单条件、换人和提前量。 [(#1792)](https://github.com/ArkMowers/arknights-mower/pull/1792) @ALEXsun0\n- 修复多绑组主班在唯一正常下班组中的心情统计和换班遗漏 [(#1788)](https://github.com/ArkMowers/arknights-mower/pull/1788) @ALEXsun0\n- 将应用排班改为停止任务后以模式 1 启动 [(#1787)](https://github.com/ArkMowers/arknights-mower/pull/1787) @ALEXsun0\n- 修复自动切换信赖首次点击控制中枢未生效时直接中断检查的问题。 [(#1785)](https://github.com/ArkMowers/arknights-mower/pull/1785) @ALEXsun0\n- 修复回收站进驻面板首次点击无效后不再重试，导致收取记录的实际驻员保持未知的问题。 [(#1784)](https://github.com/ArkMowers/arknights-mower/pull/1784) @ALEXsun0\n- 修复初始肥鸭充能等待期间阻挡独立到期任务、导致刷新任务反复派发却不执行的问题。 [(#1782)](https://github.com/ArkMowers/arknights-mower/pull/1782) @ALEXsun0\n- 修复收益演算漏计低等级制造站源石碎片的问题 [(#1780)](https://github.com/ArkMowers/arknights-mower/pull/1780) @ALEXsun0\n- 修复初始化为临近专精或换协助任务让路后，双方互相等待而无法继续的问题。 [(#1779)](https://github.com/ArkMowers/arknights-mower/pull/1779) @ALEXsun0\n- 修复训练室空技能槽误触发保护而阻止开训的问题 [(#1778)](https://github.com/ArkMowers/arknights-mower/pull/1778) @ALEXsun0\n- 修复启用自动专精且有待核对计划时，启动恢复完成前读取训练室导致实时心情或自动救急初始化报错退出的问题。 [(#1777)](https://github.com/ArkMowers/arknights-mower/pull/1777) @ALEXsun0\n- 修复基建启动时漏读训练室和漏检临近任务的问题 [(#1773)](https://github.com/ArkMowers/arknights-mower/pull/1773) @ALEXsun0\n- 修复首选替班未达急救线就被召回的问题 [(#1775)](https://github.com/ArkMowers/arknights-mower/pull/1775) @ALEXsun0\n- 修复启用实时心情计算调控时连续合成每批结束后读取心情造成的长时间停顿。 [(#1774)](https://github.com/ArkMowers/arknights-mower/pull/1774) @ALEXsun0\n- 初始化选人页心情扫描，并修正演算心情、训练室空闲替班和回班目标的调度准入。 [(#1770)](https://github.com/ArkMowers/arknights-mower/pull/1770) @ALEXsun0\n- 修复活动签到在部分 JPEG 画面中因漏识别首日进度圆点而无法确认页面的问题。 [(#1772)](https://github.com/ArkMowers/arknights-mower/pull/1772) @ALEXsun0\n- 修复原生基建调度中挂起整批换班阻挡前置回班，导致回班任务反复生成且最终安排为空的问题。 [(#1766)](https://github.com/ArkMowers/arknights-mower/pull/1766) @ALEXsun0\n- 修复多开管理器安装软件更新时误打开管理窗口的问题 [(#1765)](https://github.com/ArkMowers/arknights-mower/pull/1765) @ALEXsun0\n- 修复活动商店导航无法进入目标活动的问题，并避免黑色转场帧导致商店标题确认失败。 [(#1763)](https://github.com/ArkMowers/arknights-mower/pull/1763) @ALEXsun0\n\n### Improvements\n\n- 移除森空岛已覆盖物品的数量 OCR [(#1894)](https://github.com/ArkMowers/arknights-mower/pull/1894) @Fui-Reconk\n- 运行日志不再记录整份基地状态快照和逐干员、逐帧的重复 DEBUG 记录，WARNING、ERROR 及设备命令、识别匹配等排障记录保持不变。 [(#1889)](https://github.com/ArkMowers/arknights-mower/pull/1889) @NiceAfternoon\n- 拆分运行日志页的解析和显示逻辑 [(#1881)](https://github.com/ArkMowers/arknights-mower/pull/1881) @NiceAfternoon\n- 回收长时间等待时的识别资源和空闲 JPEG 进程 [(#1877)](https://github.com/ArkMowers/arknights-mower/pull/1877) @NiceAfternoon\n- 减少场景图导航和实时心情计算的常驻内存 [(#1876)](https://github.com/ArkMowers/arknights-mower/pull/1876) @NiceAfternoon\n- 减少 ADB 和 DroidCast 截图解码的临时内存 [(#1875)](https://github.com/ArkMowers/arknights-mower/pull/1875) @NiceAfternoon\n- 在 Windows 上默认使用单线程运行 OpenBLAS，有显式线程设置时沿用环境变量。 [(#1874)](https://github.com/ArkMowers/arknights-mower/pull/1874) @NiceAfternoon\n- 延后加载桌面启动时用不到的图像和公告解析依赖 [(#1873)](https://github.com/ArkMowers/arknights-mower/pull/1873) @NiceAfternoon\n- 跳过候补、普通替班、空闲及宿舍保留干员的额外锁单回操作。 [(#1764)](https://github.com/ArkMowers/arknights-mower/pull/1764) @ALEXsun0\n\n### Maintenance\n\n- 同步官方内置资源至 v2026.11.11-6b14e28 [(#1934)](https://github.com/ArkMowers/arknights-mower/pull/1934) @NiceAfternoon\n- 将 Arknights Mower 软件版本更新至 4.1.6-alpha.15。 [(#1933)](https://github.com/ArkMowers/arknights-mower/pull/1933) @NiceAfternoon\n\n### Documentation\n\n- 修正 AI 收益演算指南中的过时说明，使参数和结果解释符合当前演算规则。 [(#1850)](https://github.com/ArkMowers/arknights-mower/pull/1850) @ALEXsun0\n\n### Other\n\n- 撤回集成战略和普通自动战斗的终端前置导航 [(#1798)](https://github.com/ArkMowers/arknights-mower/pull/1798) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.14...v4.1.6-alpha.15](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.14...v4.1.6-alpha.15)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
   "full_assets": [
     {
-      "name": "arknights-mower_4.1.6-alpha.14_android_arm64.zip",
-      "size": 212735582,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:2860a80177773b8decf5b6a57f4bf9028301911b6d7218b9d25f6f2823ddc491"
+      "name": "arknights-mower_4.1.6-alpha.15_android_arm64.zip",
+      "size": 213785022,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:f4e290a868dd504d09e90987b495bc5e0f97c4073902804c48e985d92fbd9131"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.14_linux_arm64.tar.gz",
-      "size": 196354004,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_linux_arm64.tar.gz",
-      "digest": "sha256:ebfb2f902d285dd3feb14c9a8a87d155092dc82301388d2b681a4a3bb361aaec"
+      "name": "arknights-mower_4.1.6-alpha.15_linux_arm64.tar.gz",
+      "size": 195129547,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower_4.1.6-alpha.15_linux_arm64.tar.gz",
+      "digest": "sha256:9805bdbc5d9887533c6df93d95a555fd1e5296ac76878ec71c07276cb3ba3d04"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.14_linux_x64.tar.gz",
-      "size": 225064314,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_linux_x64.tar.gz",
-      "digest": "sha256:8a7e3bba01d56eb3c8b2d6044839036f2bd92c5f2e27f1ea811ce2d09c9b6d71"
+      "name": "arknights-mower_4.1.6-alpha.15_linux_x64.tar.gz",
+      "size": 225122696,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower_4.1.6-alpha.15_linux_x64.tar.gz",
+      "digest": "sha256:96894289dc49521ecbaad8db60e95ec683699f79953cea82a66640953e6632d3"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.14_macos_arm64.dmg",
-      "size": 226548834,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_macos_arm64.dmg",
-      "digest": "sha256:eb2f0ade0e7f35634cfd582251d8b5a331b795ebd50c21c681d28ef49e33606f"
+      "name": "arknights-mower_4.1.6-alpha.15_macos_arm64.dmg",
+      "size": 226189836,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower_4.1.6-alpha.15_macos_arm64.dmg",
+      "digest": "sha256:7085ebee8aeaba079990051e70352a7c3e30fe5a91fbfcb32a169433e0b24c79"
     },
     {
-      "name": "arknights-mower_4.1.6-alpha.14_windows_x64.zip",
-      "size": 136326787,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_windows_x64.zip",
-      "digest": "sha256:8c0e83bb213d5d9a78420e03e5fb2927ffe18326cadd3da5c1d9341fe25d585d"
+      "name": "arknights-mower_4.1.6-alpha.15_windows_x64.zip",
+      "size": 134075531,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower_4.1.6-alpha.15_windows_x64.zip",
+      "digest": "sha256:a449fec7e901ac37e70ebffd79bbb2b795c0c66e347070a23d887e000090bb3d"
     }
   ],
   "ota_assets": [
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 122503075,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:7d44e786a4cd0cca52f0621adce09b521e51b289d27c0a01a80b3c9ec53b0c18"
+      "name": "arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 126611072,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:c51d762534d9be7ab8cb9538887d12b206b0b1d6ebbda6a54690fc28347a5bc2"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 53116205,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:989c3b6cf0ba04b933f094ead6fa04ecbad0755609f166eb4b8b3b76c4f7fe0d"
+      "name": "arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 54242393,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.10_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:4464c830fd9153800c2c70a45b6cfce07238c28aaedd64361f18fbd8990f5b77"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 112087684,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:842fa5cbfecb7e3c0aacb67bf9f077e1e6a291d2d9ee24ff2c3e6c54d37cee92"
+      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 117040417,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:b86ef81f7dc09067ed21ea4fbbd7a7fd94d7371a28fcd4b159579d94da5a53fd"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 48998106,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:287fac05d3a40f7923d54f95ddfc5e917f29431a5cbbb530206f671f36f1a423"
+      "name": "arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 50190509,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.11_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:0711dc564d98f7b2f12062be988ea3e51d785aac2b8f54108e7eac9b59184bdd"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 112047184,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:bea9f39af8be427c986cc93cefff52489e2b8f09025cff839f26478c66a1b8cc"
+      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 117009927,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:fef6f5d9735e6ce596dd64f9336a39cf4aa0fa017f58f24c3ccb49810dfb6c44"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 48886434,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:e48fb6fcfe6ee08089fce0e4a3bfce32b16ce9e8f521bcafef40ac222c8cd446"
+      "name": "arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 50111418,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.12_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:ee22002b6e10a781b045900c583c0553f817e37f82b66e0c72ec47ce4499961b"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g0ba02152_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 10983566,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g0ba02152_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:74720fbeae24aeb1754705a49c2239fb737d762f0c1015f37eba541ec9579b97"
+      "name": "arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 45147485,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:0f020bca2969ce2111efa3b2a3fd01f96e955e54d5febc45e4b94c707a588b97"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g0ba02152_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 11492312,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g0ba02152_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:8d2c89eaf9fd567a39d4c140f00997ab67f44083259965ff8b3fbda2ccf67979"
+      "name": "arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 16036011,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:7290e7fdde7463bf1826ac340772c0be59aff662bd510637f28c818bb5154799"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g2f9fa770_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 12956560,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g2f9fa770_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:182de50826768bc575022537aef06af606ad7b621d88926e536f360cf8b1fc04"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g3d4f004b_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 32767339,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g3d4f004b_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:a840234c4eee2d44a08838fee16be951051354df9d73697f4e2c222483b3bf64"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g2f9fa770_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 13447641,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g2f9fa770_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:7e51652a9b21c88c6a6786e1ff3fa5bdc2c1a887c43ae9a832122cf38f637b4b"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g3d4f004b_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 10960524,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g3d4f004b_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:be6b73f4f0864b75032b4e95649b9c40aba5cfc50e1258a025201580dbd8389e"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g76911e6f_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 10764683,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g76911e6f_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:f5998c298fade185fd5c40979aa2fad0e73d4caf34fbfea68642056488fdd2de"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g3fb888cc_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 33383879,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g3fb888cc_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:c962bd9766b282ec2076d90bbcadd7b8c074eb6f60a07a350cec5484ea50c18d"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g76911e6f_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 11122456,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g76911e6f_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:cce5a2fc7f3a48148e208beec16047d5c9f4563e6d6bfbd9a980799ae8bb90f2"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g3fb888cc_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 11574324,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g3fb888cc_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:22409200a4c8ec3897e315c2f4fcea40aad5850533a94c56396b0b764e0bbd0a"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g9dba6619_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 11711836,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g9dba6619_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:63082298078007dd162a9666cc09f0ea67a8dc772f1246a224ef876206dd3883"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g42206b09_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 30875320,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g42206b09_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:8fb1bf943c139d2a0b5ed5801a52b96e974016acd3fa51fdb41ec942ed7a6fe2"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.g9dba6619_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 12059575,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.g9dba6619_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:e981807c81ca3d1d60f31cd5cccdc14a844641fa04ff679bc08eec3f506ce437"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.g42206b09_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 8450578,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.g42206b09_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:873478ac3c1edabb0da54936253f067d440e29a2cd8808d1d74b46dc7d95358c"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.gb44bfb9a_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 10602731,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.gb44bfb9a_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:29f7339257a22ea4634e24994526f8914fd5edadbc32ca94e0d8b1bdca40ac79"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.ga51d3f24_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 32874379,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.ga51d3f24_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:3c3c03eff14f51fcb84e0862fe3dffcd43132b301d3b440a93757b92d464f88b"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13.gb44bfb9a_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 10563150,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13.gb44bfb9a_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:1309a89035b7624a3f51eff4af6432438d398a761ca868afb190490015768237"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.ga51d3f24_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 11067910,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.ga51d3f24_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:880907ee3b820cfc364e3b7f4d65b0c6f47128e61bb7163641283b3a3749a3aa"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 18476556,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:e200df1808dcf83330c7f2ed353584642632f5f735ae4433014881defd724804"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.gec6e4c02_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 32984818,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.gec6e4c02_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:7f28ca371193c022fa6d2e17efc2d5ed3e911274c7fdc21130c100d161949246"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 13963277,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.13_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:8d2f03a39ef536c081f70333f8c89625eb6d2b05e0fec2ba8e7beb4f74309aee"
+      "name": "arknights-mower-ota_4.1.6-alpha.14.gec6e4c02_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 11411958,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14.gec6e4c02_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:f781fe5eee768a429d758f155b6e9a9fdcf77492887122e5910adf0e5315ff99"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.9_to_4.1.6-alpha.14_android_arm64.zip",
-      "size": 122532059,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.9_to_4.1.6-alpha.14_android_arm64.zip",
-      "digest": "sha256:3bdaf48fd79e52d5639192339a4a491d7d695ac52a9c0838f9a32beaa3e28b15"
+      "name": "arknights-mower-ota_4.1.6-alpha.14_to_4.1.6-alpha.15_android_arm64.zip",
+      "size": 39803815,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14_to_4.1.6-alpha.15_android_arm64.zip",
+      "digest": "sha256:a7edabe04d453b00b5aae7206888d855eb5314acc42901c8fbb74ba4f2958a1e"
     },
     {
-      "name": "arknights-mower-ota_4.1.6-alpha.9_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "size": 53203072,
-      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower-ota_4.1.6-alpha.9_to_4.1.6-alpha.14_windows_x64_v2.zip",
-      "digest": "sha256:d1035490854e4d2c2a418be8509404a2652c6b3bc5d477aad6c7efba7cccb9db"
+      "name": "arknights-mower-ota_4.1.6-alpha.14_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "size": 13489930,
+      "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.15/arknights-mower-ota_4.1.6-alpha.14_to_4.1.6-alpha.15_windows_x64_v2.zip",
+      "digest": "sha256:f07be10cd07bbdb7979eeade2ae4978ca4c479e7340f22020ddbe3d454ce1aa7"
     }
   ],
   "history": [
+    {
+      "schema": 1,
+      "version": "v4.1.6-alpha.14",
+      "published_at": "2026-11-01T13:25:01Z",
+      "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.14",
+      "notes": "## 4.1.6-alpha.14 - 2026-11-01\n\n### New\n\n- 完善养成规划干员卡的练度展示 [(#1751)](https://github.com/ArkMowers/arknights-mower/pull/1751) @NiceAfternoon\n- 提前停机维护的登录尝试时刻，从公告结束前半小时改为前一小时。 [(#1749)](https://github.com/ArkMowers/arknights-mower/pull/1749) @ALEXsun0\n- 适配行铃等六名干员与「时间啊，向前！」活动 [(#1747)](https://github.com/ArkMowers/arknights-mower/pull/1747) @ALEXsun0\n- 支持副表按既有绑组请求整组上下班，并修复换班中的恢复床位与替班协调判断。 [(#1745)](https://github.com/ArkMowers/arknights-mower/pull/1745) @ALEXsun0\n- 增加不含截图的日志导出入口并附带当前排班表 [(#1731)](https://github.com/ArkMowers/arknights-mower/pull/1731) @ALEXsun0\n- 添加万圣节装饰的显示选项 [(#1730)](https://github.com/ArkMowers/arknights-mower/pull/1730) @NiceAfternoon\n- 添加按日期启用的万圣节界面装饰 [(#1722)](https://github.com/ArkMowers/arknights-mower/pull/1722) @NiceAfternoon\n- 增加跑单与等待场景的网络自适应 [(#1711)](https://github.com/ArkMowers/arknights-mower/pull/1711) @NiceAfternoon\n- 展示仓库页四档折合寻访抽数和全部经验的历史走势。 [(#1710)](https://github.com/ArkMowers/arknights-mower/pull/1710) @NiceAfternoon\n- 支持自动保存专精收取截图 [(#1704)](https://github.com/ArkMowers/arknights-mower/pull/1704) @ALEXsun0\n- 支持以标准或股票模式查看基建收益与订单历史 [(#1699)](https://github.com/ArkMowers/arknights-mower/pull/1699) @NiceAfternoon\n- 支持大型任务延后普通宿舍清退并按周计划兑换活动商品 [(#1695)](https://github.com/ArkMowers/arknights-mower/pull/1695) @ALEXsun0\n- 支持悖论模拟队列和活动商店兑换 [(#1690)](https://github.com/ArkMowers/arknights-mower/pull/1690) @ALEXsun0\n- 支持通过 PRTS Plus 新作业代码和单份作业链接导入作业，并将作业集按成员顺序追加到已有队列。 [(#1689)](https://github.com/ArkMowers/arknights-mower/pull/1689) @ALEXsun0\n- 支持按队列执行普通自动战斗和保全作业 [(#1684)](https://github.com/ArkMowers/arknights-mower/pull/1684) @ALEXsun0\n- 为 GitHub 文件下载增加 GH-Proxy 默认站点，未指定站点时仍优先直连和 ghfast.top。 [(#1677)](https://github.com/ArkMowers/arknights-mower/pull/1677) @ALEXsun0\n- 保留报错归档中的原始画面像素 [(#1670)](https://github.com/ArkMowers/arknights-mower/pull/1670) @ALEXsun0\n- 支持按绑组设置心情阈值，并将日常心情阈值的最低设置降至 35%。 [(#1668)](https://github.com/ArkMowers/arknights-mower/pull/1668) @ALEXsun0\n- 支持从侧栏预览并安装软件与资源更新 [(#1666)](https://github.com/ArkMowers/arknights-mower/pull/1666) @ALEXsun0\n\n### Bug Fixes\n\n- 修复轮休受阻后的人员误调与零心情驻岗 [(#1759)](https://github.com/ArkMowers/arknights-mower/pull/1759) @ALEXsun0\n- 修复手动收取专三后养成规划仍显示训练中的问题 [(#1760)](https://github.com/ArkMowers/arknights-mower/pull/1760) @ALEXsun0\n- 修复 MAA 调用失败后任务结束设置不生效的问题 [(#1758)](https://github.com/ArkMowers/arknights-mower/pull/1758) @ALEXsun0\n- 修复干员搜索以 v 表示 ü 或查询英文 v 时遗漏结果的问题。 [(#1757)](https://github.com/ArkMowers/arknights-mower/pull/1757) @NiceAfternoon\n- 修复受监督桌面实例在工作线程异常后无法自动恢复的问题 [(#1756)](https://github.com/ArkMowers/arknights-mower/pull/1756) @NiceAfternoon\n- 修复活动签到第十天卡片的数字漏识别问题 [(#1754)](https://github.com/ArkMowers/arknights-mower/pull/1754) @NiceAfternoon\n- 修复森空岛同步后已完成的手动养成目标仍残留在训练队列的问题。 [(#1755)](https://github.com/ArkMowers/arknights-mower/pull/1755) @ALEXsun0\n- 修复最新活动推荐选入无常规材料掉落的末关而漏选材料关的问题。 [(#1753)](https://github.com/ArkMowers/arknights-mower/pull/1753) @ALEXsun0\n- 补齐公开招募池中的罗比菈塔、桑葚和琴柳 [(#1752)](https://github.com/ArkMowers/arknights-mower/pull/1752) @ALEXsun0\n- 修复旧客户端因资源包包含未登记文件而无法完成资源更新的问题。 [(#1750)](https://github.com/ArkMowers/arknights-mower/pull/1750) @ALEXsun0\n- 修复切换分组或副表后条件沿用旧值并误存的问题 [(#1748)](https://github.com/ArkMowers/arknights-mower/pull/1748) @ALEXsun0\n- 修复长时间收益演算仍受固定计算额度限制的问题，并让未完成提示突出已算时长和停止原因。 [(#1746)](https://github.com/ArkMowers/arknights-mower/pull/1746) @ALEXsun0\n- 修复副表任务整份替换后编辑器仍显示旧内容、后续编辑可能覆盖新任务的问题。 [(#1744)](https://github.com/ArkMowers/arknights-mower/pull/1744) @ALEXsun0\n- 修复共享干员继续承担现有工作替班时，兼容绑组仍无法同休的问题。 [(#1743)](https://github.com/ArkMowers/arknights-mower/pull/1743) @ALEXsun0\n- 修复跑单换人结果迟到时过早判失败并误判原班恢复完成的问题 [(#1742)](https://github.com/ArkMowers/arknights-mower/pull/1742) @NiceAfternoon\n- 修复名称 OCR 多框或误读导致的回收站材料识别错误 [(#1741)](https://github.com/ArkMowers/arknights-mower/pull/1741) @NiceAfternoon\n- 修复仓库扫描将龙门币图标误读为前导 1 的问题 [(#1740)](https://github.com/ArkMowers/arknights-mower/pull/1740) @NiceAfternoon\n- 修复信用商店领取过渡时崩溃并中断购物的问题 [(#1739)](https://github.com/ArkMowers/arknights-mower/pull/1739) @NiceAfternoon\n- 修复活动签到一次失败就跳过当天后续检查的问题 [(#1733)](https://github.com/ArkMowers/arknights-mower/pull/1733) @NiceAfternoon\n- 修复个人上限离宿阻挡已获准整组回班的问题 [(#1738)](https://github.com/ArkMowers/arknights-mower/pull/1738) @ALEXsun0\n- 修复绑组主班按个人上限离宿后，即使本组满足正常回班条件仍空闲等待的问题。 [(#1737)](https://github.com/ArkMowers/arknights-mower/pull/1737) @ALEXsun0\n- 修复普通基建位置预演使用旧心情造成的分床顺序错误，并恢复两电90分钟、其余60分钟的默认组内恢复时间差阈值。 [(#1734)](https://github.com/ArkMowers/arknights-mower/pull/1734) @ALEXsun0\n- 修复自动切换信赖因漏识别选中框而中断的问题 [(#1736)](https://github.com/ArkMowers/arknights-mower/pull/1736) @ALEXsun0\n- 显示副表暂缓切换的具体原因 [(#1735)](https://github.com/ArkMowers/arknights-mower/pull/1735) @ALEXsun0\n- 修复训练室进房失败后停止巡检并阻塞替班交接的问题 [(#1732)](https://github.com/ArkMowers/arknights-mower/pull/1732) @ALEXsun0\n- 修复 MAA 画面探测误报警和保全导航误改战术装备的问题 [(#1729)](https://github.com/ArkMowers/arknights-mower/pull/1729) @ALEXsun0\n- 修复自动救急换人或离宿失败后丢失剩余安排并阻塞独立任务的问题 [(#1726)](https://github.com/ArkMowers/arknights-mower/pull/1726) @NiceAfternoon\n- 修复设备启动和恢复未持有当前连接的准备锁的问题 [(#1725)](https://github.com/ArkMowers/arknights-mower/pull/1725) @NiceAfternoon\n- 修复活动签到无法识别已解锁未领取奖励的问题 [(#1727)](https://github.com/ArkMowers/arknights-mower/pull/1727) @NiceAfternoon\n- 修复跑单恢复原班后因短暂的房间返回失败而无法完成任务的问题。 [(#1724)](https://github.com/ArkMowers/arknights-mower/pull/1724) @NiceAfternoon\n- 修复清空缓存和进程恢复时一次房间识别失败就中断观察的问题。 [(#1723)](https://github.com/ArkMowers/arknights-mower/pull/1723) @NiceAfternoon\n- 修复跑单原班恢复时干员确认失败后进入长时间休眠、共享干员的后续跑单被阻塞的问题。 [(#1721)](https://github.com/ArkMowers/arknights-mower/pull/1721) @NiceAfternoon\n- 修复活动签到因卡片裁剪偏差而提前结束检查的问题 [(#1717)](https://github.com/ArkMowers/arknights-mower/pull/1717) @NiceAfternoon\n- 修复等待场景设置中的名称与日志不一致的问题。 [(#1718)](https://github.com/ArkMowers/arknights-mower/pull/1718) @NiceAfternoon\n- 修复保全导航误判按钮后点击进入战斗的问题 [(#1719)](https://github.com/ArkMowers/arknights-mower/pull/1719) @ALEXsun0\n- 修复换人返回后将退场残影当作已进房、导致订单操作失败的问题。 [(#1716)](https://github.com/ArkMowers/arknights-mower/pull/1716) @NiceAfternoon\n- 修复访问记录弹窗导致会客室线索流程停滞的问题 [(#1715)](https://github.com/ArkMowers/arknights-mower/pull/1715) @NiceAfternoon\n- 修复生产房快速选人名单不符时提前报错的问题 [(#1714)](https://github.com/ArkMowers/arknights-mower/pull/1714) @NiceAfternoon\n- 修复训练室协助位完整重选时误点不存在的清空按钮，导致无法取消原暂选的问题。 [(#1713)](https://github.com/ArkMowers/arknights-mower/pull/1713) @NiceAfternoon\n- 调整养成规划页面的局部呈现与交互 [(#1712)](https://github.com/ArkMowers/arknights-mower/pull/1712) @NiceAfternoon\n- 修复加工站和办公室误点清空按钮导致取消暂选失败的问题 [(#1709)](https://github.com/ArkMowers/arknights-mower/pull/1709) @NiceAfternoon\n- 修复 macOS 应用从全部设置返回后侧边栏顶部多出空白的问题。 [(#1708)](https://github.com/ArkMowers/arknights-mower/pull/1708) @ALEXsun0\n- 修复独立管理器检测 BlueStacks Air 后选项空白、无法选择和保存 ADB 连接地址的问题。 [(#1707)](https://github.com/ArkMowers/arknights-mower/pull/1707) @ALEXsun0\n- 修复宿舍不养闲人时把保留住客误当空位，导致满心情干员反复入住和补位的问题。 [(#1706)](https://github.com/ArkMowers/arknights-mower/pull/1706) @ALEXsun0\n- 修复用尽下班后心情曲线缺少入宿零点的问题 [(#1705)](https://github.com/ArkMowers/arknights-mower/pull/1705) @ALEXsun0\n- 修复 Windows 窗口从最小化恢复时页面短暂缩在左上角的问题。 [(#1697)](https://github.com/ArkMowers/arknights-mower/pull/1697) @NiceAfternoon\n- 修复普通宿舍补位遗漏首屏低心情干员的问题 [(#1701)](https://github.com/ArkMowers/arknights-mower/pull/1701) @ALEXsun0\n- 修复保存各组心情阈值时覆盖其他组设置及调整普通心情阈值时提前唤醒调度的问题。 [(#1700)](https://github.com/ArkMowers/arknights-mower/pull/1700) @ALEXsun0\n- 补足切产物与依赖换班的整批时间预算 [(#1698)](https://github.com/ArkMowers/arknights-mower/pull/1698) @ALEXsun0\n- 回收站材料收取改为读全即记录并恢复报错归档为 JPEG 编码 [(#1686)](https://github.com/ArkMowers/arknights-mower/pull/1686) @NiceAfternoon\n- 修复副表启用零心情工作后绑组成员独立回班的问题 [(#1694)](https://github.com/ArkMowers/arknights-mower/pull/1694) @ALEXsun0\n- 修复切产物等待后合并换班安排丢失导致回班挂起的问题 [(#1693)](https://github.com/ArkMowers/arknights-mower/pull/1693) @ALEXsun0\n- 修复副表条件连续读取心情时因取值时刻不同而误判，导致副表在实时判断与完整换班预演之间反复切换的问题。 [(#1692)](https://github.com/ArkMowers/arknights-mower/pull/1692) @ALEXsun0\n- 修复部分组员已有恢复床位时整组下班安排被拒绝、其余成员无法休息的问题。 [(#1691)](https://github.com/ArkMowers/arknights-mower/pull/1691) @ALEXsun0\n- 修复进入基建房间时，收取产物后仍在地图却因场景识别不匹配而提前返回首页的问题。 [(#1688)](https://github.com/ArkMowers/arknights-mower/pull/1688) @ALEXsun0\n- 修正养成推荐与卡片底部比例取全部技能最高值的问题 [(#1685)](https://github.com/ArkMowers/arknights-mower/pull/1685) @NiceAfternoon\n- 修复分片回归测试中本地作战与 MAA 用例残留库存事件、导致同一 pytest 进程中后续加工站用例失败的问题。 [(#1687)](https://github.com/ArkMowers/arknights-mower/pull/1687) @NiceAfternoon\n- 修复后台实例再次启动时无法打开内置窗口的问题 [(#1682)](https://github.com/ArkMowers/arknights-mower/pull/1682) @ALEXsun0\n- 修复活动签到奖励已领取后重新检查无法完成的问题 [(#1676)](https://github.com/ArkMowers/arknights-mower/pull/1676) @NiceAfternoon\n- 修复弹窗内容较多时出现的重复纵向滚动 [(#1679)](https://github.com/ArkMowers/arknights-mower/pull/1679) @NiceAfternoon\n- 修复心情曲线遗漏换岗和耗尽零值及满心情参与速率计算的问题 [(#1683)](https://github.com/ArkMowers/arknights-mower/pull/1683) @ALEXsun0\n- 修复实时心情模式下用尽下班未提前换班的问题 [(#1681)](https://github.com/ArkMowers/arknights-mower/pull/1681) @ALEXsun0\n- 修复制造站批量切产物反复等待的问题 [(#1680)](https://github.com/ArkMowers/arknights-mower/pull/1680) @ALEXsun0\n- 修复侧栏拖动时分组标题贴边、行距异常及原位置文字重复显示的问题。 [(#1673)](https://github.com/ArkMowers/arknights-mower/pull/1673) @NiceAfternoon\n- 修复 Windows 高 DPI 下首次读取工作区前已启用 DPI 感知时重开窗口过大的问题。 [(#1674)](https://github.com/ArkMowers/arknights-mower/pull/1674) @NiceAfternoon\n- 修复普通基建换班确认失败并耗尽原地恢复后，重登仍可能因缺少新房间观测而无法继续剩余安排的问题。 [(#1672)](https://github.com/ArkMowers/arknights-mower/pull/1672) @NiceAfternoon\n- 修复 Windows 自动换行检出后，前端构建使内容未变的心情计算产物显示假修改的问题。 [(#1669)](https://github.com/ArkMowers/arknights-mower/pull/1669) @NiceAfternoon\n- 修复 MAA 自动日常中断后未提前完成登录的问题 [(#1667)](https://github.com/ArkMowers/arknights-mower/pull/1667) @Hul11n @ALEXsun0\n- 修复基建任务等待资源或前置操作时阻塞调度的问题 [(#1661)](https://github.com/ArkMowers/arknights-mower/pull/1661) @ALEXsun0\n- 修复基建房间标题偏移导致的编号误识别 [(#1665)](https://github.com/ArkMowers/arknights-mower/pull/1665) @NiceAfternoon\n- 修复停留在贸易站订单页时进入其他房间反复等待，以及进入同一房间被提前判定成功的问题。 [(#1664)](https://github.com/ArkMowers/arknights-mower/pull/1664) @NiceAfternoon\n- 消除 vue-axios 引起的前端构建兼容性警告 [(#1663)](https://github.com/ArkMowers/arknights-mower/pull/1663) @NiceAfternoon\n\n### Improvements\n\n- 统一内置干员基础资料与基建技能的数据来源 [(#1728)](https://github.com/ArkMowers/arknights-mower/pull/1728) @NiceAfternoon\n- 减少实时心情查询的重复计算准备 [(#1720)](https://github.com/ArkMowers/arknights-mower/pull/1720) @ALEXsun0\n- 替换手动切换显示主题时的逐元素颜色过渡，改用原生界面快照完成切换。 [(#1671)](https://github.com/ArkMowers/arknights-mower/pull/1671) @NiceAfternoon\n- 减少完整换班和副表收敛中的重复心情演算 [(#1675)](https://github.com/ArkMowers/arknights-mower/pull/1675) @ALEXsun0\n\n### Dependencies\n\n- 修复前端开发依赖 zod 校验大集合时可能耗尽内存的问题。 [(#1662)](https://github.com/ArkMowers/arknights-mower/pull/1662) @NiceAfternoon\n\n### Maintenance\n\n- 发布 4.1.6-alpha.14 [(#1761)](https://github.com/ArkMowers/arknights-mower/pull/1761) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.13...v4.1.6-alpha.14](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.13...v4.1.6-alpha.14)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
+      "full_assets": [
+        {
+          "name": "arknights-mower_4.1.6-alpha.14_android_arm64.zip",
+          "size": 212735582,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_android_arm64.zip",
+          "digest": "sha256:2860a80177773b8decf5b6a57f4bf9028301911b6d7218b9d25f6f2823ddc491"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.14_linux_arm64.tar.gz",
+          "size": 196354004,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_linux_arm64.tar.gz",
+          "digest": "sha256:ebfb2f902d285dd3feb14c9a8a87d155092dc82301388d2b681a4a3bb361aaec"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.14_linux_x64.tar.gz",
+          "size": 225064314,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_linux_x64.tar.gz",
+          "digest": "sha256:8a7e3bba01d56eb3c8b2d6044839036f2bd92c5f2e27f1ea811ce2d09c9b6d71"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.14_macos_arm64.dmg",
+          "size": 226548834,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_macos_arm64.dmg",
+          "digest": "sha256:eb2f0ade0e7f35634cfd582251d8b5a331b795ebd50c21c681d28ef49e33606f"
+        },
+        {
+          "name": "arknights-mower_4.1.6-alpha.14_windows_x64.zip",
+          "size": 136326787,
+          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.14/arknights-mower_4.1.6-alpha.14_windows_x64.zip",
+          "digest": "sha256:8c0e83bb213d5d9a78420e03e5fb2927ffe18326cadd3da5c1d9341fe25d585d"
+        }
+      ]
+    },
     {
       "schema": 1,
       "version": "v4.1.6-alpha.13",
@@ -369,51 +408,6 @@
           "size": 136800347,
           "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.9/arknights-mower_4.1.6-alpha.9_windows_x64.zip",
           "digest": "sha256:ca292369fa3e7b22bbf29d52461f288cef5c24a33eda70180f53446556b1691a"
-        }
-      ]
-    },
-    {
-      "schema": 1,
-      "version": "v4.1.6-alpha.8",
-      "published_at": "2026-09-24T18:42:41Z",
-      "source_release": "https://github.com/ArkMowers/arknights-mower/releases/tag/v4.1.6-alpha.8",
-      "notes": "## 4.1.6-alpha.8 - 2026-09-25\n\n### New\n\n- 重构仓库页面并支持历史库存对比与走势分析 [(#1128)](https://github.com/ArkMowers/arknights-mower/pull/1128) @NiceAfternoon\n- 增加可记忆的关闭与启动偏好 [(#1113)](https://github.com/ArkMowers/arknights-mower/pull/1113) @983122046\n- 测试宿舍逻辑支持自定义心情上下限 [(#1132)](https://github.com/ArkMowers/arknights-mower/pull/1132) @ALEXsun0\n- 增加重启续接进程操作 [(#1104)](https://github.com/ArkMowers/arknights-mower/pull/1104) @983122046 @ALEXsun0\n- 手动编辑锁与副表下拉交互优化 [(#1117)](https://github.com/ArkMowers/arknights-mower/pull/1117) @983122046 @ALEXsun0\n- 日志页支持定时启动 [(#1121)](https://github.com/ArkMowers/arknights-mower/pull/1121) @ALEXsun0\n- 统一心情报表拖拽排序并支持自定义观察表 [(#1119)](https://github.com/ArkMowers/arknights-mower/pull/1119) @983122046\n- 记录肥鸭充能前后心情 [(#1103)](https://github.com/ArkMowers/arknights-mower/pull/1103) @ALEXsun0\n- 肥鸭心情曲线标注被充能干员 [(#1097)](https://github.com/ArkMowers/arknights-mower/pull/1097) @ALEXsun0\n- preserve recovery targets across plan reorder [(#1094)](https://github.com/ArkMowers/arknights-mower/pull/1094) @ALEXsun0\n- rebalance temporary group beds [(#1093)](https://github.com/ArkMowers/arknights-mower/pull/1093) @ALEXsun0\n\n### Bug Fixes\n\n- 保留恢复记录并修复测试逻辑满心情离宿 [(#1135)](https://github.com/ArkMowers/arknights-mower/pull/1135) @ALEXsun0\n- keep title bar active on desktop and support late bridge readiness [(#1133)](https://github.com/ArkMowers/arknights-mower/pull/1133) @NiceAfternoon\n- 使用模板匹配识别九色鹿因果 [(#1134)](https://github.com/ArkMowers/arknights-mower/pull/1134) @ALEXsun0\n- 修复 Windows 窗口尺寸记忆与最大化状态同步 [(#1112)](https://github.com/ArkMowers/arknights-mower/pull/1112) @983122046\n- 增加会客室线索流程在产物收取提示浮动时的等待处理 [(#1129)](https://github.com/ArkMowers/arknights-mower/pull/1129) @NiceAfternoon @ALEXsun0\n- 稳定宿舍逻辑，不养闲人修复及其与宿舍候补干员联动 [(#1131)](https://github.com/ArkMowers/arknights-mower/pull/1131) @Hul11n @ALEXsun0\n- 用游戏字体模板复核训练室技能 [(#1120)](https://github.com/ArkMowers/arknights-mower/pull/1120) @ALEXsun0\n- 修复宿舍排班包含空闲位时换班读取心情异常 [(#1126)](https://github.com/ArkMowers/arknights-mower/pull/1126) @NiceAfternoon\n- 避免切换产物后补队列确认误报超时 [(#1127)](https://github.com/ArkMowers/arknights-mower/pull/1127) @ALEXsun0\n- 将数据标签限定于饼图，避免干扰心情曲线 [(#1125)](https://github.com/ArkMowers/arknights-mower/pull/1125) @983122046\n- 恢复周计划控件并移除日志页重复操作 [(#1124)](https://github.com/ArkMowers/arknights-mower/pull/1124) @ALEXsun0\n- 优先识别已展开的导航栏 [(#1122)](https://github.com/ArkMowers/arknights-mower/pull/1122) @ALEXsun0\n- 校准房间姓名区域并训练模板 [(#1116)](https://github.com/ArkMowers/arknights-mower/pull/1116) @ALEXsun0\n- 明确刷理智周计划三种执行状态 [(#1118)](https://github.com/ArkMowers/arknights-mower/pull/1118) @983122046\n- 优化干员进驻的识别与选人流程 [(#1115)](https://github.com/ArkMowers/arknights-mower/pull/1115) @NiceAfternoon\n- 阻止排班干员进入专精训练 [(#1109)](https://github.com/ArkMowers/arknights-mower/pull/1109) @ALEXsun0\n- 验证排班时拦截未持有干员 [(#1111)](https://github.com/ArkMowers/arknights-mower/pull/1111) @ALEXsun0\n- 扩展九色鹿垫刀素材类型 [(#1114)](https://github.com/ArkMowers/arknights-mower/pull/1114) @ALEXsun0\n- 修正日志页空任务布局 [(#1108)](https://github.com/ArkMowers/arknights-mower/pull/1108) @ALEXsun0\n- 修复葛朗台跑单对已就绪订单误报漏单的问题 @NiceAfternoon\n- 优化运行日志布局与任务刷新 [(#1101)](https://github.com/ArkMowers/arknights-mower/pull/1101) @983122046 @ALEXsun0\n- 在心情提示框显示肥鸭充能对象 [(#1100)](https://github.com/ArkMowers/arknights-mower/pull/1100) @ALEXsun0\n- 合并延期排班并阻止单回宿舍循环 [(#1098)](https://github.com/ArkMowers/arknights-mower/pull/1098) @ALEXsun0\n- 修复窗口刚打开时标题栏不显示资源包版本的问题 [(#1099)](https://github.com/ArkMowers/arknights-mower/pull/1099) @NiceAfternoon\n- 修复重排后停摆与陈旧床位循环 [(#1096)](https://github.com/ArkMowers/arknights-mower/pull/1096) @ALEXsun0\n- inherit unset backup room order [(#1095)](https://github.com/ArkMowers/arknights-mower/pull/1095) @ALEXsun0\n- 使用包内版本信息校验手动安装包 [(#1092)](https://github.com/ArkMowers/arknights-mower/pull/1092) @ALEXsun0\n\n### Improvements\n\n- 重构测试宿舍逻辑的换班与副表调度 [(#1110)](https://github.com/ArkMowers/arknights-mower/pull/1110) @ALEXsun0\n- 移除跑单状态读取的重复进房流程 [(#1107)](https://github.com/ArkMowers/arknights-mower/pull/1107) @ALEXsun0\n\n### Other\n\n- prerelease v4.1.6-alpha.8 [(#1137)](https://github.com/ArkMowers/arknights-mower/pull/1137) @NiceAfternoon\n- 换床后重新采样令夕上限计时 [(#1136)](https://github.com/ArkMowers/arknights-mower/pull/1136) @ALEXsun0\n\n**Full Changelog**: [v4.1.6-alpha.7...v4.1.6-alpha.8](https://github.com/ArkMowers/arknights-mower/compare/v4.1.6-alpha.7...v4.1.6-alpha.8)\n\n> 产物未使用受信任发行证书，并附带统一 SHA-256 清单（SHA256SUMS）。\n> Windows 首次运行可能出现 SmartScreen 提示；macOS DMG 内的 .app\n> 仅有 ad-hoc 签名且未 notarize，若被系统拦截需在「隐私与安全性」中\n> 手动允许。建议先核对 SHA256SUMS 再使用。\n\n\n<!-- android-downloads -->\nAndroid：本次附件中的 `android_arm64.zip` 是 Mower 热更新包，供已安装的 Android 宿主导入或在线更新。\n\nAPK 与 MAA Python 兼容接口请前往 [Mower Android 下载页面](https://github.com/ALEXsun0/arknights-mower-android/releases)。Android 仓库定期检测新的 Mower / MAA 发行，独立构建并发布 APK；构建完成时间与本次 Mower 发版不同步。已有兼容宿主可直接更新 Mower，无需等待新 APK。\n",
-      "full_assets": [
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_android_arm64.zip",
-          "size": 189261721,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_android_arm64.zip",
-          "digest": "sha256:422d02ee5a71db087c8ce800bc19999319a947b05deeb7e09b30bcd6083e2be5"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
-          "size": 208389065,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_arm64.tar.gz",
-          "digest": "sha256:a897968c6122b671877e0138ff1ec080c38c250a31b41157838051147bac7813"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
-          "size": 236861905,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_linux_x64.tar.gz",
-          "digest": "sha256:2ce7b8478d0bc76ea7dbbf9f4e649e8d3886a10a0500d185e17f3c67a14030f5"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
-          "size": 218842153,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_arm64.dmg",
-          "digest": "sha256:c830f711b3aa6fd6f4e6a343e4488fa421b3c75f0f24a23239ec293f5120b7e8"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
-          "size": 236549048,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_macos_x64.dmg",
-          "digest": "sha256:49efe3f561b10cf8fa5923cc7665e363e02bac0a937c2f0b75fd408b46fe4843"
-        },
-        {
-          "name": "arknights-mower_4.1.6-alpha.8_windows_x64.zip",
-          "size": 136728316,
-          "url": "https://github.com/ArkMowers/MowerRelease/releases/download/v4.1.6-alpha.8/arknights-mower_4.1.6-alpha.8_windows_x64.zip",
-          "digest": "sha256:96ecd39ac74ed60b739a0f8ef6ce28359f8e3cc03860e7d4ea2495a48cb2aa22"
         }
       ]
     }
