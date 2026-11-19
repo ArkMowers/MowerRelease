@@ -260,12 +260,10 @@ class PublishTests(unittest.TestCase):
         steps = yaml.safe_load(workflow.read_text())["jobs"]["publish"]["steps"]
         names = [step.get("name") for step in steps]
         index = names.index("Publish the packaged Nightly frontends to R2")
-        checkout = steps[names.index("Check out the Nightly frontend publisher")]["with"]
-        self.assertEqual(checkout["ref"], "${{ needs.prepare.outputs.source_sha }}")
         step = steps[index]
         self.assertEqual(step["if"], "${{ needs.prepare.outputs.changed == 'true' }}")
-        for root in ("nightly-windows", "nightly-android"):
-            self.assertIn(f'python "$publisher" "$RUNNER_TEMP/{root}"', step["run"])
+        for platform in ("windows", "android"):
+            self.assertIn(f'python scripts/package_frontend.py "${platform}_zip" {platform}', step["run"])
         self.assertLess(index, names.index("Publish full packages"))
 
     def test_nightly_repairs_ota_even_when_full_packages_already_exist(self):

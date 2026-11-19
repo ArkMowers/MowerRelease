@@ -205,16 +205,6 @@ jobs:
         run: |
           python -m pip install bsdiff4==1.2.6 PyYAML==6.0.3
           python -m unittest discover -s tests -p 'test_*.py' -q
-      - name: Check out the Nightly frontend publisher
-        if: ${{ needs.prepare.outputs.changed == 'true' }}
-        uses: actions/checkout@v4
-        with:
-          repository: ArkMowers/arknights-mower
-          ref: ${{ needs.prepare.outputs.source_sha }}
-          path: nightly-source
-          sparse-checkout: scripts/publish_relay_ui.py
-          sparse-checkout-cone-mode: false
-          persist-credentials: false
       - name: Publish the packaged Nightly frontends to R2
         if: ${{ needs.prepare.outputs.changed == 'true' }}
         env:
@@ -227,16 +217,9 @@ jobs:
           set -euo pipefail
           android_zip="release-assets/arknights-mower_${TAG#v}_android_arm64.zip"
           windows_zip="release-assets/arknights-mower_${TAG#v}_windows_x64.zip"
-          publisher=nightly-source/scripts/publish_relay_ui.py
-          if [[ ! -f "$publisher" ]]; then
-            echo 'This source revision predates R2 frontend publication.'
-            exit 0
-          fi
           python -m pip install 'boto3>=1.36,<2'
-          python scripts/extract_nightly_ui.py "$windows_zip" windows "$RUNNER_TEMP/nightly-windows"
-          python scripts/extract_nightly_ui.py "$android_zip" android "$RUNNER_TEMP/nightly-android"
-          python "$publisher" "$RUNNER_TEMP/nightly-windows"
-          python "$publisher" "$RUNNER_TEMP/nightly-android"
+          python scripts/package_frontend.py "$windows_zip" windows
+          python scripts/package_frontend.py "$android_zip" android
       - name: Publish full packages
         if: ${{ needs.prepare.outputs.changed == 'true' }}
         env:

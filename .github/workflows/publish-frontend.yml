@@ -1,0 +1,61 @@
+name: Publish development frontend
+on:
+  repository_dispatch:
+    types: [mower_frontend_revision]
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Full commit SHA on the Mower alpha or main branch
+        type: string
+        required: true
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate revision
+        env:
+          REVISION: ${{ inputs.revision || github.event.client_payload.revision }}
+        run: '[[ "$REVISION" =~ ^[0-9a-f]{40}$ ]]'
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ inputs.revision || github.event.client_payload.revision }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify source is on an official branch
+        run: git merge-base --is-ancestor HEAD origin/alpha || git merge-base --is-ancestor HEAD origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm ci && npm run build
+        working-directory: ui
+      - uses: actions/upload-artifact@v4
+        with:
+          name: relay-ui
+          path: ui/dist/
+          if-no-files-found: error
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: relay-ui
+          path: frontend
+      - name: Publish immutable build
+        env:
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python -m pip install 'boto3>=1.36,<2'
+          python scripts/publish_relay_ui.py frontend

@@ -16,8 +16,12 @@ Windows 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同
 
 发布器逐个上传完成的差分包，重跑时跳过已经发布的附件；所有目标处理完成后更新渠道索引。下载、构建和上传具有即时日志，GitHub API 命令最多运行两分钟，附件传输最多运行十分钟。旧版 Android 缺少独立 Python 运行包时跳过该起点；无效路径或差分校验错误使任务失败，不发布新索引。Android runtime 使用相对 POSIX 路径，允许 Debian 多架构文件名中的 `:arm64`，并拒绝驱动器前缀、路径穿越与宿主数据。使用运行时文件级 OTA 需要支持这些 POSIX 文件名的 Android 更新器；旧更新器校验失败时继续使用完整包。
 
-### Nightly 中转界面
+### 中转前端发布
 
-当所选 alpha 提交包含 R2 发布脚本时，Nightly 从已打包的 Windows 和 Android 安装包中读取前端，按各自的构建标识发布到 R2。两个标识都就绪后，工作流才公开本次安装包。相同界面复用现有清单和静态文件。仅代码发生变化时才生成新的 Nightly。
+MowerRelease 统一发布中转界面到 R2。在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。
 
-在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Actions Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。使用与主仓相同的公开桶，也可以授予本仓独立的桶级发布凭据。
+- 主仓 alpha 和 main 每次推送使用已有的 `MOWER_RELEASE_TOKEN` 发送提交号。这里的 Publish development frontend 工作流校验提交属于官方分支，构建后按构建标识发布。需要补发时可手动指定完整提交 SHA。
+- 新 Nightly 从实际 Windows 和 Android ZIP 中提取前端，先发布对应界面，再公开安装包。
+- 正式版和公测版在现有镜像流程中使用已校验的 Windows 和 Android 包发布对应界面。旧包未携带中转构建标识时跳过静态发布，继续原有软件发布流程。
+
+相同构建复用已发布清单，旧实例继续使用原来的界面。
