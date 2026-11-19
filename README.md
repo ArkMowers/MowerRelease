@@ -15,3 +15,9 @@ Windows 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同
 主仓库正式版或公测版 Release 构建完成并上传全部安装包后，会发送 `mower_release_published` 事件，立即触发本仓库打包。主仓库需要配置 `MOWER_RELEASE_TOKEN` Actions secret：使用仅授权本仓库、具有 Contents 写权限的细粒度令牌。若未配置，主仓库发布任务跳过即时触发，本仓库每五分钟检查最新可用 Release 并自动补发。手动补发可在 [Publish Mower OTA](https://github.com/ArkMowers/MowerRelease/actions/workflows/publish-ota.yml) 输入已发布的 tag。nightly 由本仓库的 [Windows and Android Nightly](https://github.com/ArkMowers/MowerRelease/actions/workflows/nightly-windows.yml) 独立构建与发布，不依赖跨仓库令牌。本仓库构建和上传使用自身的 `GITHUB_TOKEN`。
 
 发布器逐个上传完成的差分包，重跑时跳过已经发布的附件；所有目标处理完成后更新渠道索引。下载、构建和上传具有即时日志，GitHub API 命令最多运行两分钟，附件传输最多运行十分钟。旧版 Android 缺少独立 Python 运行包时跳过该起点；无效路径或差分校验错误使任务失败，不发布新索引。Android runtime 使用相对 POSIX 路径，允许 Debian 多架构文件名中的 `:arm64`，并拒绝驱动器前缀、路径穿越与宿主数据。使用运行时文件级 OTA 需要支持这些 POSIX 文件名的 Android 更新器；旧更新器校验失败时继续使用完整包。
+
+### Nightly 中转界面
+
+当所选 alpha 提交包含 R2 发布脚本时，Nightly 从已打包的 Windows 和 Android 安装包中读取前端，按各自的构建标识发布到 R2。两个标识都就绪后，工作流才公开本次安装包。相同界面复用现有清单和静态文件。仅代码发生变化时才生成新的 Nightly。
+
+在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Actions Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。使用与主仓相同的公开桶，也可以授予本仓独立的桶级发布凭据。

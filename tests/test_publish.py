@@ -253,6 +253,21 @@ class PublishTests(unittest.TestCase):
             publish.download("v4.1.6-alpha.11", artifact, Path(temporary))
         self.assertEqual(transfer.call_args.kwargs["timeout"], publish.TRANSFER_TIMEOUT)
 
+    def test_new_nightly_publishes_both_packaged_frontends_before_release(self):
+        import yaml
+
+        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/nightly-windows.yml"
+        steps = yaml.safe_load(workflow.read_text())["jobs"]["publish"]["steps"]
+        names = [step.get("name") for step in steps]
+        index = names.index("Publish the packaged Nightly frontends to R2")
+        checkout = steps[names.index("Check out the Nightly frontend publisher")]["with"]
+        self.assertEqual(checkout["ref"], "${{ needs.prepare.outputs.source_sha }}")
+        step = steps[index]
+        self.assertEqual(step["if"], "${{ needs.prepare.outputs.changed == 'true' }}")
+        for root in ("nightly-windows", "nightly-android"):
+            self.assertIn(f'python "$publisher" "$RUNNER_TEMP/{root}"', step["run"])
+        self.assertLess(index, names.index("Publish full packages"))
+
     def test_nightly_repairs_ota_even_when_full_packages_already_exist(self):
         import yaml
 
