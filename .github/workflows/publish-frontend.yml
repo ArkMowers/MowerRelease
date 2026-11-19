@@ -1,45 +1,78 @@
 name: Publish development frontend
 on:
-  repository_dispatch:
-    types: [mower_frontend_revision]
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       revision:
-        description: Full commit SHA on the Mower alpha or main branch
+        description: Optional full official commit SHA to republish; blank catches up both branches
         type: string
-        required: true
+        required: false
 permissions:
   contents: read
+concurrency:
+  group: relay-ui-${{ inputs.revision || 'source-poll' }}
+  cancel-in-progress: false
 jobs:
-  build:
+  discover:
     runs-on: ubuntu-latest
+    outputs:
+      plan: ${{ steps.scan.outputs.plan }}
+      revisions: ${{ steps.scan.outputs.revisions }}
     steps:
-      - name: Validate revision
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'boto3>=1.36,<2'
+      - name: Find source revisions after the last publication
+        id: scan
         env:
-          REVISION: ${{ inputs.revision || github.event.client_payload.revision }}
-        run: '[[ "$REVISION" =~ ^[0-9a-f]{40}$ ]]'
+          REVISION: ${{ inputs.revision }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python scripts/sync_source_ui.py discover
+  build:
+    needs: discover
+    if: needs.discover.outputs.revisions != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        revision: ${{ fromJSON(needs.discover.outputs.revisions) }}
+    steps:
       - uses: actions/checkout@v4
         with:
           repository: ArkMowers/arknights-mower
-          ref: ${{ inputs.revision || github.event.client_payload.revision }}
-          fetch-depth: 0
+          ref: ${{ matrix.revision }}
           persist-credentials: false
-      - name: Verify source is on an official branch
-        run: git merge-base --is-ancestor HEAD origin/alpha || git merge-base --is-ancestor HEAD origin/main
       - uses: actions/setup-node@v4
+        if: hashFiles('ui/src/utils/publicAsset.js') != ''
         with:
           node-version: '24'
           cache: npm
           cache-dependency-path: ui/package-lock.json
-      - run: npm ci && npm run build
+      - name: Build source frontend
         working-directory: ui
+        run: |
+          if [[ -f src/utils/publicAsset.js ]]; then
+            npm ci && npm run build
+            test -s dist/relay-ui.json
+          else
+            mkdir -p dist
+            touch dist/pre-relay-source
+          fi
       - uses: actions/upload-artifact@v4
         with:
-          name: relay-ui
+          name: relay-ui-${{ matrix.revision }}
           path: ui/dist/
           if-no-files-found: error
   publish:
-    needs: build
+    needs: [discover, build]
+    if: ${{ !cancelled() && needs.discover.result == 'success' && needs.discover.outputs.revisions != '[]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,14 +81,14 @@ jobs:
           python-version: '3.12'
       - uses: actions/download-artifact@v4
         with:
-          name: relay-ui
-          path: frontend
-      - name: Publish immutable build
+          pattern: relay-ui-*
+          path: artifacts
+      - run: python -m pip install 'boto3>=1.36,<2'
+      - name: Publish and checkpoint each branch in order
         env:
+          PLAN: ${{ needs.discover.outputs.plan }}
           R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ vars.R2_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          python -m pip install 'boto3>=1.36,<2'
-          python scripts/publish_relay_ui.py frontend
+        run: python scripts/sync_source_ui.py finish

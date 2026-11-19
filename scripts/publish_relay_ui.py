@@ -117,18 +117,21 @@ def publish(root, bucket, s3):
     print("Published build", manifest["build"])
 
 
-def publish_to_r2(root):
+def r2_client():
     import boto3
 
     account = os.environ["R2_ACCOUNT_ID"]
     if not re.fullmatch(r"[0-9a-f]{32}", account):
         raise SystemExit("Set the R2_ACCOUNT_ID repository variable")
-    client = boto3.client(
+    return boto3.client(
         "s3",
         endpoint_url=f"https://{account}.r2.cloudflarestorage.com",
         region_name="auto",
     )
-    publish(root, os.environ["R2_BUCKET"], client)
+
+
+def publish_to_r2(root):
+    publish(root, os.environ["R2_BUCKET"], r2_client())
 
 
 if __name__ == "__main__":

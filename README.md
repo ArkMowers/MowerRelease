@@ -20,7 +20,7 @@ Windows 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同
 
 MowerRelease 统一发布中转界面到 R2。在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。
 
-- 主仓 alpha 和 main 每次推送使用已有的 `MOWER_RELEASE_TOKEN` 发送提交号。这里的 Publish development frontend 工作流校验提交属于官方分支，构建后按构建标识发布。需要补发时可手动指定完整提交 SHA。
+- 本仓库默认分支的 **Publish development frontend** 每五分钟检查主仓 alpha 和 main。首次从两个分支当时的最新提交开始；此后按第一父提交顺序，每轮每分支最多补六个版本。构建或上传失败会从该分支的断点重试，另一分支继续发布。较早且支持 R2 的提交可手动输入完整 SHA 补发。手动留空会立即执行常规检查。GitHub 的计划任务可能排队。进度保存在本桶的 `_sync/source-v1/` 下，与公开版本清单分别存储。源码分支同步由本仓库主动读取，无需主仓事件或跨仓令牌。
 - 新 Nightly 从实际 Windows 和 Android ZIP 中提取前端，先发布对应界面，再公开安装包。
 - 正式版和公测版在现有镜像流程中使用已校验的 Windows 和 Android 包发布对应界面。旧包未携带中转构建标识时跳过静态发布，继续原有软件发布流程。
 
