@@ -1,0 +1,94 @@
+name: Publish development frontend
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Optional full official commit SHA to republish; blank catches up both branches
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: relay-ui-${{ inputs.revision || 'source-poll' }}
+  cancel-in-progress: false
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      plan: ${{ steps.scan.outputs.plan }}
+      revisions: ${{ steps.scan.outputs.revisions }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'boto3>=1.36,<2'
+      - name: Find source revisions after the last publication
+        id: scan
+        env:
+          REVISION: ${{ inputs.revision }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python scripts/sync_source_ui.py discover
+  build:
+    needs: discover
+    if: needs.discover.outputs.revisions != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        revision: ${{ fromJSON(needs.discover.outputs.revisions) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ matrix.revision }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        if: hashFiles('ui/src/utils/publicAsset.js') != ''
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - name: Build source frontend
+        working-directory: ui
+        run: |
+          if [[ -f src/utils/publicAsset.js ]]; then
+            npm ci && npm run build
+            test -s dist/relay-ui.json
+          else
+            mkdir -p dist
+            touch dist/pre-relay-source
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: relay-ui-${{ matrix.revision }}
+          path: ui/dist/
+          if-no-files-found: error
+  publish:
+    needs: [discover, build]
+    if: ${{ !cancelled() && needs.discover.result == 'success' && needs.discover.outputs.revisions != '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: relay-ui-*
+          path: artifacts
+      - run: python -m pip install 'boto3>=1.36,<2'
+      - name: Publish and checkpoint each branch in order
+        env:
+          PLAN: ${{ needs.discover.outputs.plan }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python scripts/sync_source_ui.py finish

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from build_ota import IncompatibleSourceError, build
+from package_frontend import publish_package
 
 SOURCE_REPO = "ArkMowers/arknights-mower"
 RELEASE_REPO = "ArkMowers/MowerRelease"
@@ -213,7 +214,11 @@ def mirror_full_release(target):
                 ) != item.get("digest"):
                     raise ValueError(f"mirrored package differs: {item['name']}")
                 continue
-            products.append(download(tag, item, Path(temp)))
+            package = download(tag, item, Path(temp))
+            for platform, arch, extension in OTA_TARGETS:
+                if item["name"] == asset_name(tag, platform, arch, extension):
+                    publish_package(package, platform)
+            products.append(package)
         if current is None:
             command = [
                 "gh",

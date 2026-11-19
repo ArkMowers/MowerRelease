@@ -15,3 +15,13 @@ Windows 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同
 主仓库正式版或公测版 Release 构建完成并上传全部安装包后，会发送 `mower_release_published` 事件，立即触发本仓库打包。主仓库需要配置 `MOWER_RELEASE_TOKEN` Actions secret：使用仅授权本仓库、具有 Contents 写权限的细粒度令牌。若未配置，主仓库发布任务跳过即时触发，本仓库每五分钟检查最新可用 Release 并自动补发。手动补发可在 [Publish Mower OTA](https://github.com/ArkMowers/MowerRelease/actions/workflows/publish-ota.yml) 输入已发布的 tag。nightly 由本仓库的 [Windows and Android Nightly](https://github.com/ArkMowers/MowerRelease/actions/workflows/nightly-windows.yml) 独立构建与发布，不依赖跨仓库令牌。本仓库构建和上传使用自身的 `GITHUB_TOKEN`。
 
 发布器逐个上传完成的差分包，重跑时跳过已经发布的附件；所有目标处理完成后更新渠道索引。下载、构建和上传具有即时日志，GitHub API 命令最多运行两分钟，附件传输最多运行十分钟。旧版 Android 缺少独立 Python 运行包时跳过该起点；无效路径或差分校验错误使任务失败，不发布新索引。Android runtime 使用相对 POSIX 路径，允许 Debian 多架构文件名中的 `:arm64`，并拒绝驱动器前缀、路径穿越与宿主数据。使用运行时文件级 OTA 需要支持这些 POSIX 文件名的 Android 更新器；旧更新器校验失败时继续使用完整包。
+
+### 中转前端发布
+
+MowerRelease 统一发布中转界面到 R2。在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。
+
+- 本仓库默认分支的 **Publish development frontend** 每五分钟检查主仓 alpha 和 main。首次从两个分支当时的最新提交开始；此后按第一父提交顺序，每轮每分支最多补六个版本。构建或上传失败会从该分支的断点重试，另一分支继续发布。较早且支持 R2 的提交可手动输入完整 SHA 补发。手动留空会立即执行常规检查。GitHub 的计划任务可能排队。进度保存在本桶的 `_sync/source-v1/` 下，与公开版本清单分别存储。源码分支同步由本仓库主动读取，无需主仓事件或跨仓令牌。
+- 新 Nightly 从实际 Windows 和 Android ZIP 中提取前端，先发布对应界面，再公开安装包。
+- 正式版和公测版在现有镜像流程中使用已校验的 Windows 和 Android 包发布对应界面。旧包未携带中转构建标识时跳过静态发布，继续原有软件发布流程。
+
+相同构建复用已发布清单，旧实例继续使用原来的界面。
