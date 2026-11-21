@@ -61,18 +61,30 @@ def publication(root):
     return objects, manifest
 
 
+def manifest_exists(s3, bucket, build):
+    from botocore.exceptions import ClientError
+
+    if not re.fullmatch(r"[0-9a-f]{64}", build):
+        raise ValueError("Invalid build identifier")
+    key = f"builds/{build}/manifest.json"
+    try:
+        s3.head_object(Bucket=bucket, Key=key)
+        return True
+    except ClientError as exc:
+        if exc.response["ResponseMetadata"]["HTTPStatusCode"] != 404:
+            raise
+        return False
+
+
 def publish(root, bucket, s3):
     from botocore.exceptions import ClientError
 
     objects, manifest = publication(root)
-    key = f"builds/{manifest['build']}/manifest.json"
-    try:
-        s3.head_object(Bucket=bucket, Key=key)
-        print("Build already published", manifest["build"])
+    build = manifest["build"]
+    if manifest_exists(s3, bucket, build):
+        print("Build already published", build)
         return
-    except ClientError as exc:
-        if exc.response["ResponseMetadata"]["HTTPStatusCode"] != 404:
-            raise
+    key = f"builds/{build}/manifest.json"
     existing = set()
     for prefix in ("assets/", "files/"):
         for page in s3.get_paginator("list_objects_v2").paginate(

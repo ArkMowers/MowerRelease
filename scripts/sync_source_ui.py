@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from publish_relay_ui import publish, r2_client
+from publish_relay_ui import manifest_exists, publish, r2_client
 
 SOURCE = "https://github.com/ArkMowers/arknights-mower.git"
 BRANCHES = ("alpha", "main")
@@ -76,7 +76,12 @@ def pending(repo, tip, cursor):
     return list(reversed(history[:shared]))[:BATCH] or [tip]
 
 
-def discover(s3, bucket, repo, manual):
+def discover(s3, bucket, repo, manual, reviewed_custom=False):
+    if reviewed_custom:
+        if not SHA.fullmatch(manual or ""):
+            raise ValueError("A reviewed custom revision requires a full commit SHA")
+        # The build runner fetches this exact object from the Mower repository.
+        return {"manual": [manual]}
     heads = {
         ref.rsplit("/", 1)[-1]: rev
         for rev, ref in (
@@ -131,21 +136,58 @@ def discover(s3, bucket, repo, manual):
     return plan
 
 
+def build_id(artifacts, revision):
+    if not SHA.fullmatch(revision):
+        raise ValueError("Invalid planned revision")
+    value = (artifacts / f"relay-id-{revision}" / "build-id").read_text().strip()
+    if value == "pre-relay-source":
+        return None
+    if not re.fullmatch(r"[0-9a-f]{64}", value):
+        raise ValueError(f"Invalid UI build ID for {revision}")
+    return value
+
+
+def needed_builds(s3, bucket, revisions, artifacts):
+    sources = {}
+    for revision in revisions:
+        try:
+            build = build_id(artifacts, revision)
+        except (FileNotFoundError, ValueError) as exc:
+            # Finish reports the gap and can still checkpoint the other branch.
+            print(exc, file=sys.stderr)
+            continue
+        if build:
+            sources.setdefault(build, revision)
+    return [
+        {"revision": rev, "build": build}
+        for build, rev in sources.items()
+        if not manifest_exists(s3, bucket, build)
+    ]
+
+
 def finish(s3, bucket, plan, artifacts):
     failures = []
     complete = set()
     for branch, revisions in plan.items():
         for revision in revisions:
-            if not SHA.fullmatch(revision):
-                raise ValueError("Invalid planned revision")
-            root = artifacts / f"relay-ui-{revision}"
             try:
-                if revision not in complete:
-                    if (root / "relay-ui.json").is_file():
+                build = build_id(artifacts, revision)
+                if build and build not in complete:
+                    root = artifacts / f"relay-ui-{build}"
+                    if root.is_dir():
+                        if (
+                            json.loads((root / "relay-ui.json").read_bytes())["build"]
+                            != build
+                        ):
+                            raise ValueError(
+                                "Built UI differs from the planned identifier"
+                            )
                         publish(root, bucket, s3)
-                    elif not (root / "pre-relay-source").is_file():
-                        raise ValueError("Missing successful build artifact")
-                    complete.add(revision)
+                    elif not manifest_exists(s3, bucket, build):
+                        raise ValueError(
+                            f"Missing successful build artifact for {build}"
+                        )
+                    complete.add(build)
                 if branch != "manual":
                     save_cursor(s3, bucket, branch, revision)
             except Exception as exc:
@@ -164,11 +206,18 @@ if __name__ == "__main__":
             bucket,
             Path(os.environ["RUNNER_TEMP"]) / "source.git",
             os.getenv("REVISION"),
+            os.getenv("REVIEWED_CUSTOM") == "true",
         )
         revisions = sorted({rev for branch in plan.values() for rev in branch})
         with open(os.environ["GITHUB_OUTPUT"], "a") as output:
             print("plan=" + json.dumps(plan, separators=(",", ":")), file=output)
             print("revisions=" + json.dumps(revisions), file=output)
+    elif sys.argv[1] == "select":
+        builds = needed_builds(
+            client, bucket, json.loads(os.environ["REVISIONS"]), Path("artifacts")
+        )
+        with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+            print("builds=" + json.dumps(builds, separators=(",", ":")), file=output)
     elif sys.argv[1] == "finish":
         finish(client, bucket, json.loads(os.environ["PLAN"]), Path("artifacts"))
     else:
