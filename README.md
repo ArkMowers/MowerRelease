@@ -21,6 +21,8 @@ Windows 大文件使用 BSDIFF40 差分，生成 `_v2.zip` 附件。旧格式同
 MowerRelease 统一发布中转界面到 R2。在本仓库的 Actions Variables 设置 `R2_ACCOUNT_ID`、`R2_BUCKET`，在 Secrets 设置 `R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`。
 
 - 本仓库默认分支的 **Publish development frontend** 每五分钟检查主仓 alpha 和 main。首次从两个分支当时的最新提交开始；此后按第一父提交顺序，每轮每分支最多补六个版本。构建或上传失败会从该分支的断点重试，另一分支继续发布。较早且支持 R2 的提交可手动输入完整 SHA 补发。手动留空会立即执行常规检查。GitHub 的计划任务可能排队。进度保存在本桶的 `_sync/source-v1/` 下，与公开版本清单分别存储。源码分支同步由本仓库主动读取，无需主仓事件或跨仓令牌。
+- 源码发布先用该提交的前端构建脚本计算实例上报的 UI 标识，再查 R2。已有清单时跳过依赖安装和构建。同一批提交缺少相同标识时只构建一次，各分支仍按自己的提交顺序记录进度。
+- 要为自定义源码实例补发，维护者先审核该提交的界面、构建脚本和依赖，确认可以在公共中转页面运行，再从默认分支手动启动 **Publish development frontend**。在 `revision` 填写主仓地址可获取的完整 40 位提交 SHA（包括 GitHub fork 网络中可获取的提交），勾选 `reviewed_custom`。这次批准仅用于填写的提交，后续提交需要单独审核。实例使用者只需刷新中转页面。
 - 新 Nightly 从实际 Windows 和 Android ZIP 中提取前端，先发布对应界面，再公开安装包。
 - 正式版和公测版在现有镜像流程中使用已校验的 Windows 和 Android 包发布对应界面。旧包未携带中转构建标识时跳过静态发布，继续原有软件发布流程。
 

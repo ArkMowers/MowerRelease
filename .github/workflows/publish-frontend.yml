@@ -5,9 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       revision:
-        description: Optional full official commit SHA to republish; blank catches up both branches
+        description: Full commit SHA to publish; leave blank to catch up official branches
         type: string
         required: false
+      reviewed_custom:
+        description: I reviewed this exact custom commit for publication on the shared UI origin
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -29,12 +33,13 @@ jobs:
         id: scan
         env:
           REVISION: ${{ inputs.revision }}
+          REVIEWED_CUSTOM: ${{ inputs.reviewed_custom }}
           R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ vars.R2_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: python scripts/sync_source_ui.py discover
-  build:
+  identify:
     needs: discover
     if: needs.discover.outputs.revisions != '[]'
     runs-on: ubuntu-latest
@@ -50,29 +55,82 @@ jobs:
           ref: ${{ matrix.revision }}
           persist-credentials: false
       - uses: actions/setup-node@v4
-        if: hashFiles('ui/src/utils/publicAsset.js') != ''
         with:
           node-version: '24'
-          cache: npm
-          cache-dependency-path: ui/package-lock.json
-      - name: Build source frontend
-        working-directory: ui
+      - name: Read the instance UI identifier before installing dependencies
+        env:
+          REVIEWED_CUSTOM: ${{ inputs.reviewed_custom }}
         run: |
-          if [[ -f src/utils/publicAsset.js ]]; then
-            npm ci && npm run build
-            test -s dist/relay-ui.json
+          if [[ -f ui/src/utils/publicAsset.js ]]; then
+            node --input-type=module -e "import {relayBuildId} from './ui/scripts/relayBuild.js'; console.log(relayBuildId(process.cwd()))" > "$RUNNER_TEMP/build-id"
+            grep -Exq '[0-9a-f]{64}' "$RUNNER_TEMP/build-id"
+          elif [[ "$REVIEWED_CUSTOM" == true ]]; then
+            echo 'This revision predates relay UI support.' >&2
+            exit 1
           else
-            mkdir -p dist
-            touch dist/pre-relay-source
+            echo pre-relay-source > "$RUNNER_TEMP/build-id"
           fi
       - uses: actions/upload-artifact@v4
         with:
-          name: relay-ui-${{ matrix.revision }}
+          name: relay-id-${{ matrix.revision }}
+          path: ${{ runner.temp }}/build-id
+          if-no-files-found: error
+  select:
+    needs: [discover, identify]
+    if: ${{ !cancelled() && needs.discover.result == 'success' && needs.discover.outputs.revisions != '[]' }}
+    runs-on: ubuntu-latest
+    outputs:
+      builds: ${{ steps.select.outputs.builds }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: relay-id-*
+          path: artifacts
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'boto3>=1.36,<2'
+      - name: Select one source revision per missing R2 manifest
+        id: select
+        env:
+          REVISIONS: ${{ needs.discover.outputs.revisions }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python scripts/sync_source_ui.py select
+  build:
+    needs: select
+    if: ${{ !cancelled() && needs.select.result == 'success' && needs.select.outputs.builds != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include: ${{ fromJSON(needs.select.outputs.builds) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ArkMowers/arknights-mower
+          ref: ${{ matrix.revision }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: ${{ !inputs.reviewed_custom && 'npm' || '' }}
+          cache-dependency-path: ui/package-lock.json
+      - name: Build the selected frontend
+        working-directory: ui
+        run: npm ci && npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: relay-ui-${{ matrix.build }}
           path: ui/dist/
           if-no-files-found: error
   publish:
-    needs: [discover, build]
-    if: ${{ !cancelled() && needs.discover.result == 'success' && needs.discover.outputs.revisions != '[]' }}
+    needs: [discover, select, build]
+    if: ${{ !cancelled() && needs.select.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +139,7 @@ jobs:
           python-version: '3.12'
       - uses: actions/download-artifact@v4
         with:
-          pattern: relay-ui-*
+          pattern: relay-*
           path: artifacts
       - run: python -m pip install 'boto3>=1.36,<2'
       - name: Publish and checkpoint each branch in order

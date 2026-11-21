@@ -30,7 +30,7 @@ class SourceSyncTests(unittest.TestCase):
         self.command("commit", "-q", "--allow-empty", "-m", "revision")
         return self.command("rev-parse", "HEAD")
 
-    def scan(self, saved, name, manual=None):
+    def scan(self, saved, name, manual=None, reviewed_custom=False):
         with (
             patch.object(sync, "SOURCE", self.source.as_uri()),
             patch.object(sync, "get_cursor", side_effect=lambda _, __, b: saved.get(b)),
@@ -40,7 +40,9 @@ class SourceSyncTests(unittest.TestCase):
                 side_effect=lambda _, __, b, v: saved.update({b: v}),
             ),
         ):
-            return sync.discover(None, "test", self.root / name, manual)
+            return sync.discover(
+                None, "test", self.root / name, manual, reviewed_custom
+            )
 
     def test_first_run_retries_its_start_even_if_more_commits_arrive(self):
         saved = {}
@@ -71,12 +73,98 @@ class SourceSyncTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.scan(saved, "invalid", "0" * 40)
 
+    def test_reviewed_custom_requires_exact_sha_and_leaves_cursors_untouched(self):
+        self.command("checkout", "-qb", "custom")
+        (self.source / "custom").touch()
+        self.command("add", "custom")
+        custom = self.revision()
+        saved = {}
+        with self.assertRaisesRegex(ValueError, "official branch"):
+            self.scan(saved, "default", custom)
+        self.assertEqual(
+            self.scan(saved, "reviewed", custom, True), {"manual": [custom]}
+        )
+        for invalid in (None, "custom", custom[:7]):
+            with self.assertRaisesRegex(ValueError, "full commit SHA"):
+                self.scan(saved, "invalid", invalid, True)
+        self.assertEqual(saved, {})
+
+    def identify(self, revision, build):
+        path = self.root / f"relay-id-{revision}"
+        path.mkdir()
+        (path / "build-id").write_text(build)
+
+    def built(self, build, actual=None):
+        path = self.root / f"relay-ui-{build}"
+        path.mkdir()
+        (path / "relay-ui.json").write_text(json.dumps({"build": actual or build}))
+
+    def test_cached_and_shared_builds_are_selected_and_checkpointed_once(self):
+        revs = [f"{i:040x}" for i in range(5)]
+        cached, shared = "a" * 64, "b" * 64
+        for rev, build in zip(
+            revs, (cached, shared, shared, "pre-relay-source", cached)
+        ):
+            self.identify(rev, build)
+        s3 = Mock()
+        with patch.object(
+            sync, "manifest_exists", side_effect=lambda s, b, k: k == cached
+        ) as head:
+            self.assertEqual(
+                sync.needed_builds(s3, "bucket", revs, self.root),
+                [{"revision": revs[1], "build": shared}],
+            )
+            self.assertEqual(head.call_count, 2)
+            self.built(shared)
+            with patch.object(sync, "publish") as publish:
+                sync.finish(
+                    s3, "bucket", {"alpha": revs[:2], "main": revs[2:]}, self.root
+                )
+                publish.assert_called_once_with(
+                    self.root / f"relay-ui-{shared}", "bucket", s3
+                )
+        self.assertEqual(
+            [json.loads(c.kwargs["Body"]) for c in s3.put_object.call_args_list], revs
+        )
+
+    def test_entirely_cached_manual_run_skips_build_and_cursor(self):
+        self.identify(self.alpha, "a" * 64)
+        s3 = Mock()
+        with (
+            patch.object(sync, "manifest_exists", return_value=True),
+            patch.object(sync, "publish") as publish,
+        ):
+            self.assertEqual(
+                sync.needed_builds(s3, "bucket", [self.alpha], self.root), []
+            )
+            sync.finish(s3, "bucket", {"manual": [self.alpha]}, self.root)
+            publish.assert_not_called()
+        s3.put_object.assert_not_called()
+
+    def test_preflight_gap_or_disappeared_manifest_does_not_advance_cursor(self):
+        s3 = Mock()
+        with self.assertRaisesRegex(RuntimeError, "build-id"):
+            sync.finish(s3, "test", {"alpha": [self.alpha]}, self.root)
+        build = "a" * 64
+        self.identify(self.alpha, build)
+        with (
+            patch.object(sync, "manifest_exists", return_value=False),
+            self.assertRaisesRegex(RuntimeError, "Missing successful"),
+        ):
+            sync.finish(s3, "test", {"alpha": [self.alpha]}, self.root)
+        self.built(build, actual="b" * 64)
+        with patch.object(sync, "publish") as publish:
+            with self.assertRaisesRegex(RuntimeError, "differs"):
+                sync.finish(s3, "test", {"alpha": [self.alpha]}, self.root)
+            publish.assert_not_called()
+        s3.put_object.assert_not_called()
+
     def test_failed_publication_retries_gap_but_other_branch_advances(self):
         revs = [f"{i:040x}" for i in range(1, 5)]
         for rev in revs:
-            folder = self.root / f"relay-ui-{rev}"
-            folder.mkdir()
-            (folder / "relay-ui.json").write_text("{}")
+            build = rev.rjust(64, "0")
+            self.identify(rev, build)
+            self.built(build)
 
         def upload(path, *_):
             if path.name.endswith(revs[1]):
@@ -96,15 +184,3 @@ class SourceSyncTests(unittest.TestCase):
             written,
             [(sync.cursor_key("alpha"), revs[0]), (sync.cursor_key("main"), revs[3])],
         )
-
-    def test_missing_artifact_is_not_a_legacy_build(self):
-        rev = self.main
-        s3 = Mock()
-        with self.assertRaisesRegex(RuntimeError, "Missing successful"):
-            sync.finish(s3, "test", {"alpha": [rev]}, self.root)
-        s3.put_object.assert_not_called()
-        folder = self.root / f"relay-ui-{rev}"
-        folder.mkdir()
-        (folder / "pre-relay-source").touch()
-        sync.finish(s3, "test", {"manual": [rev]}, self.root)
-        s3.put_object.assert_not_called()
